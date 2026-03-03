@@ -10,8 +10,8 @@ from .utils import SepareByClass
 def home(request):
     pecheras = producto.objects.filter(categoria="pechera")
     grupos = SepareByClass(producto)
-    
-    return render(request, "catalog/home.html", {"pecheras" :pecheras, ""  : "correas"})
+    print(grupos)
+    return render(request, "catalog/home.html", {"pecheras" :pecheras, "grupos": grupos})
 
 def product_list(request):
     productos = producto.objects.all()

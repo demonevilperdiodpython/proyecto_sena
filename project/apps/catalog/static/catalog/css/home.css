@@ -2,6 +2,9 @@
     from{translate:0%;}
     to{translate:-100%;}
 }
+html{
+    scroll-behavior: smooth;
+}
 /* carousel*/
 
 .products-list{
@@ -56,10 +59,10 @@
     margin-top: 1rem;
     transition: all 0.2s ease-in-out;
     
-    
+     
 }
 
-.product:hover .text{
+.product .text:hover{
     max-height:100px;
     transition: all 0.2s ease-in-out;
 }
@@ -79,12 +82,7 @@
     rotate: 10deg;
     
 }
-.pause-container{
-    top: 100%;
-    position:absolute;
-    z-index: 1;
-    z-index: 2;
-}
+
 /*end carousel css*/
 
 .text p{
@@ -234,7 +232,7 @@
     padding:4rem;
     z-index: 0;
     position: relative;
-    margin-top: 19rem;
+    margin-top: 0rem;
     
 }
 .dual-conatiner div{
@@ -252,4 +250,41 @@
     scale: 1.1;
     box-shadow: 1px 1px 20px var(--secondary-color);
     transition:all 0.3s ease-in-out;
+
+}
+.carousel{
+    overflow-x: scroll;
+    display: flex;
+    flex-wrap:nowrap;
+    position: relative;
+    scroll-behavior: smooth;
+}
+.carousel::scroll-button(right), .carousel::scroll-button(left){
+    content:">";
+    border: None;
+    background-color: var(--primary-color);
+    font-family:Consolas;
+    font-size: 3rem;
+    color:white;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    padding-bottom: .1em;
+    cursor: pointer;
+    position:absolute;
+    
+    right:5%;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+.carousel::scroll-button(left){
+    left: 5%;
+    content: "<"
+    
+}
+
+.carousel::-webkit-scrollbar{
+    display: none;
+    
 }
