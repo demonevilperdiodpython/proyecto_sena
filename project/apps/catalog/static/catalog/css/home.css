@@ -7,7 +7,21 @@ html{
 }
 /* carousel*/
 
-.products-list{
+body {background-color: black;}
+
+.main-tittle {
+    
+    
+    animation: glowborde 5s infinite alternate;}
+
+@keyframes glowborde {
+    20%  {box-shadow: 0 10 20px lime;}
+    50% {box-shadow: 0 0 20px cyan;}
+    100%  {box-shadow: 0 0 20px darkviolet;}
+
+} 
+
+    .products-list{
     display: grid;  
     grid-auto-columns: 300px;
     grid-template-rows: 1fr;
@@ -190,39 +204,41 @@ html{
     justify-content: space-evenly;
     border-top: 2px solid black;
     padding-bottom : 3rem; padding-top: 1rem;
-
+    background-color: black;
     
 }
-.footer-container:hover p{
-    color:white;
-}
-.footer-container:hover h1{
-    color: white;
-}
+
 
 .footer-container{
     border-radius: 10px;
     height: 100%;
     
     transition: all 0.1s ease-in-out;
+    background: linear-gradient(
+    color-mix(in srgb, var(--primary-color) 80%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
 
+    transition: all 1.3s ease-in-out;
+    
 }
 .footer-container:hover{
-    background: var(--primary-color);
+   
     scale:1.1;
     
+    transition: all 0.3s ease-in-out;
+    box-shadow: 1px 1px 20px cyan;
 }
 
 .footer-container p,
 .footer-container h1{
     margin-inline: 1rem;
     
-
+    transition: transform 0.3s ease;
 }
 .footer-container p:hover{
-    color:var(--secondary-color);
+    color:cyan;
     font-size: larger;
-    
+    transform: scale(1.1);
 }
 
 .dual-conatiner{
@@ -233,7 +249,7 @@ html{
     z-index: 0;
     position: relative;
     margin-top: 0rem;
-    
+    background-color: black;
 }
 .dual-conatiner div{
     height: 80vh;
@@ -243,13 +259,13 @@ html{
     color-mix(in srgb, var(--primary-color) 80%, transparent),
     color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
 
-    transition:all 0.3s ease-in-out;
+    transition:all 1.3s ease-in-out;
     
 }       
 .dual-conatiner div:hover{
     scale: 1.1;
-    box-shadow: 1px 1px 20px var(--secondary-color);
-    transition:all 0.3s ease-in-out;
+    box-shadow: 1px 1px 20px cyan;
+    transition:all 1.3s ease-in-out;
 
 }
 .carousel{
@@ -258,7 +274,10 @@ html{
     flex-wrap:nowrap;
     position: relative;
     scroll-behavior: smooth;
+    background-color: black;
+
 }
+
 .carousel::scroll-button(right), .carousel::scroll-button(left){
     content:">";
     border: None;
