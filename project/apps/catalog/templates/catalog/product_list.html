@@ -1,19 +1,22 @@
+<!-- usualy, the html needs tags like "<html>" "<docttype html>" but in this case is not necesary cause-->
+<!-- we extend from plantilla html, that aready have those tags-->
 {% extends "plantilla.html" %}
 
 {%load static%}
+<!-- this block is used to  load the display,-->
+
 {%block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-
-
-
-
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/productlist.css'%}">
 
 {%endblock%}
+
+
+<!-- the block content is always to  write the html-->
+<!-- notice that html like this dont have the usual-->
+<!--  structure of html, that is cause they're extending from "plantilla.html"-->
+
 {% block content %}
-
-
-
 <div class="container-2">
     <form method = "POST" enctype="multipart/form-data">
         
@@ -28,7 +31,7 @@
     <button type="submit">Registrar</button>
     </form>
 </div>
-
+<!-- this html is used to display a form,  to add  products in the database-->
 <h1>Lista de Productos</h1>
 <div class="product-list">
     {% for x in productos %}
@@ -61,37 +64,3 @@
                 
         </div>
     {% endfor %}
-    <div class="footer">
-    <footer>
-        <div class="footer-container">
-            <h1>alaskapets</h1>
-            <p>para darle amor a tu mascota</p>
-            <div class="redes-sociales">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-
-            </div>
-        </div>
-
-        <div class="footer-container">
-        <h1>sobre alaskapets</h1>
-        <p>nosotros</p>
-        <p>como compra</p>
-        <p> punto fisico</p>
-        </div>
-        
-        <div class="footer-container">
-            <h1>atencion al cliente</h1>
-            <p>whatsap</p>
-            <p>telefono</p>
-            <p>correo </p>
-            <p>horario:</p>
-        </div>
-    </footer>
-    <div>
-</div>
-
-
-{% endblock %}

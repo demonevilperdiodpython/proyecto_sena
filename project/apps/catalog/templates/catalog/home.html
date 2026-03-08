@@ -1,23 +1,38 @@
-{%extends "plantilla.html"%}
+
+<!-- usualy, the html needs tags like "<html>" "<docttype html>" but in this case is not necesary cause-->
+<!-- we extend from plantilla html, that aready have those tags-->
+{%extends "plantilla.html" %}
+
+<!-- this  block is only used to change the title from the html-->
 {% block title %}Home Catalog{% endblock %}
-{%load static%}
+{% load static %}
+
+
+<!-- this block is used to load the css, you could add css directly here, but is better to create a new -->
+<!-- file in the static folder and link it here.-->
+
 
 {%block css%}
-
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
-
 {%endblock%}
 
-{%block content%}
 
+
+
+<!-- the block content is always to  write the html-->
+<!-- notice that html like this dont have the usual-->
+<!--  structure of html, that is cause they're extending from "plantilla.html"-->
+
+{%block content%}
 <div class="main">
     <div class="main-background overlay">
-        <div class="main-tittle">
+        <div class="main-tittle glowborder">
         <h1 class="main-tittle">SHARP MIND</h1>
-        </div>
+    </div>
+
         <div class="main-text-container"> 
             <p class="main-text">
                 habla y comparte con compañeros con los cuales
@@ -31,12 +46,10 @@
 
 <div class="carousel-repeat">
     {%for categoria, grupo in grupos.items%}
-    <h2>        categoria </h2>
+    <h2>categoria </h2>
     <div style="position:relative;">
     <div class="carousel">
-        
         <div class="container-3">
-            
             <div class="products-list" id="1">
             {%for x in  grupo%}
                 {% if x.imagen %}

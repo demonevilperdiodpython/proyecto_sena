@@ -11,6 +11,9 @@ body {background-color: black;}
 
 
 
+
+
+
     .products-list{
     display: grid;  
     grid-auto-columns: 300px;
@@ -108,12 +111,6 @@ body {background-color: black;}
     max-height: 260px;
 }
     /*the next css is made for the landpage, the previous thing was for  mostly only the carouse */
-@keyframes changecolorline{
-    0%{background: linear-gradient(90deg, var(--primary-color) 40%, var(--secondary-color) 60%);}
-    33%{background: linear-gradient(70deg, var(--primary-color) 40%, var(--secondary-color) 60%);}
-    60%{background: linear-gradient(50deg, var(--primary-color) 40%, var(--secondary-color) 60%);}
-    100%{background: linear-gradient(90deg, var(--primary-color) 40%, var(--secondary-color) 60%);}
-}
 
 .main h1:after{
     content:"";
@@ -124,7 +121,7 @@ body {background-color: black;}
     bottom:-0.3rem;
     left:0rem;
     filter: blur(5px);
-    animation: changecolorline 1s infinite linear;
+    
 }
 .main h1::before{
     content:"";
@@ -138,14 +135,14 @@ body {background-color: black;}
     
     
 }  
+
+/* the class main and it's variants are used to, in this case,  modify the  frist thing the  viewer see 
+in the web, the photo and the text*/
 .main{
     display:flex;
     
     margin: 2rem 0em;
     justify-content: center;
-
-
-
 }
 .main-background{
     display:flex;
@@ -160,6 +157,7 @@ body {background-color: black;}
     justify-content: center;
     align-items:center;
 }
+/*overlay class is only used to  add a gradient over the image at main*/
 .overlay{
     border-image-source: linear-gradient( hsl(240 100% 50% / 0.2), hsla(293, 100%, 50%, 0.2) );
     border-image-slice: 1 fill;
@@ -168,10 +166,8 @@ body {background-color: black;}
     
 
 .main-text-container{
-    
     width:60%;
-    margin-top: 5rem;
-    
+    margin-top: 5rem;  
 }
 .main-text-container p{
     margin-block-start:3rem;
@@ -189,7 +185,14 @@ body {background-color: black;}
     
    animation: glowcolor 5s infinite;
  transition: transform 1s ease;
+
+    
 }
+/*glowborder: class only added to  give an animation on  the */
+.glowborder{
+    animation: glowborde 5s infinite alternate;
+}
+
 
 @keyframes glowcolor {
     20%  {text-shadow:0 0 10px lime;}
@@ -211,8 +214,6 @@ body {background-color: black;}
     background-color: black;
     
 }
-
-
 .footer-container{
     border-radius: 10px;
     height: 100%;
@@ -245,6 +246,7 @@ body {background-color: black;}
     transform: scale(1.1);
 }
 
+/* dual container, div inside of the footer, used to show  both of the squares*/
 .dual-conatiner{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -272,6 +274,9 @@ body {background-color: black;}
     transition:all 0.6s ease-in-out;
 
 }
+
+/*previously  a div that were used to have an animation to scroll*/
+/*now its just a class used to  move the  objets  like an netflix scroll*/
 .carousel{
     overflow-x: scroll;
     display: flex;
@@ -282,6 +287,9 @@ body {background-color: black;}
 
 }
 
+/*scroll buttons only made with css*/
+/*posibility to replace with buttons created with css*/
+/*do not touch if you dont know what it is*/
 .carousel::scroll-button(right), .carousel::scroll-button(left){
     content:">";
     border: None;
@@ -306,8 +314,6 @@ body {background-color: black;}
     content: "<"
     
 }
-
 .carousel::-webkit-scrollbar{
     display: none;
-    
 }
