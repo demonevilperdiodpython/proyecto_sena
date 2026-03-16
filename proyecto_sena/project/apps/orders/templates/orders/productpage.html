@@ -1,0 +1,80 @@
+{%extends 'plantilla.html'%}
+{%load static%}
+{%block css%}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'orders/css/stylesbuy.css' %}">
+{%endblock%}
+
+
+{%block content%}
+    <div class="product-imgs">
+
+        <div class="imagen-container">
+            {%if product.imagen%}
+                <img src="{{product.imagen.url}}" alt="{{product.nombre}}">
+            
+            {%elif product.imagen_url%}
+                <img src="{{product.imagen_url}}" alt="{{product.nombre}}">
+            {%endif%}
+        </div>
+    
+        <div class="various-img-div">
+            <div class="scroll-div">
+            
+            {%for x in product.img_list%}
+            {%endfor%}
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="info-product">
+        
+        <div class="text">
+            <h1>{{product.nombre}}</h1>
+            <p>Precio: {{product.precio}}</p>
+            <p>Descripción: {{product.descripcion}} </p>
+            <h2>Información del producto</h2>
+            <p>{{product.informacion}}</p>
+        </div>
+    </div> 
+    <div class="payment-div">  
+        <div class="payment">
+            <h2>Comprar</h2>
+            <form method="post" action="{% url 'orders:add_to_cart'%}">
+                {% csrf_token %}
+                
+                
+                <div class="input-group">
+                    <input type="hidden" name="product_name" value="{{product.nombre}}">
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                    <label for="quantity">Cantidad:</label>
+                    <input type="number" id="quantity" name="quantity" value="0" min="1" step="1">
+                </div>
+                <button type="submit">Agregar al carrito</button>
+            </form>
+        </div>
+    </div>
+
+    
+{%endblock%}
+{%block extraContent%}
+    <div>
+        <div class="other-products">
+            <div class="scroll-div">
+                {%for x in recomended_product%}
+                
+                    
+                
+                {%endfor%}
+            </div>
+        </div>  
+    </div>
+    {% if messages %} 
+    <ul class="messages"> 
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li> 
+        {% endfor %}
+    </ul> {% endif %}
+{%endblock%}

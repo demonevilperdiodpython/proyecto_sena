@@ -1,0 +1,38 @@
+{% extends "plantilla.html" %}
+
+{% block title %}Plantilla de Usuarios{% endblock %}
+{%load  static%}
+{% block css %}
+
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
+
+<script src="{%static 'users/js/nav.js'%}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <div class=container-2>
+        <form method="post" class="animated-input">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            
+            {% for field in form %}
+            <div class="input-group">
+                
+                {{ field.as_widget }} {{ field.label_tag }}
+                
+            </div>
+            {% endfor %}
+
+            {{error}}
+
+            <br>
+            
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+.container{
+    
+    width:  100vw;
+    background-color: var(--full-white);
+    margin:0;
+}
+.container-2 form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;;
+    position: relative;
+    flex-wrap: wrap;
+    height: 10%;
+    margin: 1rem 1  1rem 0 0;
+    z-index: 0;
+
+
+}
+.product-item{
+    border:1px solid black;
+}
+
+
+.container-2 form textarea{
+    resize:None;
+    height: 1rem;
+}

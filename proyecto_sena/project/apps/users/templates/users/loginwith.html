@@ -1,0 +1,29 @@
+{% extends "plantilla.html" %}
+
+{% block title %}Plantilla de Usuarios{% endblock %}
+{%load  static%}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container-2">
+    <form method="post" class="animated-input">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="input-group">
+            {{field.as_widget }} {{ field.label_tag }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <button type="submit">login</button>
+        {%if error%}
+            <p style="color:red;">{{error}}</p>
+        {%endif%}
+    </form>
+</div>
+{% endblock %}

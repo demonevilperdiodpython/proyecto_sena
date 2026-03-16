@@ -1,0 +1,93 @@
+/* Estilos específicos para la app users */
+
+
+.input-group{
+    margin: 10px;
+    display:flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+.container{
+    
+    display:flex;
+    justify-items: center;
+    flex-direction: column;
+    padding: 0px;
+    border-radius: 10px;
+    
+    margin:5%;
+    box-shadow: 0px 5px 15px var(--primary-color-light);
+    width: 50%;
+    height:fit-content;         
+}
+
+.container-2{
+    display: flex;
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding:50px ;
+}
+
+.container-2 form{
+    display: flex;
+    flex-direction: column;
+    flex-grow:1;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.container-2 form .Form-control{
+    margin: 10px;
+    width: 20vw;
+    height: 4vh;
+    border: None;
+    background-color: None;
+    border-radius: 3px;
+    font-size:large;
+} 
+.container-2 form .Form-control:hover,.container-2 form .Form-control:focus{
+    box-shadow: 1px 1px 20px var(--primary-color-dark);
+}
+.container-2 form .Form-control:focus{
+    cursor: none;
+    outline: none;
+    border:None;
+}
+.container-2 form label{
+    color: var(--font-primary-black-light);
+    position:absolute;
+    left:1rem;
+    top:0.8rem;
+    user-select: none; 
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+
+}   
+.container-2 form .Form-control:hover + label, .container-2 form .Form-control:not(:placeholder-shown) + label{
+    top: -0.5rem;
+    font-size: medium;
+    padding:0 3px;
+    color: var(--font-primary-black);
+}
+
+.container-2 form button[type="submit"]{
+    border: None;
+    width: 10vw;
+    border-radius: 5px;
+    height: 5vh;
+    margin-top: 20px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+.container-2 form button[type="submit"]:hover{
+    
+    scale: 1.05;
+    box-shadow: 1px 1px 5px black;
+}
+

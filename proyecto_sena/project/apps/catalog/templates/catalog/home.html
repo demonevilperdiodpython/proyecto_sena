@@ -1,43 +1,28 @@
-
-<!-- usualy, the html needs tags like "<html>" "<docttype html>" but in this case is not necesary cause-->
-<!-- we extend from plantilla html, that aready have those tags-->
-{%extends "plantilla.html" %}
-
-<!-- this  block is only used to change the title from the html-->
+{%extends "plantilla.html"%}
 {% block title %}Home Catalog{% endblock %}
-{% load static %}
-
-
-<!-- this block is used to load the css, you could add css directly here, but is better to create a new -->
-<!-- file in the static folder and link it here.-->
-
+{%load static%}
 
 {%block css%}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
+
 {%endblock%}
 
-
-
-
-<!-- the block content is always to  write the html-->
-<!-- notice that html like this dont have the usual-->
-<!--  structure of html, that is cause they're extending from "plantilla.html"-->
-
 {%block content%}
+
 <div class="main">
     <div class="main-background overlay">
-        <div class="main-tittle glowborder">
+        <div class="main-tittle">
         <h1 class="main-tittle">SHARP MIND</h1>
-    </div>
-
+        </div>
         <div class="main-text-container"> 
             <p class="main-text">
                 habla y comparte con compañeros con los cuales
-                compartes gustos, y estan interesados en asdfdasasdfasdf
-                mejorar entredsklfjaeslñdjfasdjflasjdfjasdñlfjaslkjflaskjflkasdjflkasjfkajsdjflasñdjfa
+                compartes gustos, y estan interesados en 
+                mejorar en cuanto al aprendizaje autonomo
             </p>
         </div>
     </div>
@@ -46,10 +31,12 @@
 
 <div class="carousel-repeat">
     {%for categoria, grupo in grupos.items%}
-    <h2> {{categoria}} </h2>
+    <h2>        categoria </h2>
     <div style="position:relative;">
     <div class="carousel">
+        
         <div class="container-3">
+            
             <div class="products-list" id="1">
             {%for x in  grupo%}
                 {% if x.imagen %}
@@ -146,20 +133,22 @@
 
 <div class="dual-conatiner">
     <div>
-        <h1> investiga tus limites</h1>
-        <p> en sharp mind, creemos que el conocimiento es un viaje sin fin, y cada producto es una puerta a nuevas posibilidades. Explora, aprende y crece con nosotros.</p>
-        
+        <h1> Post de la comunidad </h1>
+        <p> Publica acerca de planes de estudios,ideas,soluciona problemas comunes en prinicipiantes,etc. Para asi potenciar el aprendizaje autonomo
+        </p>
     </div> 
     <div>
-        <h1> educate por ti mismo</h1>
-        <p> material de estudio para cada area</p>
+        <h1>Usuarios verificados</h1>
+        <p> Son los usuarios que gracias a sus aportes, la veracidad de su informacion o la calidad de la misma son verificados ya que son las fuentes mas confiables ene ste sitio
+        </p>
     </div> 
 </div>
 
 <div class="footer">
     <div class="footer-container">
-        <h1>sharp mind</h1>
-        <p>alimenta tu mente</p>
+        <h1>sharpmind</h1>
+        <p>El aprendizaje no importa de donde venga sino como se aplica
+        </p>
         <div class="redes-sociales">
             <div></div>
             <div></div>
@@ -170,16 +159,17 @@
     </div>
 
     <div class="footer-container">
-    <h1>sobre sharp mind</h1>
+    <h1>sobre sharpmind</h1>
     <p>nosotros</p>
-
+    <p>como compra</p>
+    <p> punto fisico</p>
     </div>
     
     <div class="footer-container">
         <h1>atencion al cliente</h1>
         <p>whatsap</p>
         <p>telefono</p>
-        <p>correo: </p>
+        <p>correo </p>
         <p>horario:</p>
     </div>
 </div>
