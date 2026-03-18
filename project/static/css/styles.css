@@ -102,7 +102,9 @@ body, html{
     width:100%;
     font-family: 'Arial', sans-serif;
     background: var(--full-white);
-    padding-bottom: 50px;
+    padding-bottom: 50px; 
+    background-image: url("/static/img/fondo.jpeg");
+
 }
 
 .container {
