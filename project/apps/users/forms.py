@@ -25,10 +25,16 @@ class CustomUserCreationForm(UserCreationForm):
             'type': 'email',
             'placeholder': ' '
         })
+        self.fields["imagen"].widget.attrs.update({
+            'class': "img-imput",
+            'file': "image/*",
+            'placeholder': ' '
+        })
         self.fields["username"].label = "username"
         self.fields["password2"].label = "password"
         self.fields["password1"].label = "password"
         self.fields["email"].label = "email"
+        self.fields["imagen"].label = "profile picture"
     email = forms.EmailField(required=True)
     
 
@@ -36,7 +42,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         
         
-        fields = ("username", "email", "password1", "password2")
+        fields = ("username", "email", "password1", "password2", "imagen")
         
 
     def clean_email(self):

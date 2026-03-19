@@ -16,7 +16,8 @@ class UserSession(models.Model):
     user_agent = models.TextField()
     device_id = models.CharField(max_length=128, default="unknown")
     login_time = models.DateTimeField(default="2025-01-01")
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)   
+    
 
     def __str__(self):
         return f"{self.user.username} - {self.ip_address}"
@@ -25,8 +26,14 @@ class UserSession(models.Model):
 
 class customuser(AbstractUser):
     email = models.EmailField(unique=True)
-
+    imagen = models.ImageField(upload_to='imagenes/', default="img/yokse.png")
     def clean(self):
         if not self.email.endswith("@gmail.com"):
             from django.core.exceptions import ValidationError
             raise ValidationError("El correo debe ser de Gmail (@gmail.com).")
+
+
+
+class imagen(models.Model):
+    imagen = models.ImageField(upload_to="users/imagenes", default="users/imagenes/default.jpg")
+    imagen_url = models.URLField(blank=True, null=True)

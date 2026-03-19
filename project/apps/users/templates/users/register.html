@@ -1,6 +1,6 @@
 {% extends "plantilla.html" %}
 
-{% block title %}Plantilla de Usuarios{% endblock %}
+{% block title %}register{% endblock %}
 {%load  static%}
 {% block css %}
 
@@ -15,24 +15,35 @@
 {% endblock %}
 
 {% block content %}
-    <div class=container-2>
-        <form method="post" class="animated-input">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            
-            {% for field in form %}
-            <div class="input-group">
-                
-                {{ field.as_widget }} {{ field.label_tag }}
-                
-            </div>
-            {% endfor %}
+<form method="post">
+    <div class="container-2 animated-input">
+    {% csrf_token %}
+        <div class="input-group">
+        {{form.username}}
+        {{form.username.label_tag}}   
+        
+        </div>
+        
+        <div class="input-group">
+        {{form.email}}
+        {{form.email.label_tag}}
+        </div>
 
-            {{error}}
+        <div class="input-group">
+        {{form.password1}}
+        {{form.password1.label_tag}}
+        </div>
+        
+        <div class="input-group">
+        {{form.password2}}
+        {{form.password2.label_tag}}
+        </div>
 
-            <br>
-            
-            <button type="submit">Registrar</button>
-        </form>
+        <button type="submit"> register</button>
     </div>
+    
+    <div class="container-2"> 
+        {{form.imagen}}
+    </div>
+</form>
 {% endblock %}

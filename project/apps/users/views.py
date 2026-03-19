@@ -38,9 +38,9 @@ def login_view(request):
 
 
 
-def signUp_view(request):
+def Register_view(request):
     form = UserCreationForm()
-    response = render(request, 'users/login.html', {"form": form})
+    response = render(request, 'users/register.html', {"form": form})
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         
