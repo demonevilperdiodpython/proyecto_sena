@@ -11,8 +11,9 @@
 {% endblock %}
 
 {% block content %}
+<form method="post" class="animated-input"></form>
 <div class="container-2">
-    <form method="post" class="animated-input">
+    
         {% csrf_token %}
         {% for field in form %}
         <div class="input-group">
@@ -24,6 +25,7 @@
         {%if error%}
             <p style="color:red;">{{error}}</p>
         {%endif%}
-    </form>
+    
 </div>
+</form>
 {% endblock %}

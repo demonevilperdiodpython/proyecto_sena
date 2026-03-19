@@ -28,7 +28,8 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields["imagen"].widget.attrs.update({
             'class': "img-imput",
             'file': "image/*",
-            'placeholder': ' '
+            'placeholder': ' ',
+            'id': 'id_imagen'
         })
         self.fields["username"].label = "username"
         self.fields["password2"].label = "password"

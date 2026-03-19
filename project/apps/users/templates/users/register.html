@@ -10,12 +10,13 @@
 <link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
 
-<script src="{%static 'users/js/nav.js'%}"></script>
+
+
 
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="container-2 animated-input">
     {% csrf_token %}
         <div class="input-group">
@@ -43,7 +44,27 @@
     </div>
     
     <div class="container-2"> 
+        
+        <div class="imagen-selecter">
+
+            <div class="img-show">
+                <img id="preview"src="static/img/yokse.png">
+            </div>
+            {%for i in default_image%}
+            <label for="{{i.id}}" class="image-option">
+                <input type="radio" id="{{i.id}}" name="default_image" value="{{i.id}}" class="image-radio">
+                {% if i.imagen%}
+                <img src="{{i.imagen}}" alt="Default Image {{i.id}}" class="default-image">
+                {%elif  i.imagen_url%}
+                <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
+                {%else%}
+                IMAGEN NO ENCONTRADA
+                {% endif %}
+            </label>
+            {%endfor%}
+        </div>
         {{form.imagen}}
     </div>
+    <script src="{%static 'users/js/imagen.js'%}"></script>
 </form>
 {% endblock %}
