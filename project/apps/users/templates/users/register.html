@@ -50,18 +50,22 @@
             <div class="img-show">
                 <img id="preview"src="static/img/yokse.png">
             </div>
-            {%for i in default_image%}
-            <label for="{{i.id}}" class="image-option">
-                <input type="radio" id="{{i.id}}" name="default_image" value="{{i.id}}" class="image-radio">
-                {% if i.imagen%}
-                <img src="{{i.imagen}}" alt="Default Image {{i.id}}" class="default-image">
-                {%elif  i.imagen_url%}
-                <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
-                {%else%}
-                IMAGEN NO ENCONTRADA
-                {% endif %}
-            </label>
-            {%endfor%}
+
+            <div>
+                {%for i in imagen%}
+
+                <label for="{{i.id}}" class="image-option">
+                    <input type="radio" id="{{i.id}}" name="default_image" value="{{i.imagen}}" class="image-radio">
+                    {% if i.imagen%}
+                    <img src="{{i.imagen.url}}" alt="Default Image {{i.id}}" class="default-image">
+                    {% elif  i.imagen_url%}
+                    <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
+                    {% else %}
+                    IMAGEN NO ENCONTRADA
+                    {% endif %}
+                </label>
+                {%endfor%}
+            </div>  
         </div>
         {{form.imagen}}
     </div>

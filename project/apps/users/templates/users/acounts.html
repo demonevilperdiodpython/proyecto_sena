@@ -18,7 +18,7 @@
     {%for i in ingresed_users%}
 
         <div class="user-card" 
-        onclick="window.location.href='{% url 'users:login_wit  h_user' %}'">
+        onclick="window.location.href='{% url 'users:login_with_user' %}'">
             <input type="hidden" name="user" value="{{i.user}}">
             <div class="user-img-1">
                 {%if i.user.img%}
@@ -42,19 +42,7 @@
                     <button type="submit">Eliminar</button>
                 
             </form>
-            <div class="conatiner-container-acount">
-                <div class="container-acount">
 
-                </div>
-
-                <div class="container-acount">
-
-                </div>
-
-                <div class="container-acount">
-
-                </div>
-            </div>
             
         </div>
     {%endfor%}

@@ -10,6 +10,7 @@ from .forms import CustomUserCreationForm as UserCreationForm
 import re
 from django.contrib.auth import logout
 from  apps.orders.models import orderList
+from apps.users.models import imagen as ImagenModel
 # Create your views here.cu
 def login_view(request):
     form = AuthenticationForm(request)
@@ -40,15 +41,19 @@ def login_view(request):
 
 def Register_view(request):
     form = UserCreationForm()
-    response = render(request, 'users/register.html', {"form": form})
+    imagen = ImagenModel.objects.all()
+    response = render(request, 'users/register.html', {"imagen":imagen,"form": form})
+    
+    
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreationForm(request.POST, request.FILES)
         
         if form.is_valid():
             if es_gmail_valido(form.cleaned_data['email']):
                 pass
             else:
                 return render(request, 'users/register.html',  {"form" : form, "error" : "gmail no valido"})
+            
             ip = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT','')
             device_id = get_device_id(request, response)
@@ -56,8 +61,17 @@ def Register_view(request):
             other_users = UserSession.objects.filter(ip_address=ip,
                                             user_agent=user_agent,
                                             device_id=device_id).update(is_active=False)
+            print("TESTOOOOOOOOOO------------------------------------------------------------------------------")
+            user = form.save(commit=False)
+            if form.cleaned_data['imagen'] == None:
+                img = request.POST.get('default_image')
+                user.imagen = img
+                user = form.save()
+            else:
+                user = form.save()
+                print(form.cleaned_data['imagen'])
+            print("TESTOOOOOOOOOO-------------------------------------------------------------------------------")
 
-            user = form.save()
 
             init_sesion = UserSession.objects.create(
                 device_id = device_id,
@@ -69,7 +83,7 @@ def Register_view(request):
             OrderList.save()
 
             login(request, user)
-            return redirect('users:singup')
+            return redirect('catalog:home')
     return response
 
 def acounts_view(request):

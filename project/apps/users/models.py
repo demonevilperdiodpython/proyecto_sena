@@ -26,7 +26,7 @@ class UserSession(models.Model):
 
 class customuser(AbstractUser):
     email = models.EmailField(unique=True)
-    imagen = models.ImageField(upload_to='imagenes/', default="img/yokse.png")
+    imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
     def clean(self):
         if not self.email.endswith("@gmail.com"):
             from django.core.exceptions import ValidationError
@@ -37,3 +37,5 @@ class customuser(AbstractUser):
 class imagen(models.Model):
     imagen = models.ImageField(upload_to="users/imagenes", default="users/imagenes/default.jpg")
     imagen_url = models.URLField(blank=True, null=True)
+
+
