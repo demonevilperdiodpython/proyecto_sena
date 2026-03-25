@@ -41,11 +41,14 @@ form{
     box-sizing: border-box;
     padding:30px ;
     width: 40%;
-    padding-bottom: 50px;
-    padding-top: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 3px;
     height:fit-content;   
     margin-right: auto; 
-    background-color: VAR(--white-90);
+    background: linear-gradient(
+    color-mix(in srgb, violet 80%, transparent),
+    color-mix(in srgb, purple 60%, transparent));
 }
 
 
@@ -109,10 +112,10 @@ button[type="submit"]:hover{
 }
 .imagen-selecter{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 80%;
-    height: 80%;
+    flex-wrap: wrap;
+    justify-content:flex-start;
+    width:100% ;
+    gap: 10px;
     object-fit: cover;
     background-color: var(--primary-color-dark);
 }
@@ -124,4 +127,12 @@ button[type="submit"]:hover{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border: solid red 3px;
+    border-radius: 30%;
+height: 100px;
+width: 100px;
 }
+.default-image {border: solid red 3px;
+border-radius: 30%;
+height: 100px;
+width: 100px;}
