@@ -149,7 +149,7 @@
         <h1> mejores usuarios</h1>
         {%for x in best_users%}
             {% if x.imagen %}
-            <img src="{{x.imagen.url}}" alt="{{x.username}}">
+            <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
             {%endif%}
             <p>{{x.user.username}}</p>
         {%endfor%}
@@ -158,9 +158,9 @@
         <h1>mejores grupos</h1>
         {%for x in best_groups%}
             {% if x.imagen %}
-            <img src="{{x.imagen.url}}" alt="{{x.name}}">
+            <img src="{{x.imagen.url}}" alt="{{x.name}}" class="foto-perfil">
             {%endif%}
-            <p>{{x.name}}</p></p>
+            <p>{{x.name}}</p>
             {{x.name}}
         
         {%endfor%}

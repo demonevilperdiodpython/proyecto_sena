@@ -45,3 +45,28 @@
     display: flex;
     position:relative
 }
+.container-2 {display: flex; flex-direction: column; align-items: flex-start;
+margin: 0px;
+padding: 20px;
+width: 1400px;
+height: 800px auto;
+}
+
+
+
+.container {background: linear-gradient(
+    color-mix(in srgb, violet 80%, transparent),
+    color-mix(in srgb, purple 60%, transparent));
+    margin-top: 50px;
+}
+
+.foto-perfil {border: solid red 4px;
+border-radius: 50%;
+height: 60px;
+width: 60px;
+object-fit: cover;
+}
+
+.make-post {width:50% ;
+padding-left: 500px ;
+ }
