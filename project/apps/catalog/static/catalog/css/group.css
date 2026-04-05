@@ -108,3 +108,9 @@ flex-direction: column;}
     align-items: center;
     width: 100%;
 }
+.edit{
+    display: none;
+}
+.view{
+    display: block;
+} 

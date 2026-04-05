@@ -91,3 +91,19 @@ def post( request, group_id, section_id):
         messages.success(request, "Post creado exitosamente.")
         return redirect('catalog:topic_section', group_id=group_id, section_id=section_id)
     return render(request, "catalog/post.html", {"group": group, "section": section})
+
+
+
+def eliminate_post(request):
+    post_id = request.POST.get("post_id")
+    post = post_model.objects.get(id=post_id)
+    post.delete()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+def edit_post(request):
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
+        Post = post_model.objects.get(id=post_id)
+        content = request.POST.get("content")
+        Post.content = content
+        Post.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))

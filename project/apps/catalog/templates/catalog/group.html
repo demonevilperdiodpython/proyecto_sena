@@ -15,37 +15,49 @@
         <div>
         {%for i in posts%}
             <div class="post">
-               
-                     {%if i.user.imagen%}
-                     <img src="{{i.user.imagen.url}}" class="foto-perfil">
+                    
+                    {%if i.user.imagen%}
+                    <img src="{{i.user.imagen.url}}" class="foto-perfil">
                     {%else%}
-                     <img src="default" class="foto-perfil">
+                        <img src="default" class="foto-perfil">
                     {%endif%}
                     <div class="nose">
-                    <div class="cabeza">
-                        <p class="username-post">{{i.user.username}}</p>
-                                
-                                
-
-                        <div class="post-text">
-                            <p>
-                                {{i.content}}
-                            </p>
+                        <div class="cabeza" id="cabeza-{{i.id}}">
+                            <p class="username-post">{{i.user.username}}</p>
+                            <div class="post-text view">
+                                <p> 
+                                    {{i.content}}
+                                </p>
+                            </div>
+                            <div class="post-text edit">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value="{{i.id}}">
+                                    <textarea name="content">{{i.content}}</textarea>
+                                    <button type="submit" id="EPBB-{{i.id}}" formaction="{%url 'catalog:edit_post'%}">guardar</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="botoness">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{i.id}}">
                         <div class="button-eliminate">
-                            <button action="">
+                            <button type="submit" formaction="{%url 'catalog:eliminate_post'%}">
                                 eliminar
                             </button>
+                        </div>  
+                        </form>
+                        <div class="button_editate"  >
+                            
+                                <button  id="EPb-{{i.id}}" onclick="toggleEdit({{i.id}})">
+                                    editar
+                                </button>
+                            
                         </div>
-                        <div class="button_editate">
                         
-                            <button action="">
-                                editar
-                            </button>
-                        </div>
-                    </div> 
+                    
                     </div>
             </div>
         {%endfor%}
@@ -85,6 +97,7 @@
 
 
     <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+    <script src="{% static 'catalog/js/edit_post.js' %}"></script>
 {%endblock%}
 
 
