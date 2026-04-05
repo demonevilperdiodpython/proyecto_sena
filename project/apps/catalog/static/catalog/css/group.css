@@ -43,15 +43,19 @@
 
 .post{
     display: flex;
-    position:relative
+    position:relative;
+    gap: 10px;
+    margin-bottom: 25px;
+    
 }
 .container-2 {display: flex; flex-direction: column; align-items: flex-start;
-margin: 0px;
+margin: 5px;
 padding: 20px;
-width: 1200px;
-max-width: 95%;
+width: 100%;
+max-width: 1200px;
 min-height: 500px;
 margin-bottom: 20px;
+
 }
 
 
@@ -60,15 +64,47 @@ margin-bottom: 20px;
     color-mix(in srgb, violet 80%, transparent),
     color-mix(in srgb, purple 60%, transparent));
     margin-top: 50px;
+    width: 75%;
 }
 
 .foto-perfil {border: solid red 4px;
 border-radius: 50%;
-height: 60px;
-width: 60px;
+height: 50px;
+width: 50px;
 object-fit: cover;
 }
 
-.make-post {width:50% ;
-padding-left: 500px ;
+.postear {width:80% ;
+display: flex ;
+flex-direction: column;
+justify-content: right;
+padding-left: 185%;
  }
+.postear button {width: 20%;
+background-color: black;
+color: whitesmoke;}
+
+ .post-text {padding-top: 15px;}
+ .username-post {font-size: 13px;}
+
+.botoness button {display: flex;
+flex-direction: column;
+border-radius: 10px;
+background-color: black;
+color: whitesmoke;
+margin-bottom: 5px;
+margin-top: 5px;
+font-size: 10px;
+padding: 5px 5px;
+transition: all 0.3s ease-in-out;}
+
+.botoness button:hover{transform: scale(1.1);}
+
+.cabeza {display: flex;
+flex-direction: column;}
+
+.nose {display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}

@@ -15,47 +15,56 @@
         <div>
         {%for i in posts%}
             <div class="post">
-                <div class="button-eliminate">
-                    <button action="">
-                        eliminar
-                    </button>
-                </div>
-                <div class="button_editate">
-                    
-                    <button action="">
-                        editar
-                    </button>
-                </div>
-                <p>{{i.user.username}}</p>
-                        {%if i.user.imagen%}
-                    <img src="{{i.user.imagen.url}}">
+               
+                     {%if i.user.imagen%}
+                     <img src="{{i.user.imagen.url}}" class="foto-perfil">
                     {%else%}
-                    <img src="default">
+                     <img src="default" class="foto-perfil">
                     {%endif%}
-                    
-                    
-                    <div class="post-text">
-                        <p>
-                            {{i.content}}
-                        </p>
+                    <div class="nose">
+                    <div class="cabeza">
+                        <p class="username-post">{{i.user.username}}</p>
+                                
+                                
+
+                        <div class="post-text">
+                            <p>
+                                {{i.content}}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    <div class="botoness">
+                        <div class="button-eliminate">
+                            <button action="">
+                                eliminar
+                            </button>
+                        </div>
+                        <div class="button_editate">
+                        
+                            <button action="">
+                                editar
+                            </button>
+                        </div>
+                    </div> 
+                    </div>
             </div>
         {%endfor%}
         </div>
         <form method="post">
-            <div class="make-post">
-                {%for field in form%}
-                    {% csrf_token %}
-                    {{ field.label_tag}}
-                    {{ field }}
-                    {{ field.errors}}
-                {% endfor %}
+            <div class="postear">
+                <div class="make-post">
+                    {%for field in form%}
+                        {% csrf_token %}
+                        {{ field.label_tag}}
+                        {{ field }}
+                        {{ field.errors}}
+                    {% endfor %}
+                </div>
+                <button type="submit">publicar</button>
             </div>
-            <button type="submit">publicar</button>
         </form>
     </div>
-     asdfasdfasd
+     
     
 {%endblock%}
 
