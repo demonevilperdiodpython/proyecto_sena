@@ -1,0 +1,40 @@
+.user-card {
+    display:flex;
+    border: 1px solid black;
+    background-color: #fff;
+    
+    border: 1px solid #ddd;;
+    padding: 2vh 2vw 2vh;
+    display: flex;
+    flex-direction: row;
+}
+.user-card:hover{
+    background-color:var(--gray-500);
+}
+.user-img-1{   
+    display:flex;
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    align-self: center;
+    border: 2px solid black;
+    margin-right: 20px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+.user-img-1 img{
+    width: 100%;
+    height: auto;
+    user-select: none; 
+    pointer-events: none;
+}
+.user-info{
+    display: flex;
+    flex-grow: 1;
+    flex-direction:column;
+    padding: 0;
+    user-select: none; 
+    pointer-events: none;
+}

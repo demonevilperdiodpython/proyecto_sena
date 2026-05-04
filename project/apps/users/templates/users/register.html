@@ -1,0 +1,74 @@
+{% extends "plantilla.html" %}
+
+{% block title %}register{% endblock %}
+{%load  static%}
+{% block css %}
+
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
+
+
+
+
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <div class="container-2 animated-input">
+    {% csrf_token %}
+        <div class="input-group">
+        {{form.username}}
+        {{form.username.label_tag}}   
+        
+        </div>
+        
+        <div class="input-group">
+        {{form.email}}
+        {{form.email.label_tag}}
+        </div>
+
+        <div class="input-group">
+        {{form.password1}}
+        {{form.password1.label_tag}}
+        </div>
+        
+        <div class="input-group">
+        {{form.password2}}
+        {{form.password2.label_tag}}
+        </div>
+
+        <button type="submit"> register</button>
+    </div>
+    
+    <div class="container-2"> 
+        
+        <div class="imagen-selecter">
+
+            <div class="img-show">
+                <img id="preview"src="static/img/yokse.png">
+            </div>
+
+            <div>
+                {%for i in imagen%}
+
+                <label for="{{i.id}}" class="image-option">
+                    <input type="radio" id="{{i.id}}" name="default_image" value="{{i.imagen}}" class="image-radio">
+                    {% if i.imagen%}
+                    <img src="{{i.imagen.url}}" alt="Default Image {{i.id}}" class="default-image">
+                    {% elif  i.imagen_url%}
+                    <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
+                    {% else %}
+                    IMAGEN NO ENCONTRADA
+                    {% endif %}
+                </label>
+                {%endfor%}
+            </div>  
+        </div>
+        {{form.imagen}}
+    </div>
+    <script src="{%static 'users/js/imagen.js'%}"></script>
+</form>
+{% endblock %}

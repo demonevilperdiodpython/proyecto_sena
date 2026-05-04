@@ -1,0 +1,10 @@
+.venv/
+
+venv/
+
+*.pdf
+*.apk
+
+__pycache__/
+*.pyc
+.tonoto

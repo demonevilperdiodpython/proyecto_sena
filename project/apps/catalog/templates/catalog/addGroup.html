@@ -1,0 +1,23 @@
+{%extends 'plantilla.html'%}
+
+{%block css%}
+{% load static %}    
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
+
+   
+{% endblock %}
+{% block content %}
+<form method = "POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.errors }}
+        </div>
+    {% endfor %}
+    <button type="submit">Registrar</button>
+</form>
+{% endblock %}

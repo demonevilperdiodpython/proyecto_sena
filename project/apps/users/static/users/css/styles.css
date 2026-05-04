@@ -1,0 +1,138 @@
+/* Estilos específicos para la app users */
+form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.input-group{
+    margin: 10px;
+    display:flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+}
+
+
+.container{
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    width:100%;
+    margin:5%;
+    height: 100%;   
+}
+
+
+.container-2{
+    display:flex;
+    justify-items: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+
+    box-shadow: 0px 5px 15px var(--primary-color-light);
+
+    box-sizing: border-box;
+    padding:30px ;
+    width: 40%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 3px;
+    height:fit-content;   
+    margin-right: auto; 
+    background: linear-gradient(
+    color-mix(in srgb, violet 80%, transparent),
+    color-mix(in srgb, purple 60%, transparent));
+}
+
+
+
+
+.Form-control{
+    margin: 10px;
+    width: 20vw;
+    height: 4vh;
+    border: None;
+    background-color: None;
+    border-radius: 3px;
+    font-size:large;
+} 
+.Form-control:hover, .Form-control:focus{
+    box-shadow: 1px 1px 20px var(--primary-color-dark);
+}
+.Form-control:focus{
+    cursor: none;
+    outline: none;
+    border:None;
+}
+.input-group label{
+    color: var(--font-primary-black-light);
+    position:absolute;
+    left:1rem;
+    top:0.8rem;
+    user-select: none; 
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+
+}   
+.Form-control:hover + label,.Form-control:not(:placeholder-shown) + label{
+    top: -0.5rem;
+    font-size: medium;
+    padding:0 3px;
+    color: var(--font-primary-black);
+}
+
+button[type="submit"]{
+    border: None;
+    width: 10vw;
+    border-radius: 5px;
+    height: 5vh;
+    margin-top: 20px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+button[type="submit"]:hover{
+    
+    scale: 1.05;
+    box-shadow: 1px 1px 5px black;
+}
+
+.container-acount{
+    height:40px;
+    width: 40px;
+    border-radius: 5px;
+    background-color: gray;
+    overflow: hidden;
+}
+.imagen-selecter{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:flex-start;
+    width:100% ;
+    gap: 10px;
+    object-fit: cover;
+    background-color: var(--primary-color-dark);
+}
+.img-show{
+    height: 30vh;
+    width: 30vw;
+}
+.img-show img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: solid red 3px;
+    border-radius: 30%;
+height: 100px;
+width: 100px;
+}
+.default-image {border: solid red 3px;
+border-radius: 30%;
+height: 100px;
+width: 100px;}

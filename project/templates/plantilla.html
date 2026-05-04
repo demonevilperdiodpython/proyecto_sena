@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- this templante is the base for the other templantes, -->
+<html>
+    <head>
+        <title>{% block title %}Plantilla Base{% endblock %}</title>
+        {% load static %}
+        {%block css%}
+        {% endblock %}
+        <script src="{% static 'js/plantilla.js'%}"></script>
+
+    </head>
+    <body style="display: flex; flex-direction: column; align-items: center;">
+        <div class="navbar">
+            <div class="nav-container">
+                
+                <a href="{%url 'catalog:home'%}">
+                    <div class="nav-logo">
+                        <img src="{% static 'img/yokse.png' %}" alt="logo">
+                    </div>
+                </a>
+                
+
+                <div class="nav-links">
+                </div>
+
+                <div>
+                    <div class="nav_extensable-button">
+                        <button class="toggle-btn">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </button>
+                        <ul class="menu">
+<!-- not sure of why this causes an erro on vs code, but still runs so dont worry-->
+                            {%if user.is_authenticated%}
+                                {{user.username}}
+                               
+                                <li><button onclick="window.location.href='{%url 'users:logout'%}'">logout</button></li>
+                                <li><button onclick="window.location.href='{% url 'catalog:add_group'%}'">groups</BUTTON></li>
+                            {%else%}
+                                <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
+                                <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>
+                            {%endif%}
+
+                            <li><button onclick="window.location.href='{% url 'users:acounts' %}'">profiles</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="container">
+            {% block content %}
+<!--that the hml from the other templante is written here inside content-->
+            
+            {% endblock %}
+        </div>
+        <div class="no-style">
+            {%block extraContent%}
+            
+            {%endblock%}
+        </div>
+    </body>
+</html>

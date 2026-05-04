@@ -1,0 +1,116 @@
+.button-menu .button button{
+    
+    height: 100%;
+    width: 100%;
+    border-radius: 20px
+}
+
+.button-menu{
+    display: flex;
+    position: absolute;
+    top:150px;
+    left: 100px;
+    
+}
+.button-menu .menu{
+    position:absolute;
+    left: -100px;
+    top:0;
+    height: 100vh;
+    width: 400px;
+    background-color: bisque;
+    border-radius: 20px;
+    z-index: 5;
+}
+.button-menu .button{
+    border-radius: 10px;
+    height: 20px;
+    width: 50px;
+    z-index: 5;
+
+}
+
+
+
+
+.button-menu .menu-close{
+    display:none;
+}
+.button-menu .menu-open{
+    display:flex;
+    
+}
+
+.post{
+    display: flex;
+    position:relative;
+    gap: 10px;
+    margin-bottom: 25px;
+    
+}
+.container-2 {display: flex; flex-direction: column; align-items: flex-start;
+margin: 5px;
+padding: 20px;
+width: 100%;
+max-width: 1200px;
+min-height: 500px;
+margin-bottom: 20px;
+
+}
+
+
+
+.container {background: linear-gradient(
+    color-mix(in srgb, violet 80%, transparent),
+    color-mix(in srgb, purple 60%, transparent));
+    margin-top: 50px;
+    width: 75%;
+}
+
+.foto-perfil {border: solid red 4px;
+border-radius: 50%;
+height: 50px;
+width: 50px;
+object-fit: cover;
+}
+
+.postear {width:80% ;
+display: flex ;
+flex-direction: column;
+justify-content: right;
+padding-left: 185%;
+ }
+.postear button {width: 20%;
+background-color: black;
+color: whitesmoke;}
+
+ .post-text {padding-top: 15px;}
+ .username-post {font-size: 13px;}
+
+.botoness button {display: flex;
+flex-direction: column;
+border-radius: 10px;
+background-color: black;
+color: whitesmoke;
+margin-bottom: 5px;
+margin-top: 5px;
+font-size: 10px;
+padding: 5px 5px;
+transition: all 0.3s ease-in-out;}
+
+.botoness button:hover{transform: scale(1.1);}
+
+.cabeza {display: flex;
+flex-direction: column;}
+
+.nose {display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.edit{
+    display: none;
+}
+.view{
+    display: block;
+} 

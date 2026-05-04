@@ -1,0 +1,246 @@
+:root {
+    
+    --primary-color: hsl(250 45% 70%);
+    --primary-color-light: hsl(250 45% 80%);
+    --primary-color-dark: hsl(250 45% 50%);
+    
+    --secondary-color: hsl(20 90% 50%);
+    --secondary-color-light: hsl(20 90% 70%);
+    
+
+
+    --font-primary-black: hsl(0 0% 10%);
+    --font-primary-black-light: hsl(0 0% 60%);
+    
+    --full-white: hsl(250 0% 100%);
+    --white: hsl(250 5% 95%);
+    --white-90: hsl(250 5% 90%);
+    --white-85: hsl(250 5% 50%)
+
+
+}
+*:after{
+    padding:0px;
+    margin:0px;
+    display:inline-block
+}
+*:before{
+    padding:0px;
+    margin:0px;
+    display: inline-block;
+}
+.toggle-btn{
+    padding: 10px;
+    background-color: var(--primary-color-dark);
+    border:None;
+}
+.toggle-btn .line:after{
+    padding:1px;
+    content: "";
+    border-radius: 10%;
+    height: 8px;
+    width: 50px;
+    background-color: white;
+}
+
+html{
+    
+    overflow-y: visible;
+    overflow-x: hidden;
+}
+
+.toggle-btn .line{
+    padding:1px;
+}
+.toggle-btn:hover .line:after{
+    transition: all 0.3s ease-out;
+    box-shadow: 0px 0px 15px var(--secondary-color);
+}
+
+.nav-logo{
+height: 60px;
+width: 60px;
+}
+
+
+.nav-logo img{
+    width: 60px;
+    
+    height: 60px;
+ animation: glowbox 5s infinite alternate;
+ 
+}
+@keyframes glowbox {
+    20%  {box-shadow:0 0 15px yellow;}
+    50%  {box-shadow: 0 0 15px pink;}
+    70% {box-shadow:0 0 15px  cyan;}
+    100%  {box-shadow:0 0 15px red;}
+
+
+}
+
+
+
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    color: #666;
+    line-height: 1.6;
+    margin:0;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+
+}
+body, html{
+    margin:0px;
+    padding:0px;
+    height:100%;
+    width:100%;
+    font-family: 'Arial', sans-serif;
+    background: var(--full-white);
+    padding-bottom: 50px; 
+    background-image: url("/static/img/fondo.jpeg");
+
+}
+
+.container {
+    margin: 0%;
+    display: flex;
+    height: fit-content;
+    flex-direction: column;
+    padding: 0px;
+    border-radius: 10px;
+    background-color: var(--white-90);
+    overflow: visible;
+}
+.navbar {
+    display: flex;
+    position:sticky;
+    top:0;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    height: 11%;
+    background-color: var(--primary-color-dark);
+    z-index: 1000;
+
+}
+.nav-container{
+    z-index: 1000;
+    display:flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin:auto;
+}
+.nav_extensable-button .menu {
+    padding: 0;
+    position: absolute;
+
+    width: 0;
+    height: 0;
+    overflow: hidden;
+
+    border: none;   
+}
+
+
+.nav_extensable-button .menu.open {
+    display:flex;
+    height: auto;
+    width: 30vw;
+    background-color:var(--white-90) ;
+    padding: 25px;
+    flex-direction: column;
+    font-size: 1.2rem;
+    color: var(--font-primary-black);
+    list-style: none;
+    z-index:1001;
+
+
+}
+.nav_extensable-button {
+    position: relative;
+    z-index:5;
+}
+
+.nav_extensable-button ul.menu {
+    display:flex;
+    position: absolute;
+    top: 100%; 
+    left: -100%;
+    font-size: 1.2rem;
+    color:var(--font-primary-black);
+    list-style: none;
+    z-index:5;
+}
+
+.nav-links{
+    display:flex;
+    
+    
+}   
+
+.nav-links li:hover{
+    
+
+    
+    cursor: pointer;
+    transform: scale(1.1);
+    
+    box-shadow: 0px 0px 20px var(--secondary-color-ligth);
+    
+    }
+.nav-links li {
+    display: inline-block;
+    margin: 0px 10px;
+    padding: 10px 15px 10px 15px;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+    background-color: var(--primary-color-dark);
+    transition: transform 1s ease;
+
+    
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none; /* Quita el subrayado */
+    color: inherit;        /* Hereda el color del elemento padre */
+    background: none;      /* Elimina cualquier fondo */
+    outline: none;         /* Quita el contorno al hacer clic */
+}
+
+.menu li button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    text-decoration: none;
+    outline: none;
+    z-index:5;
+    
+}
+.nav_extensable-button button:hover {
+    color: var(--font-primary-black);
+}
+
+
+p{
+    color: #000025;
+}
+h{
+    color: #000025;
+}

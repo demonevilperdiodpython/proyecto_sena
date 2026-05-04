@@ -1,0 +1,91 @@
+<!-- usualy, the html needs tags like "<html>" "<docttype html>" but in this case is not necesary cause-->
+<!-- we extend from plantilla html, that aready have those tags-->
+{% extends "plantilla.html" %}
+
+{%load static%}
+
+<!-- this block is used to  load the display-->
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/productlist.css'%}">
+{% endblock %}
+
+
+<!-- the block content is always to  write the html-->
+<!-- notice that html like this dont have the usual-->
+<!--  structure of html, that is cause they're extending from "plantilla.html"-->
+
+{% block content %}
+<div class="container-2">
+    <form method = "POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {%for field in form%}
+        <div>
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        </div>
+    {%endfor%}
+    <button type="submit">Registrar</button>
+    </form>
+</div>
+<!-- this html is used to display a form,  to add  products in the database-->
+<h1>Lista de Productos</h1>
+<div class="product-list">
+    {% for x in productos %}
+        <div class="product-item" style="display: flex;">
+            
+                <div>
+                    <h2>{{ x.nombre }}</h2>
+                    <p>{{ x.descripcion }}</p>
+                    <p>Precio: {{ x.precio }}</p>
+                    <p>Stock: {{ x.stock }}</p>
+                    <p>Categoría: {{ x.categoria }}</p>
+                    <form method="POST" action="{%url 'catalog:eliminate_product' x.id%}">
+                        {% csrf_token %}
+                        <button type="submit">borrar</button>
+                    <form>
+                </div>
+                {% if x.imagen %}
+                    <div>
+                            <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" style="max-width: 200px;">
+                    </div>
+
+                {% elif  x.imagen_url %}
+                
+                    <div>
+                        <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}" style="max-width: 200px;">
+                    </div>
+                
+                {% endif %}   
+        </div>
+    {% endfor %}
+        <div class="product-item" style="display: flex;">
+            
+                <div>
+                    <h2>{{ x.nombre }}</h2>
+                    <p>{{ x.descripcion }}</p>
+                    <p>Precio: {{ x.precio }}</p>
+                    <p>Stock: {{ x.stock }}</p>
+                    <p>Categoría: {{ x.categoria }}</p>
+                    <form method="POST" action="{%url 'catalog:eliminate_product' x.id%}">
+                        {% csrf_token %}
+                        <button type="submit">borrar</button>
+                    <form>
+                </div>
+                {% if x.imagen %}
+                    <div>
+                            <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" style="max-width: 200px;">
+                    </div>
+
+                {% elif  x.imagen_url %}
+                
+                    <div>
+                        <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}" style="max-width: 200px;">
+                    </div>
+                
+                {% endif %}   
+        </div>
+    {%for x in groups%}
+{% endblock %}
