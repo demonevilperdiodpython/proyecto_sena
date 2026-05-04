@@ -65,7 +65,7 @@ width: 60px;
 
 .nav-logo img{
     width: 60px;
-    
+    display: grid;
     height: 60px;
  animation: glowbox 5s infinite alternate;
  
@@ -244,3 +244,5 @@ p{
 h{
     color: #000025;
 }
+
+

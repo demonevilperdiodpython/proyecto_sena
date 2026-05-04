@@ -16,34 +16,34 @@
 {% block content %}
     
     {%for i in ingresed_users%}
-
-        <div class="user-card" 
-        onclick="window.location.href='{% url 'users:login_with_user' %}'">
-            <input type="hidden" name="user" value="{{i.user}}">
-            <div class="user-img-1">
-                {%if i.user.img%}
-                    <img src="{{i.user.img.url}}">
+        
+            <div class="user-card" 
+            onclick="window.location.href='{% url 'users:login_with_user' %}'">
+                <input type="hidden" name="user" value="{{i.user}}">
+                <div class="user-img-1">
+                    {%if i.user.img%}
+                        <img src="{{i.user.img.url}}">
+                        
+                    {% else %}
+                        <img src="https://www.bing.com/th/id/OIP.OmJICjo6Xt-Ay8oWfxkGNQHaHa?w=195&h=211&c=8&rs=1&qlt=90&o=6&cb=ucfimg1&dpr=1.3&pid=3.1&rm=2&ucfimg=1">
+                    {% endif %}
+                </div>
+                <div class="user-info">
+                    <p>Usuario: {{i.user.username}}</p>
+                    <p>Gmail: {{i.user.gmail}}...</p>
+                    <p>estado: {{i.user.estado}}</p>
                     
-                {% else %}
-                    <img src="https://www.bing.com/th/id/OIP.OmJICjo6Xt-Ay8oWfxkGNQHaHa?w=195&h=211&c=8&rs=1&qlt=90&o=6&cb=ucfimg1&dpr=1.3&pid=3.1&rm=2&ucfimg=1">
-                {% endif %}
-            </div>
-            <div class="user-info">
-                <p>Usuario: {{i.user.username}}</p>
-                <p>Gmail: {{i.user.gmail}}...</p>
-                <p>estado: {{i.user.estado}}</p>
-                
-                
+                    
 
-            </div>  
-            <form method="POST" action="{% url 'users:eliminate_user_session' i.user.id%}">
-                    {% csrf_token %}
-    
-                    <button type="submit">Eliminar</button>
-                
-            </form>
+                </div>  
+                <form method="POST" action="{% url 'users:eliminate_user_session' i.user.id%}">
+                        {% csrf_token %}
+        
+                        <button type="submit">Eliminar</button>
+                    
+                </form>
 
-            
-        </div>
+            </div>    
+          
     {%endfor%}
 {% endblock %}

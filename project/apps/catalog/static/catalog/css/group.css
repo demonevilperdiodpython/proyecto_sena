@@ -108,6 +108,17 @@ flex-direction: column;}
     align-items: center;
     width: 100%;
 }
+
+
+
+
+.nose2 {height: auto;
+max-width: 80%;
+word-break: break-word;
+}
+
+
+
 .edit{
     display: none;
 }

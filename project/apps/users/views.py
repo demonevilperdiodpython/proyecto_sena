@@ -9,7 +9,7 @@ from .models import customuser as User
 from .forms import CustomUserCreationForm as UserCreationForm
 import re
 from django.contrib.auth import logout
-from  apps.orders.models import orderList
+
 from apps.users.models import imagen as ImagenModel
 # Create your views here.cu
 def login_view(request):

@@ -7,9 +7,13 @@
     padding: 2vh 2vw 2vh;
     display: flex;
     flex-direction: row;
+    transition: 2.1s all ease-out;
+    border-radius: 15px;
 }
 .user-card:hover{
-    background-color:var(--gray-500);
+   background-color: lightcoral  ;
+   transition: 2.1s all ease-out;
+   scale: 1.1;
 }
 .user-img-1{   
     display:flex;
@@ -38,3 +42,9 @@
     user-select: none; 
     pointer-events: none;
 }
+
+.container {display: flex;
+flex-direction: column;
+gap: 15px;
+align-items: flex-start;
+padding-left:25px ;  }
