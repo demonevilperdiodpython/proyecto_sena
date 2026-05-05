@@ -16,16 +16,16 @@
         {%for i in posts%}
             <div class="post">
                     
-                    {%if i.user.imagen%}
+                    {%if i.imagen%}
                     <img src="{{i.user.imagen.url}}" class="foto-perfil">
                     {%else%}
                         <img src="default" class="foto-perfil">
                     {%endif%}
-                    <div class="nose">
+                    
                         <div class="cabeza" id="cabeza-{{i.id}}">
-                            <p class="username-post">{{i.user.username}}</p>
+                            <p class="username-post">{{i.username}}</p>
                             <div class="post-text view">
-                                <p class="nose2"> 
+                                <p> 
                                     {{i.content}}
                                 </p>
                             </div>
@@ -38,7 +38,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    
                     <div class="botoness">
                         <form method="POST">
                             {% csrf_token %}
@@ -62,14 +62,14 @@
             </div>
         {%endfor%}
         </div>
-        <form method="post">
+        <form method="post" class="post-form">
             <div class="postear">
                 <div class="make-post">
                     {%for field in form%}
                         {% csrf_token %}
-                        {{ field.label_tag}}
+                        
                         {{ field }}
-                        {{ field.errors}}
+                        
                     {% endfor %}
                 </div>
                 <button type="submit">publicar</button>

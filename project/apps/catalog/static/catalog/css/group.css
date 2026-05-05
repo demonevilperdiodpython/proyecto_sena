@@ -41,21 +41,14 @@
     
 }
 
-.post{
-    display: flex;
-    position:relative;
-    gap: 10px;
-    margin-bottom: 25px;
-    
-}
+
 .container-2 {display: flex; flex-direction: column; align-items: flex-start;
-margin: 5px;
-padding: 20px;
+
 width: 100%;
 max-width: 1200px;
 min-height: 500px;
-margin-bottom: 20px;
-
+padding:10px;
+position:relative;
 }
 
 
@@ -63,7 +56,7 @@ margin-bottom: 20px;
 .container {background: linear-gradient(
     color-mix(in srgb, violet 80%, transparent),
     color-mix(in srgb, purple 60%, transparent));
-    margin-top: 50px;
+
     width: 75%;
 }
 
@@ -74,15 +67,8 @@ width: 50px;
 object-fit: cover;
 }
 
-.postear {width:80% ;
-display: flex ;
-flex-direction: column;
-justify-content: right;
-padding-left: 185%;
- }
-.postear button {width: 20%;
-background-color: black;
-color: whitesmoke;}
+
+
 
  .post-text {padding-top: 15px;}
  .username-post {font-size: 13px;}
@@ -96,12 +82,19 @@ margin-bottom: 5px;
 margin-top: 5px;
 font-size: 10px;
 padding: 5px 5px;
+
 transition: all 0.3s ease-in-out;}
 
+.botones{
+    position: absolute;
+    right: 15px;
+}
 .botoness button:hover{transform: scale(1.1);}
 
 .cabeza {display: flex;
-flex-direction: column;}
+flex-direction: column;
+width: 80%;
+}
 
 .nose {display: flex;
     justify-content: space-between;
@@ -125,3 +118,45 @@ word-break: break-word;
 .view{
     display: block;
 } 
+.post-form{
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+}
+.postear{
+    width: 80%;
+    display:flex;
+    
+}
+.make-post{
+    width: 100%;
+    display: flex;
+}
+.post-form textarea{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    resize: horizontal;
+}
+.postear button{
+    width: 20%;
+    background-color: black;
+    color: whitesmoke;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.post{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 10px;
+}
+.container-2 > :first-child {
+    width: 100%;
+}
+.cabeza p{
+    word-break: break-all;
+}

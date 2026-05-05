@@ -69,7 +69,7 @@ def topic_group(request, id):
     if request.method == 'POST':
         if form.is_valid():
             post = form.save(commit=False)
-            post.user = request.user
+            
             post.group = group
             post.save()
             group.posts.add(post)
