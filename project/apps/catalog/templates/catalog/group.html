@@ -2,7 +2,7 @@
 {% load static %}
 {% block css %}
 
-<link rel="stylesheet" type= "text/css" href="{%static 'css/styles.css'%}">
+<link rel="stylesheet" type="text/css" href="{%static 'css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
 {% endblock %}
@@ -11,86 +11,87 @@
 
 
 {% block content %}
-    <div class ="container-2">
-        <div>
+<div class="container-2">
+    <div>
         {%for i in posts%}
-            <div class="post">
-                    
-                    {%if i.imagen%}
-                    <img src="{{i.user.imagen.url}}" class="foto-perfil">
-                    {%else%}
-                        <img src="default" class="foto-perfil">
-                    {%endif%}
-                    
-                        <div class="cabeza" id="cabeza-{{i.id}}">
-                            <p class="username-post">{{i.username}}</p>
-                            <div class="post-text view">
-                                <p> 
-                                    {{i.content}}
-                                </p>
-                            </div>
-                            <div class="post-text edit">
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="post_id" value="{{i.id}}">
-                                    <textarea name="content">{{i.content}}</textarea>
-                                    <button type="submit" id="EPBB-{{i.id}}" formaction="{%url 'catalog:edit_post'%}">guardar</button>
-                                </form>
-                            </div>
-                        </div>
-                    
-                    <div class="botoness">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="post_id" value="{{i.id}}">
-                        <div class="button-eliminate">
-                            <button type="submit" formaction="{%url 'catalog:eliminate_post'%}">
-                                eliminar
-                            </button>
-                        </div>  
-                        </form>
-                        <div class="button_editate"  >
-                            
-                                <button  id="EPb-{{i.id}}" onclick="toggleEdit({{i.id}})">
-                                    editar
-                                </button>
-                            
-                        </div>
-                        
-                    
-                    </div>
-            </div>
-        {%endfor%}
-        </div>
-        <form method="post" class="post-form">
-            <div class="postear">
-                <div class="make-post">
-                    {%for field in form%}
-                        {% csrf_token %}
-                        
-                        {{ field }}
-                        
-                    {% endfor %}
-                </div>
-                <button type="submit">publicar</button>
-            </div>
-        </form>
-    </div>
+        <div class="post">
 
-    
+            {%if i.user.imagen%}
+            <img src="{{i.user.imagen.url}}" class="foto-perfil">
+            {%else%}
+            <img src="default" class="foto-perfil">
+            {%endif%}
+
+            <div class="cabeza" id="cabeza-{{i.id}}">
+                <p class="username-post">{{i.username}}</p>
+                <div class="post-text view">
+                    <p>
+                        {{i.content}}
+                    </p>
+                </div>
+                <div class="post-text edit">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{i.id}}">
+                        <textarea name="content">{{i.content}}</textarea>
+                        <button type="submit" id="EPBB-{{i.id}}"
+                            formaction="{%url 'catalog:edit_post'%}">guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="botoness">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{i.id}}">
+                    <div class="button-eliminate">
+                        <button type="submit" formaction="{%url 'catalog:eliminate_post'%}">
+                            eliminar
+                        </button>
+                    </div>
+                </form>
+                <div class="button_editate">
+
+                    <button id="EPb-{{i.id}}" onclick="toggleEdit({{i.id}})">
+                        editar
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+    <form method="post" class="post-form">
+        <div class="postear">
+            <div class="make-post">
+                {%for field in form%}
+                {% csrf_token %}
+
+                {{ field }}
+
+                {% endfor %}
+            </div>
+            <button type="submit">publicar</button>
+        </div>
+    </form>
+</div>
+
+
 {%endblock%}
 
 
 {% block extraContent %}
 
-    <div class="button-menu">
-        <div class="button ">
-            <button></button>
-        </div>
-        <div class="menu menu-close">
-            {% for i in sections %}
-                <div class="section">
-                    <a href="{% url 'catalog:section' section.id %}">{{ section.name }}</a>
+<div class="button-menu">
+    <div class="button ">
+        <button></button>
+    </div>
+    <div class="menu menu-close">
+        {% for i in sections %}
+        <div class="section">
+            <a href="{% url 'catalog:section' section.id %}">{{ section.name }}</a>
             {%endfor%}
         </div>
     </div>
@@ -98,6 +99,4 @@
 
     <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
     <script src="{% static 'catalog/js/edit_post.js' %}"></script>
-{%endblock%}
-
-
+    {%endblock%}

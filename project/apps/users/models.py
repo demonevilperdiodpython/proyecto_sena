@@ -36,7 +36,7 @@ class customuser(AbstractUser):
 
 
 class imagen(models.Model):
-    imagen = models.ImageField(upload_to="users/imagenes", default="users/imagenes/default.jpg")
+    imagen = models.ImageField(upload_to="users/imagenes", default=r"C:\Users\ESTUDIANTE\Desktop\proyecto_sena\project\static\img\user.jpg")
     imagen_url = models.URLField(blank=True, null=True)
 
 

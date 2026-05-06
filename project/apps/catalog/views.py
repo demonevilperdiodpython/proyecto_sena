@@ -63,7 +63,7 @@ def topic_group(request, id):
     form = postForm(request.POST)
     group= topics_group.objects.get(id=id)
     sections = group.sections.all()
-    group_post = group.posts.all()
+    group_post = group.post.all()
     
     print(group,group_post)
     if request.method == 'POST':

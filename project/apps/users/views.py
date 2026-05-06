@@ -61,7 +61,7 @@ def Register_view(request):
             other_users = UserSession.objects.filter(ip_address=ip,
                                             user_agent=user_agent,
                                             device_id=device_id).update(is_active=False)
-            print("TESTOOOOOOOOOO------------------------------------------------------------------------------")
+           
             user = form.save(commit=False)
             if form.cleaned_data['imagen'] == None:
                 img = request.POST.get('default_image')
@@ -70,7 +70,7 @@ def Register_view(request):
             else:
                 user = form.save()
                 print(form.cleaned_data['imagen'])
-            print("TESTOOOOOOOOOO-------------------------------------------------------------------------------")
+           
 
 
             init_sesion = UserSession.objects.create(
@@ -78,10 +78,8 @@ def Register_view(request):
                 user=user,
                 ip_address=ip,
                 user_agent= user_agent)
+            
             init_sesion.save()
-            OrderList = orderList.objects.create(user=user)
-            OrderList.save()
-
             login(request, user)
             return redirect('catalog:home')
     return response

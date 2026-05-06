@@ -21,12 +21,8 @@
             onclick="window.location.href='{% url 'users:login_with_user' %}'">
                 <input type="hidden" name="user" value="{{i.user}}">
                 <div class="user-img-1">
-                    {%if i.user.img%}
-                        <img src="{{i.user.img.url}}">
-                        
-                    {% else %}
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVh8NtsIhaLweqYmV65iObLrSX5_VTo0cDCQ&s">
-                    {% endif %}
+    
+                        <img src="{{i.user.imagen.url}}">
                 </div>
                 <div class="user-info">
                     <p>Usuario: {{i.user.username}}</p>
