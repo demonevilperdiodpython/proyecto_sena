@@ -1,3 +1,9 @@
+html:webkit-scrollbar{
+    display: none;
+}
+html{
+    overflow: hidden;
+}
 .button-menu .button button{
     
     height: 100%;
@@ -42,22 +48,30 @@
 }
 
 
-.container-2 {display: flex; flex-direction: column; align-items: flex-start;
+.container-2 {
+background: linear-gradient(
+    
+    color-mix(in srgb, purple 95%, transparent)
+);
+    display: flex; flex-direction: column; align-items: flex-start;
+    width: 50%;
+    min-height: 98%;
+    padding:10px;
+    position:relative;
+    border-radius: 20px;
+    
 
-width: 100%;
-max-width: 1200px;
-min-height: 500px;
-padding:10px;
-position:relative;
 }
 
 
 
-.container {background: linear-gradient(
-    color-mix(in srgb, violet 80%, transparent),
-    color-mix(in srgb, purple 60%, transparent));
 
-    width: 75%;
+.container {
+    background-color: transparent;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
 }
 
 .foto-perfil {border: solid red 4px;
@@ -84,12 +98,14 @@ font-size: 10px;
 padding: 5px 5px;
 
 transition: all 0.3s ease-in-out;}
-
-.botones{
+.botoness{
     position: absolute;
     right: 15px;
 }
+
 .botoness button:hover{transform: scale(1.1);}
+div.butoness{position: absolute;
+right: 10pxp;}
 
 .cabeza {display: flex;
 flex-direction: column;
