@@ -16,28 +16,28 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="register">
     <div class="container-2 animated-input">
     {% csrf_token %}
         <div class="input-group">
-        {{form.username}}
-        {{form.username.label_tag}}   
-        
-        </div>
-        
-        <div class="input-group">
-        {{form.email}}
-        {{form.email.label_tag}}
-        </div>
+            {{form.username}}
+            {{form.username.label_tag}}   
+            
+            </div>
+            
+            <div class="input-group">
+            {{form.email}}
+            {{form.email.label_tag}}
+            </div>
 
-        <div class="input-group">
-        {{form.password1}}
-        {{form.password1.label_tag}}
-        </div>
-        
-        <div class="input-group">
-        {{form.password2}}
-        {{form.password2.label_tag}}
+            <div class="input-group">
+            {{form.password1}}
+            {{form.password1.label_tag}}
+            </div>
+            
+            <div class="input-group">
+            {{form.password2}}
+            {{form.password2.label_tag}}
         </div>
 
         <button type="submit"> register</button>
@@ -65,9 +65,9 @@
                     {% endif %}
                 </label>
                 {%endfor%}
+                {{form.imagen}}
             </div>  
         </div>
-        {{form.imagen}}
     </div>
     <script src="{%static 'users/js/imagen.js'%}"></script>
 </form>
