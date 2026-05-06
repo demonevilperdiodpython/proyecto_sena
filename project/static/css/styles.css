@@ -68,8 +68,13 @@ width: 60px;
     display: grid;
     height: 60px;
  animation: glowbox 5s infinite alternate;
- 
+ border-radius: 30px;
+ transition: 0.4s all ease-out;
 }
+.nav-logo :hover {scale: 1.1;
+transition: 0.4s all ease-out;}
+
+
 @keyframes glowbox {
     20%  {box-shadow:0 0 15px yellow;}
     50%  {box-shadow: 0 0 15px pink;}
