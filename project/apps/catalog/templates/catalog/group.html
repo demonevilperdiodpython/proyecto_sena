@@ -18,12 +18,13 @@
 
             {%if i.user.imagen%}
             <img src="{{i.user.imagen.url}}" class="foto-perfil">
+            
             {%else%}
             <img src="default" class="foto-perfil">
             {%endif%}
 
             <div class="cabeza" id="cabeza-{{i.id}}">
-                <p class="username-post">{{i.username}}</p>
+                <p class="username-post">{{i.user.username}}</p>
                 <div class="post-text view">
                     <p>
                         {{i.content}}

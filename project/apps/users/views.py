@@ -34,6 +34,7 @@ def login_view(request):
                 device_id=device_id)
             init_sesion.save()
             login(request, user)
+            return redirect('catalog:home')
             
     return response
 
@@ -44,11 +45,14 @@ def Register_view(request):
     imagen = ImagenModel.objects.all()
     response = render(request, 'users/register.html', {"imagen":imagen,"form": form})
     
-    
+    print('register ----------------------------------------------------------------------------------------------------------------------')   
     if request.method == 'POST':
+        print('POST request received in Register_view')
         form = UserCreationForm(request.POST, request.FILES)
-        
+        print('----------form is valid-----------')
+       
         if form.is_valid():
+            
             if es_gmail_valido(form.cleaned_data['email']):
                 pass
             else:
@@ -61,10 +65,11 @@ def Register_view(request):
             other_users = UserSession.objects.filter(ip_address=ip,
                                             user_agent=user_agent,
                                             device_id=device_id).update(is_active=False)
-           
-            user = form.save(commit=False)
+            user = form.save(commit=False) 
             if form.cleaned_data['imagen'] == None:
+                
                 img = request.POST.get('default_image')
+                print('--------------print img-------------------')
                 user.imagen = img
                 user = form.save()
             else:
@@ -133,8 +138,11 @@ def eliminate_user_session_view(request, user_id):
         user =UserSession.objects.get(user_id = user_id, user_agent=user_agent, ip_address=ip, device_id=device_id)
         if user.user_id == request.user.id:
             logout(request)
-        user.delete()
-        
+            
+           
+            
+            user.is_active = False
+            user.save()
         return response
 def log_in_with_user_view(request):
     username = request.GET.get('user')

@@ -16,7 +16,7 @@
 {% block content %}
     
     {%for i in ingresed_users%}
-        
+        {%if not i.user.is_banned%}
             <div class="user-card" 
             onclick="window.location.href='{% url 'users:login_with_user' %}'">
                 <input type="hidden" name="user" value="{{i.user}}">
@@ -39,7 +39,8 @@
                     
                 </form>
 
-            </div>    
+            </div>
+        {%endif%}  
           
     {%endfor%}
 {% endblock %}

@@ -15,8 +15,10 @@ class UserSession(models.Model):
     ip_address = models.GenericIPAddressField()
     user_agent = models.TextField()
     device_id = models.CharField(max_length=128, default="unknown")
-    login_time = models.DateTimeField(default="2025-01-01")
+    login_time = models.DateTimeField(auto_now_add=True)
+    logout_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)   
+    
     
 
     def __str__(self):
@@ -28,6 +30,7 @@ class customuser(AbstractUser):
     email = models.EmailField(unique=True)
     imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
     score = models.IntegerField(default=0)
+    is_banned = models.BooleanField(default=False)
     def clean(self):
         if not self.email.endswith("@gmail.com"):
             from django.core.exceptions import ValidationError
