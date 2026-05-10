@@ -60,23 +60,28 @@ def add_group(request):
 
 
 def topic_group(request, id):
+    print('--------------------DEBUG---------------------')
     form = postForm(request.POST)
     group= topics_group.objects.get(id=id)
     sections = group.sections.all()
     group_post = group.post.all()
     
-    print(group,group_post)
+    
     if request.method == 'POST':
         
         if form.is_valid():
-            post = form.save(commit=False)
+            print('--------------------FORM VALID---------------------')
             
+            post = form.save(commit=False)
+            post.user = request.user
             post.group = group
             post.save()
             group.post.add(post)
             
             
             return redirect('catalog:topic_group', id=id)
+        else:
+            print(form.errors)
 
     return render(request, "catalog/group.html", {"group": group, "sections": sections, "posts": group_post, "form": form})
 
