@@ -87,9 +87,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
         'NAME': 'sharp_mind',              # 2. El nombre que usaste en phpMyAdmin
         'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
-        'PASSWORD': 'kashira',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
+        'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
         'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)
-        'PORT': '3307',                         # 6. El puerto estándar de MySQL
+        'PORT': '3306',                         # 6. El puerto estándar de MySQL
     },
     'sqlite':{
         'ENGINE': 'django.db.backends.sqlite3',
