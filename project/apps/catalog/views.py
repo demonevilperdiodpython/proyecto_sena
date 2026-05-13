@@ -19,8 +19,8 @@ def home(request):
     grupo = topics_group.objects.all()
     grupo = SepareByClass(topics_group)
     
-    best_user  =  CustomUser.objects.order_by('-score')[:10]
-    best_group = topics_group.objects.order_by('-score')[:10]
+    best_user  =  CustomUser.objects.order_by('-score')[:5]
+    best_group = topics_group.objects.order_by('-score')[:5]
     print(best_user)
     print(grupos)
     return render(request, "catalog/home.html", {"pecheras" :pecheras, "grupos": grupo, "best_users" : best_user, "best_groups": best_group})
