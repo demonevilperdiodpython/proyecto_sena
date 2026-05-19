@@ -147,6 +147,8 @@
     <div>
         <h1> mejores usuarios</h1>
         {%for x in best_users%}
+            {{x.imagen.url}}
+            
             {% if x.imagen %}
             <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
             {%endif%}

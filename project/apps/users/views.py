@@ -66,17 +66,17 @@ def Register_view(request):
             other_users = UserSession.objects.filter(ip_address=ip,
                                             user_agent=user_agent,
                                             device_id=device_id).update(is_active=False)
-            user = form.save(commit=False) 
-            if form.cleaned_data['imagen'] == None:
-                
-                img = request.POST.get('default_image')
-                print('--------------print img-------------------')
-                user.imagen = img
-                user = form.save()
-            else:
-                user = form.save()
-                print(form.cleaned_data['imagen'])
-           
+            user = form.save(commit=False)
+            uploaded_image = form.cleaned_data.get('imagen')
+            selected_default = request.POST.get('default_image')
+
+            if uploaded_image:
+                user.imagen = uploaded_image
+            elif selected_default:
+                user.imagen = selected_default
+            # If neither is provided, leave the model default image in place.
+
+            user.save()
 
 
             init_sesion = UserSession.objects.create(

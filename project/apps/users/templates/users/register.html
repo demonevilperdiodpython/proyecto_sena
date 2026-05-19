@@ -67,10 +67,10 @@
                 {%for i in imagen%}
 
                 <label for="{{i.id}}" class="image-option">
-                    <input type="radio" id="{{i.id}}" name="default_image" value="{{i.imagen}}" class="image-radio">
-                    {% if i.imagen%}
+                    <input type="radio" id="{{i.id}}" name="default_image" value="{{i.imagen.name}}" class="image-radio">
+                    {% if i.imagen %}
                     <img src="{{i.imagen.url}}" alt="Default Image {{i.id}}" class="default-image">
-                    {% elif  i.imagen_url%}
+                    {% elif i.imagen_url %}
                     <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
                     {% else %}
                     IMAGEN NO ENCONTRADA

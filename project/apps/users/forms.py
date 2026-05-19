@@ -4,6 +4,8 @@ from .models import customuser as CustomUser
 from django.contrib.auth.forms import AuthenticationForm
 
 class CustomUserCreationForm(UserCreationForm):
+    imagen = forms.ImageField(required=False)
+
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         
