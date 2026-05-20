@@ -51,7 +51,7 @@ html, body{
     background-color: var(--white-90);
     display: flex;
     flex-direction: column;
-    
+    margin: 3%;
     overflow: hidden;
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
@@ -151,6 +151,8 @@ in the web, the photo and the text*/
     background-position: center;
     width: 100%;
     padding: 8%;
+    margin-left: 4%;
+    margin-right: 4%;
     position:relative;
     justify-content: center;
     align-items:center;
@@ -171,15 +173,15 @@ in the web, the photo and the text*/
     margin-block-start:3rem;
     font-size: 1.3rem;
     color:white;
-
+    text-align: center;
 }
 .main-tittle{
     position:relative;
-
+   font-family:"Nabla", system-ui;
     color:white;
     font-size: 2.5rem;
-    
-  font-size: 50px;
+    transform: rotate(-7deg);
+  font-size: 80px;
     
    animation: glowcolor 5s infinite;
  transition: transform 1s ease;
@@ -193,9 +195,9 @@ in the web, the photo and the text*/
 
 
 @keyframes glowcolor {
-    20%  {text-shadow:0 0 10px lime;}
-    50% {text-shadow:0 0 10px  cyan;}
-    100%  {text-shadow:0 0 10px darkviolet;}
+    20%  {text-shadow:0 0 15px rgb(82, 255, 82);}
+    50% {text-shadow:0 0 15px  rgb(0, 255, 255);}
+    100%  {text-shadow:0 0 15px rgb(200, 71, 255);}
 
 
 }
@@ -252,6 +254,7 @@ in the web, the photo and the text*/
     z-index: 0;
     position: relative;
     margin-top: 0rem;
+    align-items: column;
 }
 .dual-conatiner div{
     height: 80vh;
@@ -260,9 +263,7 @@ in the web, the photo and the text*/
     background: linear-gradient(
     color-mix(in srgb, var(--primary-color) 80%, transparent),
     color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
-
     transition:all 0.6s ease-in-out;
-    
 }       
 .dual-conatiner div:hover{
     scale: 1.1;
@@ -286,8 +287,8 @@ object-fit: cover;
     flex-wrap:nowrap;
     position: relative;
     scroll-behavior: smooth;
-
-
+    margin-left: 4% ;
+    margin-right: 4%;
 }
 
 /*scroll buttons only made with css*/

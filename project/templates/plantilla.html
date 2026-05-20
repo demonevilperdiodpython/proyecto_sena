@@ -7,7 +7,9 @@
         {%block css%}
         {% endblock %}
         <script src="{% static 'js/plantilla.js'%}"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
     </head>
     <body style="display: flex; flex-direction: column; align-items: center;">
         <div class="navbar">
@@ -16,7 +18,7 @@
                 <a href="{%url 'catalog:home'%}">
                     <div class="nav-logo">
                         
-                        <img src="{% static 'img\Logo.png' %}" alt="logo">
+                        <p>SM</p>
                     </div>
                 </a>
                 
@@ -35,7 +37,7 @@
 <!-- not sure of why this causes an erro on vs code, but still runs so dont worry-->
                             {%if user.is_authenticated%}
                                 {{user.username}}
-                                <img src="{{user.imagen.url}}" alt="">
+                                <img src="{{user.imagen.url}}" alt="" class="userImagen">
                                 <li><button onclick="window.location.href='{%url 'users:logout'%}'">logout</button></li>
                                 <li><button onclick="window.location.href='{% url 'catalog:add_group'%}'">groups</BUTTON></li>
                             {%else%}

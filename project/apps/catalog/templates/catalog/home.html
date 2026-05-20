@@ -17,6 +17,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
 {%endblock%}
 
 
@@ -147,7 +150,6 @@
     <div>
         <h1> mejores usuarios</h1>
         {%for x in best_users%}
-            {{x.imagen.url}}
             
             {% if x.imagen %}
             <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
