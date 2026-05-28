@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import producto
 from .forms import productoForm
 from .utils import SepareByClass
@@ -12,10 +14,30 @@ from apps.users.models import customuser as CustomUser
 from .forms import postImagenForm
 from .forms import postVideoForm
 from .models import postvideo
-# Create your views here.
 
-
-
+def ia(request):
+    # Support htmx/htmlx detection without requiring middleware
+    is_htmx = request.headers.get("HX-Request") or getattr(request, "htmlx", None) or getattr(request, "htmx", None)
+    if is_htmx:
+        if request.method == "POST" and request.POST.get("input_text"):
+            print("-------------------------    -------------------------")
+            description = request.POST.get("input_text")
+            print(description)
+            client = Client()
+            output = client.generate(
+                model="tinyllama",
+                prompt=f"answer anything youre told: {description}",
+                stream=False,
+                options={
+                    "num_predict": 100,
+                    "temperature": 0.5,
+                }
+            )
+            context={
+                "response": output["response"],
+                "description": description}
+            return render(request, "catalog/ia_response.html", context=context)
+    return render(request, "catalog/ia.html")
 def home(request):
     pecheras = producto.objects.filter(categoria="pechera")
     grupos = SepareByClass(producto)
