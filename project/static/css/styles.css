@@ -111,7 +111,7 @@ body, html{
     font-family: 'Arial', sans-serif;
     background: var(--full-white);
     padding-bottom: 50px; 
-    background-image: url("/static/img/naranja.jpeg");
+    
 
 }
 h2 {margin-left: 4% ;}
@@ -133,7 +133,6 @@ h2 {margin-left: 4% ;}
     justify-content: space-between;
     align-items: center;
     width: 100%;
-
     height: 11%;
     background: linear-gradient(rgb(71, 73, 228), rgb(173, 104, 236)  );
     z-index: 1000;
