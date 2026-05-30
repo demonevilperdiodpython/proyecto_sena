@@ -18,3 +18,20 @@ button.forEach(e => {
     });
 });
     
+const boton = document.getElementById("modo");
+
+if(localStorage.getItem("tema") === "dark"){
+    document.body.classList.add("dark");
+}
+
+boton.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+        localStorage.setItem("tema","dark");
+    }else{
+        localStorage.setItem("tema","light");
+    }
+
+});

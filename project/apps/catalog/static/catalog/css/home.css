@@ -9,12 +9,34 @@ html{
 
 
 html, body{
-    background-color:var(--white-95)
+    
 }
 
+:root{
+    --fondo: white;
+    --texto: black;
+    --card: #f0f0f0;
+}
 
+.dark{
+    --fondo: #121212;
+    --texto: white;
+    --card: #1e1e1e;
+}
 
+body, .dual-conatiner, .footer, .carousel-repeat{
+    background: var(--fondo);
+    color: var(--texto);
+}
 
+.card{
+    background: var(--card);
+}
+
+#modo {width: 40px;
+    height: 40px;
+    font-size: 20px;
+}
 
 .products-list{
     display: grid;  
@@ -139,13 +161,13 @@ in the web, the photo and the text*/
 .main{
     display:flex;
     
-    margin: 2rem 0em;
+    margin: 2rem 25em;
     justify-content: center;
 }
 .main-background{
     display:flex;
     flex-direction: column;
-    background-image:url("../imagen/books_image.jpg");
+    background-image:url("../imagen/yokse.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -211,12 +233,11 @@ in the web, the photo and the text*/
     justify-content: space-evenly;
     border-top: 2px solid black;
     padding-bottom : 3rem; padding-top: 1rem;
-    
 }
 .footer-container{
     border-radius: 10px;
     height: 100%;
-    
+       margin: 2rem 2em;
     transition: all 0.1s ease-in-out;
     background: linear-gradient(
     color-mix(in srgb, var(--primary-color) 80%, transparent),
@@ -258,6 +279,7 @@ in the web, the photo and the text*/
 }
 .dual-conatiner div{
     height: 80vh;
+    margin: 2rem 5em;
     box-shadow: 1px 1px 20px var(--primary-color-dark);
     border-radius: 20px;
     background: linear-gradient(
@@ -289,6 +311,7 @@ object-fit: cover;
     scroll-behavior: smooth;
     margin-left: 4% ;
     margin-right: 4%;
+     margin: 2rem 20rem;
 }
 
 /*scroll buttons only made with css*/
@@ -307,7 +330,8 @@ object-fit: cover;
     padding-bottom: .1em;
     cursor: pointer;
     position:absolute;
-    
+    margin-left: 9rem;
+    margin-right: 9rem;
     right:5%;
     top: 50%;
     transform: translateY(-50%);

@@ -13,8 +13,7 @@
     </head>
     <body style="display: flex; flex-direction: column; align-items: center;">
         <div class="navbar">
-            <div class="nav-container">
-                
+            <div class="nav-container">      
                 <a href="{%url 'catalog:home'%}">
                     <div class="nav-logo">
                         
@@ -25,7 +24,11 @@
 
                 <div class="nav-links">
                 </div>
+                    <div class="boton-tema">
+                        <button id="modo">🌙</button>
 
+                        <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+                    </div> 
                 <div>
                     <div class="nav_extensable-button">
                         <button class="toggle-btn">
