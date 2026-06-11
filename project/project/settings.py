@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'livereload',
     'django.contrib.staticfiles',
     'apps.users',
-    
+    'apps.grupos',
     'apps.catalog',  
 ]
 
