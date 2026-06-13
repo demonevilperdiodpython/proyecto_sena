@@ -1,8 +1,15 @@
 from django.shortcuts import render
-
-
-# Create your views here.
 from django.shortcuts import render
+from apps.catalog.models import topics_group
+from apps.catalog.utils import SepareByClass
 
 def categorias(request):
-    return render(request, 'grupos/categorias.html')
+    grupos = SepareByClass(topics_group)
+
+    return render(
+        request,
+        "grupos/categorias.html",
+        {"grupos": grupos}
+    )
+
+# Create your views here.
