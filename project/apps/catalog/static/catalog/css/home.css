@@ -8,9 +8,6 @@ html{
 /* carousel*/
 
 
-html, body{
-    
-}
 
 :root{
     --fondo: white;
@@ -33,10 +30,17 @@ body, .dual-conatiner, .footer, .carousel-repeat{
     background: var(--card);
 }
 
-#modo {width: 40px;
-    height: 40px;
-    font-size: 20px;
+#modo {width: 30px;
+    height: 30px;
+    font-size: 15px;
+    border-radius: 55%;
+    
 }
+.boton-tema {display: flex;
+flex-direction: row;
+gap: 10px ;
+}
+
 
 .products-list{
     display: grid;  
