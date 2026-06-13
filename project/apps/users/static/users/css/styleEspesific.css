@@ -22,7 +22,7 @@
     display:flex;
     width: 35%;
     height: 45%;
-    border-radius: 50%;
+    border-radius: 10px;
     margin-bottom: 10px;
     align-self: center;
     border: 2px solid black;

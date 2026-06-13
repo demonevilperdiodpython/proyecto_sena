@@ -35,8 +35,10 @@ class post(models.Model):
     content = models.TextField(max_length=1000)
     user = models.ForeignKey(user, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add= True )
-    group = models.ForeignKey('topics_group', on_delete=models.CASCADE, related_name='post', blank = True)
+    updated_at = models.DateTimeField(auto_now_add= True)
+    group = models.ForeignKey('topics_group', on_delete=models.CASCADE, related_name='post', blank = True, null=True)
+    ia_response= models.TextField(blank=True, null=True)
+    
     
 class postimagen(models.Model):
     post = models.ForeignKey(post, on_delete=models.CASCADE, related_name='imagenes', default=None)

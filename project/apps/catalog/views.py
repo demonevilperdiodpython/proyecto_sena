@@ -14,29 +14,9 @@ from apps.users.models import customuser as CustomUser
 from .forms import postImagenForm
 from .forms import postVideoForm
 from .models import postvideo
+from ollama import Client
 
 def ia(request):
-    # Support htmx/htmlx detection without requiring middleware
-    is_htmx = request.headers.get("HX-Request") or getattr(request, "htmlx", None) or getattr(request, "htmx", None)
-    if is_htmx:
-        if request.method == "POST" and request.POST.get("input_text"):
-            print("-------------------------    -------------------------")
-            description = request.POST.get("input_text")
-            print(description)
-            client = Client()
-            output = client.generate(
-                model="tinyllama",
-                prompt=f"answer anything youre told: {description}",
-                stream=False,
-                options={
-                    "num_predict": 100,
-                    "temperature": 0.5,
-                }
-            )
-            context={
-                "response": output["response"],
-                "description": description}
-            return render(request, "catalog/ia_response.html", context=context)
     return render(request, "catalog/ia.html")
 def home(request):
     pecheras = producto.objects.filter(categoria="pechera")
@@ -94,13 +74,29 @@ def topic_group(request, id):
     imagenform = postImagenForm(request.POST or None, request.FILES or None)
     
     if request.method == 'POST':
+        print('--------------------POST REQUEST---------------------')
         if form.is_valid():
             print('--------------------FORM VALID---------------------')
+            print(request.POST.get("ia"))
             post = form.save(commit=False)
             post.user = request.user
             post.group = group
             post.save()
-
+            if request.POST.get("ia") == "True":
+                print('--------------------IA REQUEST---------------------')
+                client = Client()
+                output = client.generate(
+                    model="tinyllama",
+                    prompt=f"answer anything youre told: {post.content}",
+                    stream=False,
+                    options={
+                        "num_predict": 100,
+                        "temperature": 0.5,
+                    }
+                )
+                print("output:", output["response"])
+                post.ia_response = output["response"]
+                post.save()
             if videoform.is_valid() and videoform.cleaned_data.get('video'):
                 video = videoform.save(commit=False)
                 video.post = post
@@ -114,10 +110,10 @@ def topic_group(request, id):
                 imagen.save()
             else:
                 print('imagenform errors:', imagenform.errors)
-
-            return redirect('catalog:topic_group', id=id)
-        else:
-            print('post form errors:', form.errors)
+                return redirect('catalog:topic_group', id=id)
+            
+            print(request.method == 'POST' and request.POST.get("ia") == "True")
+        
 
     return render(request, "catalog/group.html", {"group": group, 
                                                 "sections": sections,
@@ -160,3 +156,27 @@ def edit_post(request):
         Post.content = content
         Post.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def ia_response(request):
+        # Support htmx/htmlx detection without requiring middleware
+  
+    
+    if request.method == "POST" and request.POST.get("input_text"):
+        print("-------------------------    -------------------------")
+        description = request.POST.get("input_text")
+        print(description)
+        client = Client()
+        output = client.generate(
+            model="tinyllama",
+            prompt=f"answer anything youre told: {description}",
+            stream=False,
+            options={
+                "num_predict": 100,
+                "temperature": 0.5,
+            }
+        )
+        context={
+            "response": output["response"],
+            "description": description}
+        return render(request, "catalog/ia_response.html", context=context)
+    

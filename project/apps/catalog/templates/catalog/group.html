@@ -30,6 +30,10 @@
                 <div class="post-text view">
                     <p>
                         {{i.content}}
+                        
+                    </p>
+                    <p>
+                        response: {{i.ia_response}}
                     </p>
                     <div>
                         
@@ -44,7 +48,7 @@
                     {% for imagen in i.imagen.all%}
                         {% if imagen.imagen %}
                             <img src="{{ imagen.imagen.url }}" alt="{{ imagen.tittle }}" style="max-width: 100%;" />
-                        {% endif %}
+                        {% endif %} 
                     {% endfor %}
                     </div>
                     <div>
@@ -93,14 +97,14 @@
     </div>
     <form method="post" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
-
+        <input type="Radio" value="True" name="ia">
         {{ form.non_field_errors }}
         {{ videoform.non_field_errors }}
         {{ imagenform.non_field_errors }}
 
         {{ videoform }}
         {{ imagenform }}
-
+        
         <input type="hidden" name="user.id" value="{{ request.user.id }}">
 
         {% for field in form %}

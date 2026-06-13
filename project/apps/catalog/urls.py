@@ -13,6 +13,7 @@ urlpatterns = [
     path('add_group/', views.add_group, name='add_group'),
     path('eliminate_post/', views.eliminate_post, name='eliminate_post'),
     path('edit_post/', views.edit_post, name='edit_post'),
-    path("ia/" , views.ia , name="ia")
+    path("ia/" , views.ia , name="ia"),
+    path("ia_response/" , views.ia_response , name="ia_response")
 ]
 

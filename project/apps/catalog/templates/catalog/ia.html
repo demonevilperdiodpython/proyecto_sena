@@ -10,16 +10,12 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" hx-post="{% url 'catalog:ia' %}" hx-target="#response" hx-swap="innerHTML">
+<form method="post" hx-post="{% url 'catalog:ia_response' %}" hx-target="#response" hx-swap="innerHTML">
   {% csrf_token %}
   <input name="input_text" />
   <button type="submit">Ask</button>
 </form>
 
 <div id="response">
-    asdfadsf
-  {% if response %}
-   <p>puto: {{ response|linebreaks }}<p>
-  {% endif %}
 </div>
 {% endblock %}

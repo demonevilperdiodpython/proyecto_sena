@@ -83,13 +83,13 @@ form{
 
 button[type="submit"]{
     border: None;
-    width: 10vw;
+    width: 6vw;
     border-radius: 5px;
     height: 5vh;
     margin-top: 20px;
     background-color: var(--primary-color);
     transition: all 0.3s ease-in-out;
-}
+}   
 button[type="submit"]:hover{
     
     scale: 1.05;

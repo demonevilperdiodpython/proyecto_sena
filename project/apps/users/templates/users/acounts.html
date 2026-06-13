@@ -16,14 +16,15 @@
 {% block content %}
     
     {%for i in ingresed_users%}
-        {%if not i.user.is_banned%}
+        {%if not i.is_banned%}
             {%if i.is_active%}
             <div class="user-card" 
             onclick="window.location.href='{% url 'users:login_with_user' %}'">
                 <input type="hidden" name="user" value="{{i.user}}">
                 <div class="user-img-1">
     
-                        <img src="{{i.user.imagen.url}}">
+                        <img src="{{i.user.imagen.url}}" alt="" class="userImagen">
+                        
                 </div>
                 <div class="user-info">
                     <p>Usuario: {{i.user.username}}</p>
@@ -36,7 +37,7 @@
                 <form method="POST" action="{% url 'users:eliminate_user_session' i.user.id%}">
                         {% csrf_token %}
         
-                        <button type="submit">Eliminar</button>
+                        <button type="submit" class="eliminar">Eliminar</button>
                     
                 </form>
 
