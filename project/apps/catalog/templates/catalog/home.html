@@ -24,7 +24,7 @@
 
 
 
-
+    
 <!-- the block content is always to  write the html-->
 <!-- notice that html like this dont have the usual-->
 <!--  structure of html, that is cause they're extending from "plantilla.html"-->
@@ -68,14 +68,15 @@
     </div>
 </div>
 
-
+<div>
+    <h1>titulo</h1>
 <div class="flex-grid">
     <section class="bigflex"  style="background-color: var(--primary-color-lighter)">
         <div class="flex-image">
             <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
         </div>
         <section>
-            hoala
+            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit qui magnam suscipit velit assumenda? In repudiandae autem nobis commodi temporibus.</p>
         </section>
     </section>
 
@@ -84,7 +85,8 @@
             <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
         </div>
         <section>
-            hoala
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci exercitationem accusamus laudantium provident autem repudiandae corrupti aperiam vel aut quibusdam harum, eos enim, dignissimos nobis! Aperiam deleniti, labore accusantium aliquid velit totam repellat illo quis ex architecto sint quam qui recusandae eum impedit possimus cumque earum quisquam! At, quo?
+        </P>
         </section>
         
     </section>
@@ -97,7 +99,7 @@
             <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
         </div>
         <section>
-            hoala
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque aperiam tempora quia nulla recusandae unde esse. Reiciendis quidem animi fugiat?</p>
         </section>
     </section>
     <section class="bigflex" style="background-color: var(--secondary-color-lighter)">
@@ -106,10 +108,12 @@
             <img>
         </div>
         <section>
-            hola
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium perspiciatis tempora nulla quis! Mollitia vero voluptatibus praesentium possimus itaque eos provident fugit odio quam. Nisi dignissimos natus distinctio dicta quaerat!    
         </section>
     
     </section>
+</div>
+
 </div>
 <div class="carousel-repeat">
     {%for categoria, grupo in grupos.items%}

@@ -15,7 +15,7 @@
     --full-white: hsl(250 0% 100%);
     --white: hsl(250 5% 95%);
     --white-90: hsl(250 5% 90%);
-    --white-85: hsl(250 5% 50%)
+    --white-85: hsl(250 5% 50%);
 
 
 }
@@ -277,23 +277,9 @@ p{
 h{
     color: #000025;
 }
-.search-bar input[type="text"]{ 
-    width: 40vw;
-    height:10vh;
-    border-radius: 15px;
-
-}
-.search-bar button{
-    width: 10vh;
-    height: 10vh;
-    border-radius: 15px;
-
-}
-.search-bar{
-    width: 100%;
-    height: fit-content;
-    display:flex;
-    flex-direction:column;
+.left-navbar{
+    display: flex;
     align-items: center;
+   
+    gap: 30px;
 }
-

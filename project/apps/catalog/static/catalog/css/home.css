@@ -259,7 +259,11 @@ in the web, the photo and the text*/
     width: 100%;
     height: 70%;
     background-color: white;
-
+    }
+.flex-image1{
+    width: 100%;
+    height:100%;
+    object-fit:cover;
 }
 @keyframes glowcolor {
     20%  {text-shadow:0 0 15px rgb(82, 255, 82);}
@@ -281,7 +285,6 @@ in the web, the photo and the text*/
 }
 .footer-container{
     border-radius: 10px;
-    height: 100%;
     margin: 2rem 2em;
     transition: all 0.1s ease-in-out;
     background: var(--primary-color);
@@ -354,7 +357,7 @@ object-fit: cover;
     scroll-behavior: smooth;
     margin-left: 4% ;
     margin-right: 4%;
-     margin: 2rem 20rem;
+    margin: 2rem 10rem;
 }
 
 /*scroll buttons only made with css*/
@@ -375,14 +378,16 @@ object-fit: cover;
     position:absolute;
     margin-left: 9rem;
     margin-right: 9rem;
-    right:5%;
+    right:0%;
     top: 50%;
     transform: translateY(-50%);
+    transform:translateX(100px)
 
 }
 .carousel::scroll-button(left){
-    left: 5%;
-    content: "<"
+    left: 0%;
+    content: "<";
+    transform:translateX(-100px)
     
 }
 .carousel::-webkit-scrollbar{
@@ -391,4 +396,32 @@ object-fit: cover;
 
 .secondary-lighter{
     background: var(--secondary-color-lighter);
+}
+.search-bar input[type="text"]{ 
+    width: 40vw;
+    height:10vh;
+    border-radius: 15px;
+
+}
+.search-bar button{
+    width: 10vh;
+    height: 10vh;
+    border-radius: 15px;
+
+}
+.search-bar{
+    width: 100%;
+    height: fit-content;
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    z-index: 4;
+}
+
+
+.main-search{
+    z-index: 4;
+}
+.nav-links a{
+    margin-right:1rem;
 }

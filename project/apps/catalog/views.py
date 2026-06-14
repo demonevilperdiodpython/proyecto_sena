@@ -180,7 +180,7 @@ def ia_response(request):
             "description": description}
         return render(request, "catalog/ia_response.html", context=context)
 
-def groups_list(request):
+def search_view(request):
     pecheras = producto.objects.filter(categoria="pechera")
     grupos = SepareByClass(producto)
     grupo = topics_group.objects.all()
@@ -193,4 +193,4 @@ def groups_list(request):
 def search(request):
     query = request.GET.get("search")
     grupos = topics_group.objects.filter(name__icontains=query)
-    return render(request, "catalog/search_results.html", {"grupos": grupos, "query": query})
+    return render(request, "catalog/search_results.html", {"grupos": grupos, "query": query})   

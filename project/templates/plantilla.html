@@ -17,18 +17,20 @@
     <body>
     <div class="navbar-sticky">
         <div class="navbar">
-            <a href="{%url 'catalog:home'%}">
-                <div class="nav-logo">
-                    
-                    <p>SM</p>
-                </div>
-            </a>
-            
+            <section class="left-navbar">
+                <a href="{% url 'catalog:home' %}">
+                    <div class="nav-logo">
+                        <p>SM</p>
+                    </div>
+                </a>
 
             <div class="nav-links">
-                <a href="{% url 'catalog:grupos' %}">Grupos</a>
+                <a href="{% url 'catalog:search' %}">Grupos</a>
+                <a>more</a>
+                <a href="{%url 'catalog:home'%}"></a>
             </div>
-                
+            </section>
+
             <section>
                 <div class="nav_extensable-button">
                     <button class="toggle-btn">
