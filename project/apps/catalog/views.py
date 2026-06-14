@@ -179,4 +179,18 @@ def ia_response(request):
             "response": output["response"],
             "description": description}
         return render(request, "catalog/ia_response.html", context=context)
-    
+
+def groups_list(request):
+    pecheras = producto.objects.filter(categoria="pechera")
+    grupos = SepareByClass(producto)
+    grupo = topics_group.objects.all()
+    grupo = SepareByClass(topics_group)
+
+    best_group = topics_group.objects.order_by('-score')[:5]
+    best_user  =  CustomUser.objects.order_by('-score')[:5]
+    return render(request, "catalog/groups.html", {"pecheras" :pecheras, "grupos": grupo, "best_users" : best_user, "best_groups": best_group})
+
+def search(request):
+    query = request.GET.get("search")
+    grupos = topics_group.objects.filter(name__icontains=query)
+    return render(request, "catalog/search_results.html", {"grupos": grupos, "query": query})

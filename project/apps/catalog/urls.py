@@ -14,6 +14,8 @@ urlpatterns = [
     path('eliminate_post/', views.eliminate_post, name='eliminate_post'),
     path('edit_post/', views.edit_post, name='edit_post'),
     path("ia/" , views.ia , name="ia"),
-    path("ia_response/" , views.ia_response , name="ia_response")
+    path("ia_response/" , views.ia_response , name="ia_response"),
+    path("grupos" , views.groups_list , name="grupos"),
+    path("search", views.search, name="search"),
 ]
 

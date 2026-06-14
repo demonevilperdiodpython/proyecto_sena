@@ -1,0 +1,137 @@
+
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block title %}Grupos Catalog{% endblock %}
+
+{% block css %}
+{%endblock%}
+
+
+{% block content %}
+<div class="dual-conatiner">
+    <div>
+        <h1> mejores usuarios</h1>
+        {%for x in best_users%}
+            
+            {% if x.imagen %}
+            <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
+            {%endif%}
+            <p>{{x.username}}</p>
+        {%endfor%}
+    </div>
+    <div>
+        <h1>mejores grupos</h1>
+        {%for x in best_groups%}
+            {% if x.imagen %}
+            <img src="{{x.imagen.url}}" alt="{{x.name}}" class="foto-perfil">
+            {%endif%}
+            <p>{{x.name}}</p>
+            {{x.name}}
+        
+        {%endfor%}
+        
+    </div> 
+</div>
+
+
+<div class="carousel-repeat">
+    {%for categoria, grupo in grupos.items%}
+    <h2> {{categoria}} </h2>
+    <div style="position:relative;">
+    <div class="carousel">
+        <div class="container-3">
+            <div class="products-list" id="1">
+            {%for x in  grupo%}
+                {% if x.imagen %}
+                    <div class="product">
+                    
+                        <div class="img-container">
+                            <a href="{%url 'catalog:topic_group' x.id%}">
+                                <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" >
+                            </a>
+                        </div>
+                    
+                        <div class="text">
+                            <h4>{{ x.nombre }}</h4>
+                            <p>{{ x.descripcion }}</p>
+                            <div class="hidden-text">
+                                <p>{{ x.descripcion }}</p>
+                                <p>stock: {{ x.stock}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% elif  x.imagen_url %}
+                    <div class="product">
+                            
+                            <div class="img-container">
+                                <a href="{%url 'catalog:topic_group' x.id%}">
+                                <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                                </a>
+                            </div>
+                            
+                        
+                        <div class="text">
+                            <h4>{{ x.nombre }}</h4>
+                            <p>{{ x.descripcion }}</p>
+                            <div class="hidden-text">
+                                <p>{{ x.descripcion }}</p>
+                                <p>stock: {{ x.stock}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
+        <div class="container-3">
+            
+            <div class="products-list" id="1">
+            {%for x in  grupo%}
+                {% if x.imagen %}
+                    <div class="product">
+                    
+                        <div class="img-container">
+                            <a href="{%url 'catalog:topic_group' x.id%}">
+                                <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" >
+                            </a>
+                        </div>
+                    
+                        <div class="text">
+                            <h4>{{ x.nombre }}</h4>
+                            <p>{{ x.descripcion }}</p>
+                            <div class="hidden-text">
+                                <p>{{ x.descripcion }}</p>
+                                <p>stock: {{ x.stock}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% elif  x.imagen_url %}
+                    <div class="product">
+                            
+                            <div class="img-container">
+                                <a href="{%url 'catalog:topic_group' x.id%}">
+                                <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                                </a>
+                            </div>
+                            
+                        
+                        <div class="text">
+                            <h4>{{ x.nombre }}</h4>
+                            <p>{{ x.descripcion }}</p>
+                            <div class="hidden-text">
+                                <p>{{ x.descripcion }}</p>
+                                <p>stock: {{ x.stock}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    {%endfor%}
+</div>
+{% endblock %}
+

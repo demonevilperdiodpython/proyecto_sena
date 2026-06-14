@@ -21,8 +21,8 @@ html{
     --card: #1e1e1e;
 }
 
-body, .dual-conatiner, .footer, .carousel-repeat{
-    background: var(--fondo);
+body, .dual-conatiner,.carousel-repeat{
+    background: var(--primary-color-dark);
     color: var(--texto);
 }
 
@@ -40,7 +40,6 @@ body, .dual-conatiner, .footer, .carousel-repeat{
 flex-direction: row;
 gap: 10px ;
 }
-
 
 .products-list{
     display: grid;  
@@ -164,8 +163,8 @@ gap: 10px ;
 in the web, the photo and the text*/
 .main{
     display:flex;
-    
-    margin: 2rem 25em;
+    background: var(--primary-color-dark);
+    flex-direction: column; 
     justify-content: center;
 }
 .main-background{
@@ -175,24 +174,30 @@ in the web, the photo and the text*/
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    width: 100%;
-    padding: 8%;
-    margin-left: 4%;
-    margin-right: 4%;
-    position:relative;
-    justify-content: center;
-    align-items:center;
+    border-radius: 30px; 
+    position: relative;
 }
-/*overlay class is only used to  add a gradient over the image at main*/
-.overlay{
-    border-image-source: linear-gradient( hsl(240 100% 50% / 0.2), hsla(293, 100%, 50%, 0.2) );
-    border-image-slice: 1 fill;
-
-    }
-    
-
+.main-background::after{
+    content:"";
+    top:0;
+    position:absolute;
+    left:0;
+    background: linear-gradient( hsl(240 100% 50% / 0.2), hsla(293, 100%, 50%, 0.2) );
+    border-radius: 30px;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+}
+.mainmain{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-rows: 70vh;
+    gap:20px;
+    padding: 10%;
+;
+}   
 .main-text-container{
-    width:60%;
+    
     margin-top: 5rem;  
 }
 .main-text-container p{
@@ -202,17 +207,15 @@ in the web, the photo and the text*/
     text-align: center;
 }
 .main-tittle{
+    margin-top: 50px;
     position:relative;
-   font-family:"Nabla", system-ui;
+    font-family:"Nabla", system-ui;
     color:white;
     font-size: 2.5rem;
-    transform: rotate(-7deg);
-  font-size: 80px;
     
-   animation: glowcolor 5s infinite;
- transition: transform 1s ease;
-
-    
+    font-size: 80px;
+    animation: glowcolor 5s infinite;
+    transition: transform 1s ease;  
 }
 /*glowborder: class only added to  give an animation on  the */
 .glowborder{
@@ -220,6 +223,44 @@ in the web, the photo and the text*/
 }
 
 
+.flex-grid{
+    height: 500px;
+    
+    margin-top: 5rem;
+    margin-bottom:5rem;
+    display:flex;
+    flex-direction: row;
+    box-sizing: border-box;
+
+}
+.bigflex{
+    margin:10px;
+    width: 65%;
+    display:flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 30px;
+    overflow: hidden;
+    position:relative
+}
+.shortflex{
+    margin:10px;
+    width:35%;
+    display:flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 30px;
+    overflow: hidden;
+    position:relative;
+
+
+}
+.flex-image{
+    width: 100%;
+    height: 70%;
+    background-color: white;
+
+}
 @keyframes glowcolor {
     20%  {text-shadow:0 0 15px rgb(82, 255, 82);}
     50% {text-shadow:0 0 15px  rgb(0, 255, 255);}
@@ -228,24 +269,22 @@ in the web, the photo and the text*/
 
 }
 
-.main-tittle:hover{ transform: scale(1.1);}
+
 
 /* footer container*/
 .footer{
     position: relative;
     display:flex;
     justify-content: space-evenly;
-    border-top: 2px solid black;
+    
     padding-bottom : 3rem; padding-top: 1rem;
 }
 .footer-container{
     border-radius: 10px;
     height: 100%;
-       margin: 2rem 2em;
+    margin: 2rem 2em;
     transition: all 0.1s ease-in-out;
-    background: linear-gradient(
-    color-mix(in srgb, var(--primary-color) 80%, transparent),
-    color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
+    background: var(--primary-color);
 
     transition: all 1.3s ease-in-out;
     
@@ -348,4 +387,8 @@ object-fit: cover;
 }
 .carousel::-webkit-scrollbar{
     display: none;
+}
+
+.secondary-lighter{
+    background: var(--secondary-color-lighter);
 }
