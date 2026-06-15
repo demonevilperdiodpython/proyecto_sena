@@ -7,8 +7,7 @@
 
 {%block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
-
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,33 +18,19 @@
 
 {% block content %}
 <div class="search-container">
-    <div class="search-options">
+    <div class="search options">
         <form action="{% url 'catalog:search' %}" method="GET">
             <input type="text" name="search" placeholder="search">
+            
             <button type="submit">search</button>
         </form> 
     </div>
+    <div class="searched-group">
+
+    </div>
 </div>
 
-<div class="asidemain">
-<div class="searched-group">
-    {%for i in grupos%}
-    <section class="group">
-        <div class="group-img">
-            <img src="{{i.imagen.url}}">
-        </div>
-        <div class="group-text">
-            <p>
-            {{i.nombre}}
-            {{i.descripcion}}
-            </p>
-            <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, dolorem? </p>
-        </div>
-        </section>
-    {%endfor%}
-</div>
-<aside class="dual-conatiner">
-    
+<div class="dual-conatiner">
     <div>
         <h1> mejores usuarios</h1>
         {%for x in best_users%}
@@ -68,9 +53,6 @@
         {%endfor%}
         
     </div> 
-
-</aside>
-<div>
+</div>
 
 {% endblock %}
-

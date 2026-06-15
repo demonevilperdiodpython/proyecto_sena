@@ -172,7 +172,7 @@ def ia_response(request):
             stream=False,
             options={
                 "num_predict": 100,
-                "temperature": 0.5,
+                "temperature": 0.5, 
             }
         )
         context={
@@ -184,8 +184,7 @@ def search_view(request):
     pecheras = producto.objects.filter(categoria="pechera")
     grupos = SepareByClass(producto)
     grupo = topics_group.objects.all()
-    grupo = SepareByClass(topics_group)
-
+    
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user  =  CustomUser.objects.order_by('-score')[:5]
     return render(request, "catalog/groups.html", {"pecheras" :pecheras, "grupos": grupo, "best_users" : best_user, "best_groups": best_group})

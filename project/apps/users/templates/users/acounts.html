@@ -14,10 +14,11 @@
 {% endblock %}
 
 {% block content %}
-    
+    <div class="div-users">
     {%for i in ingresed_users%}
         {%if not i.is_banned%}
             {%if i.is_active%}
+
             <div class="user-card" 
             onclick="window.location.href='{% url 'users:login_with_user' %}'">
                 <input type="hidden" name="user" value="{{i.user}}">
@@ -46,4 +47,5 @@
         {%endif%}  
           
     {%endfor%}
+    </div>
 {% endblock %}

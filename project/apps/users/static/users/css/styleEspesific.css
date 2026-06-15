@@ -9,7 +9,7 @@
     transition: 0.4s all ease-out;
     border-radius: 15px;
     height: 200px;
-    width: 400px;
+    width: 100%;
     box-sizing: border-box;
 }
 .user-card:hover{
@@ -36,6 +36,7 @@
     height: auto;
     user-select: none; 
     pointer-events: none;
+    object-fit: cover;
 }
 .user-info{
     display: flex;
@@ -46,9 +47,27 @@
     pointer-events: none;
 }
 
-.container {display: flex;
-flex-direction: column;
-gap: 15px;
-align-items: flex-start;
-padding-left:25px ;  }
+.container {
+    position:relative;
+    display:flex;
+    margin-top: 10%;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+.div-users{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 40%;
 
+}
+
+.navbar{
+    position:fixed;
+}
+.navbar-sticky{
+    z-index: 1;
+}
