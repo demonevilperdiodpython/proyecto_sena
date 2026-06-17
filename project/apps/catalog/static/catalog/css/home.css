@@ -171,7 +171,7 @@ in the web, the photo and the text*/
 .main-background{
     display:flex;
     flex-direction: column;
-    background-image:url("../imagen/yokse.png");
+    background-image:url("../imagen/books_image.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
