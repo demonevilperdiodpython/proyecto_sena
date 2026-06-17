@@ -5,27 +5,25 @@
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
-<link rel="stylesheet" type="text/css" href="{%static 'catalog/css/home.css'%}">
 
 {% endblock %}
 
 {% block content %}
-<form method="post" class="animated-input"></form>
-<div class="container-2">
-    
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="input-group">
-            {{field.as_widget }} {{ field.label_tag }}
-            {{ field.errors }}
-        </div>
-        {% endfor %}
-        <button type="submit">login</button>
-        {%if error%}
-            <p style="color:red;">{{error}}</p>
-        {%endif%}
-    
-</div>
-</form>
+
+    <div class="container-2">
+    <form method="post" class="animated-input"></form> 
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="input-group">
+                {{field.as_widget }} {{ field.label_tag }}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit">login</button>
+            {%if error%}
+                <p style="color:red;">{{error}}</p>
+            {%endif%}
+    </form>
+    </div>
+
 {% endblock %}

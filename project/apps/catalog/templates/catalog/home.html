@@ -37,9 +37,10 @@
     </div>
     <div class="main-search">
         <div class="search-bar">
-            <form action="{% url 'catalog:search'%}">
+            <form action="{% url 'catalog:search_view' 1%}" method="POST">
                 
-                <input type="text" placeholder="Search..." name="search">
+                {% csrf_token %}              
+                <input type="text" placeholder="search" name="search">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -47,23 +48,37 @@
     <div class="mainmain">
         
         <div class="main-background ">
+            <div class="main-bd-image">
+            <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Compartir con compañeros" class="main-bg-image">
             <section class="main-text-container"> 
                 <p class="main-text">
                     habla y comparte con compañeros con los cuales
                     compartes gustos e intereses
                 </p>
             </section>
+            </div>
+            
         </div>
         
-        <section class="main-background  main-img2">
-            <p class="main-text">
-                encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
-            </p>
+        <section class="main-background">
+            <div class="main-bd-image">
+                <img src="{% static 'catalog/img/reading1.jpg' %}" alt="Grupos de estudio" class="main-bg-image">
+                <section class="main-text-container"> 
+                    <p class="main-text">
+                        encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
+                    </p>
+                </section>
+            </div>    
         </section>
-        <section class="main-background main-img3">
-            <p class="main-text">
-                encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
-            </p>
+        <section class="main-background">
+            <div class="main-bd-image">
+                <img src="{% static 'catalog/img/cuadernos.jpg' %}" alt="Compartir conocimientos" class="main-bg-image">
+                <section class="main-text-container"> 
+                    <p class="main-text">
+                        encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
+                    </p>
+                </section>
+            </div>
         </section>
     </div>
 </div>
@@ -72,146 +87,95 @@
     <h1>titulo</h1>
 <div class="flex-grid">
     <section class="bigflex"  style="background-color: var(--primary-color-lighter)">
-        <div class="flex-image">
-            <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
+        <div class="bigflex-media">
+            <img src="{% static 'catalog/img/bochi-the-rock-guitarra.jpg' %}" alt="Guitarra en estudio">
         </div>
-        <section>
-            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit qui magnam suscipit velit assumenda? In repudiandae autem nobis commodi temporibus.</p>
+        <section class="bigflex-info">
+            <h2>Estudia guitarra</h2>
+            <p>busca quienes esten interesados en tocar guitarra con tigo.</p>
         </section>
     </section>
 
     <section class="shortflex"  style="background-color: var(--primary-color-lighter)">
-        <div class="flex-image1">
-            <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
+        <div class="shortflex-media">
+            <img src="{% static 'catalog/img/berserk_gym.jpg' %}" alt="Gym y estudio">
+            <div class="overlay-text">
+                <p>Rutinas simples para equilibrar ejercicio y estudio.</p>
+            </div>
         </div>
-        <section>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci exercitationem accusamus laudantium provident autem repudiandae corrupti aperiam vel aut quibusdam harum, eos enim, dignissimos nobis! Aperiam deleniti, labore accusantium aliquid velit totam repellat illo quis ex architecto sint quam qui recusandae eum impedit possimus cumque earum quisquam! At, quo?
-        </P>
-        </section>
-        
     </section>
 
 </div>
 
 <div class="flex-grid">
     <section class="shortflex" style="background-color: var(--secondary-color-lighter)">
-        <div class="flex-image1">
-            <img src="{% static 'catalog/img/pexels-pixabay-267569.jpg' %}" alt="Imagen 1">
+        <div class="shortflex-media">
+            <img src="{% static 'catalog/img/estudiar.jpg' %}" alt="Estudio académico">
+            <div class="overlay-text">
+                <p>Organiza tu estudio con reglas claras y breves.</p>
+            </div>
         </div>
-        <section>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque aperiam tempora quia nulla recusandae unde esse. Reiciendis quidem animi fugiat?</p>
-        </section>
     </section>
     <section class="bigflex" style="background-color: var(--secondary-color-lighter)">
-    
-        <div class="flex-image">
-            <img>
+        <div class="bigflex-media">
+            <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Estudio digital">
         </div>
-        <section>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium perspiciatis tempora nulla quis! Mollitia vero voluptatibus praesentium possimus itaque eos provident fugit odio quam. Nisi dignissimos natus distinctio dicta quaerat!    
+        <section class="bigflex-info">
+            <h2>Estudia online</h2>
+            <p>Aprende desde casa con materiales prácticos y rápidos.</p>
         </section>
-    
     </section>
 </div>
 
 </div>
 <div class="carousel-repeat">
-    {%for categoria, grupo in grupos.items%}
-    <h2> {{categoria}} </h2>
+    
+   
     <div style="position:relative;">
     <div class="carousel">
         <div class="container-3">
             <div class="products-list" id="1">
-            {%for x in  grupo%}
-                {% if x.imagen %}
-                    <div class="product">
-                    
-                        <div class="img-container">
-                            <a href="{%url 'catalog:topic_group' x.id%}">
-                                <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" >
-                            </a>
-                        </div>
-                    
-                        <div class="text">
-                            <h4>{{ x.nombre }}</h4>
-                            <p>{{ x.descripcion }}</p>
-                            <div class="hidden-text">
-                                <p>{{ x.descripcion }}</p>
-                                <p>stock: {{ x.stock}}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% elif  x.imagen_url %}
-                    <div class="product">
-                            
+                {% for x in grupos %}
+                    {% if x.imagen %}
+                        <div class="product">
                             <div class="img-container">
-                                <a href="{%url 'catalog:topic_group' x.id%}">
-                                <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                                <a href="{% url 'catalog:topic_group' x.id %}">
+                                    <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
                                 </a>
                             </div>
-                            
-                        
-                        <div class="text">
-                            <h4>{{ x.nombre }}</h4>
-                            <p>{{ x.descripcion }}</p>
-                            <div class="hidden-text">
-                                <p>{{ x.descripcion }}</p>
-                                <p>stock: {{ x.stock}}</p>
+                            <div class="text">
+                                <h4>{{ x.nombre }}</h4>
+                                <p>{{ x.descripcion|truncatechars:80 }}</p>
+                                <div class="hidden-text">
+                                    <p>{{ x.descripcion }}</p>
+                                    <p>score: {{ x.score }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-            </div>
-        </div>
-        <div class="container-3">
-            
-            <div class="products-list" id="1">
-            {%for x in  grupo%}
-                {% if x.imagen %}
-                    <div class="product">
-                    
-                        <div class="img-container">
-                            <a href="{%url 'catalog:topic_group' x.id%}">
-                                <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" >
-                            </a>
-                        </div>
-                    
-                        <div class="text">
-                            <h4>{{ x.nombre }}</h4>
-                            <p>{{ x.descripcion }}</p>
-                            <div class="hidden-text">
-                                <p>{{ x.descripcion }}</p>
-                                <p>stock: {{ x.stock}}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% elif  x.imagen_url %}
-                    <div class="product">
-                            
+                    {% elif x.imagen_url %}
+                        <div class="product">
                             <div class="img-container">
-                                <a href="{%url 'catalog:topic_group' x.id%}">
-                                <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                                <a href="{% url 'catalog:topic_group' x.id %}">
+                                    <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
                                 </a>
                             </div>
-                            
-                        
-                        <div class="text">
-                            <h4>{{ x.nombre }}</h4>
-                            <p>{{ x.descripcion }}</p>
-                            <div class="hidden-text">
-                                <p>{{ x.descripcion }}</p>
-                                <p>stock: {{ x.stock}}</p>
+                            <div class="text">
+                                <h4>{{ x.nombre }}</h4>
+                                <p>{{ x.descripcion|truncatechars:80 }}</p>
+                                <div class="hidden-text">
+                                    <p>{{ x.descripcion }}</p>
+                                    <p>score: {{ x.score }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
+                    {% endif %}
+                {% empty %}
+                    <p>No hay grupos disponibles.</p>
+                {% endfor %}
             </div>
         </div>
     </div>
     </div>
-    {%endfor%}
 </div>
 
 

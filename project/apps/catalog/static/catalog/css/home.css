@@ -2,9 +2,7 @@
     from{translate:0%;}
     to{translate:-100%;}
 }
-html{
-    scroll-behavior: smooth;
-}
+
 /* carousel*/
 
 
@@ -22,7 +20,7 @@ html{
 }
 
 .carousel-repeat{
-    background: var(--primary-color-dark);
+    background: var(--primary-color-darker);
     color: var(--texto);
 }
 
@@ -42,13 +40,14 @@ gap: 10px ;
 }
 
 .products-list{
-    display: grid;  
-    grid-auto-columns: 300px;
-    grid-template-rows: 2fr;
+    display: grid;
+    grid-auto-columns: minmax(300px, 340px);
+    grid-auto-rows: minmax(1fr, auto);
     grid-auto-flow: column;
+    gap: 1rem;
     z-index: 0;
-    
-
+    min-height: 360px;
+    padding: 1rem;
 }
 .container-3{
     display:flex;
@@ -56,40 +55,40 @@ gap: 10px ;
     flex-direction: row;
     position: relative;
     z-index: 0;
+    width: 100%;
 }
 
 .container-3::-webkit-scrollbar{
-    display:none
+    display:none;
 }
 
 .products-list img{
-    
-    height: 100%;    
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     z-index: 0;
 }
 /*class */
 
 .product {
-    
     border: 2px solid var(--white-85);
-    background-color: var(--white-90);
+    background: var(--secondary-color-dark);
     display: flex;
     flex-direction: column;
-    margin: 3%;
+    margin: 0;
     overflow: hidden;
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
     align-self: start;
-    transition: all 0.3s ease-in-out;
+    min-width: 280px;
+    min-height: 360px;
 }
 
 .product .hidden-text{
     height: auto;
     margin-top: 1rem;
     transition: all 0.2s ease-in-out;
-    
-     
 }
 
 .product .text:hover{
@@ -97,20 +96,19 @@ gap: 10px ;
     transition: all 0.2s ease-in-out;
 }
 .text{
-    
     max-height:30px;
     margin-bottom: 1rem;
     transition: all 0.2s ease-in-out;
 }
 
-
 .product img{
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
     transition: all 0.3s ease-in-out;
 }
 .product:hover img{
-    scale:1.3;
-    rotate: 10deg;
-    
+    transform: scale(1.05);
 }
 
 /*end carousel css*/
@@ -163,19 +161,17 @@ gap: 10px ;
 in the web, the photo and the text*/
 .main{
     display:flex;
-    background: var(--primary-color-dark);
+    background: var(--primary-color-darker);
     flex-direction: column; 
     justify-content: center;
 }
 .main-background{
     display:flex;
     flex-direction: column;
-    background-image:url("../imagen/yokse.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    border-radius: 30px; 
     position: relative;
+    overflow: hidden;
+    min-height: 100%;
+    min-height: 100%;
 }
 .main-background::after{
     content:"";
@@ -188,24 +184,51 @@ in the web, the photo and the text*/
     width: 100%;
     height: 100%;
 }
+.main-bd-image {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.main-bd-image img,
+.main-bd-image .main-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.main-bd-image .main-text-container {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    pointer-events: none;
+}
+.main-bd-image .main-text-container p {
+    margin: 0;
+    font-size: 1.3rem;
+    color: white;
+    text-align: center;
+    max-width: 90%;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 1.2rem 1.5rem;
+    border-radius: 1rem;
+}
 .mainmain{
     display:grid;
     grid-template-columns: 1.5fr 1fr 1fr;
     grid-template-rows: 70vh;
     gap:20px;
     padding: 10%;
-;
-}   
-.main-text-container{
-    
-    margin-top: 5rem;  
 }
-.main-text-container p{
-    margin-block-start:3rem;
-    font-size: 1.3rem;
-    color:white;
-    text-align: center;
-}
+
 .main-tittle{
     margin-top: 50px;
     position:relative;
@@ -224,46 +247,93 @@ in the web, the photo and the text*/
 
 
 .flex-grid{
-    height: 500px;
-    
+    min-height: 560px;
+    height: auto;
     margin-top: 5rem;
     margin-bottom:5rem;
     display:flex;
     flex-direction: row;
     box-sizing: border-box;
-
 }
 .bigflex{
     margin:10px;
-    width: 65%;
-    display:flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    border-radius: 30px;
-    overflow: hidden;
-    position:relative
-}
-.shortflex{
-    margin:10px;
-    width:35%;
-    display:flex;
-    flex-direction: column;
+    width: 70%;
+    display:grid;
+    grid-template-columns: 70% 30%;
+    gap: 1rem;
     box-sizing: border-box;
     border-radius: 30px;
     overflow: hidden;
     position:relative;
-
-
+    min-height: 460px;
+    background: transparent;
 }
-.flex-image{
+.bigflex-info{
+    background: var(--primary-color-lighter);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+}
+.bigflex-info p{
+    color: #111;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+.bigflex-media,
+.shortflex-media{
+    position: relative;
     width: 100%;
-    height: 70%;
-    background-color: white;
-    }
-.flex-image1{
+    height: 100%;
+    overflow: hidden;
+    border-radius: 30px;
+}
+.bigflex-media img,
+.shortflex-media img{
     width: 100%;
-    height:100%;
-    object-fit:cover;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.overlay-text{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem;
+    color: white;
+    background: rgba(0, 0, 0, 0.35);
+}
+.overlay-text p{
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    max-width: 100%;
+}
+.shortflex{
+    margin:10px;
+    width:35%;
+    position:relative;
+    box-sizing: border-box;
+    border-radius: 30px;
+    overflow: hidden;
+    background: transparent;
+}
+.bigflex{
+    margin:10px;
+    width: 65%;
+    display:grid;
+    grid-template-columns: 70% 30%;
+    gap: 1rem;
+    box-sizing: border-box;
+    border-radius: 30px;
+    overflow: hidden;
+    position:relative;
+    background: transparent;
 }
 @keyframes glowcolor {
     20%  {text-shadow:0 0 15px rgb(82, 255, 82);}
@@ -287,7 +357,7 @@ in the web, the photo and the text*/
     border-radius: 10px;
     margin: 2rem 2em;
     transition: all 0.1s ease-in-out;
-    background: var(--primary-color);
+    background: var(--primary-color-darker);
 
     transition: all 1.3s ease-in-out;
     
@@ -372,7 +442,7 @@ object-fit: cover;
 .secondary-lighter{
     background: var(--secondary-color-lighter);
 }
-.search-bar input[type="text"]{ 
+.search-bar input[type="text"]{     
     width: 40vw;
     height:10vh;
     border-radius: 15px;
@@ -399,4 +469,5 @@ object-fit: cover;
 }
 .nav-links a{
     margin-right:1rem;
+    color:white;
 }

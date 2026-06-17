@@ -8,19 +8,15 @@
 {%block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
-
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
 {%endblock%}
 
 
 {% block content %}
 <div class="search-container">
     <div class="search-options">
-        <form action="{% url 'catalog:search' %}" method="GET">
+        <form action="{% url 'catalog:search_view' 1 %}" method ="POST">
+            {% csrf_token %}
             <input type="text" name="search" placeholder="search">
             <button type="submit">search</button>
         </form> 
@@ -30,20 +26,40 @@
 <div class="asidemain">
 <div class="searched-group">
     {%for i in grupos%}
+    <a href="{%url 'catalog:topic_group' i.id%}">
     <section class="group">
-        <div class="group-img">
-            <img src="{{i.imagen.url}}">
-        </div>
-        <div class="group-text">
-            <p>
-            {{i.nombre}}
-            {{i.descripcion}}
-            </p>
-            <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, dolorem? </p>
-        </div>
+        
+
+            <div class="group-img">
+                <img src="{{i.imagen.url}}">
+            </div>
+            <div class="group-text">
+                <p>
+                {{i.nombre}}
+                {{i.descripcion}}
+                </p>
+                <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, dolorem? </p>
+            </div>
+        
         </section>
+    </a>
     {%endfor%}
+    <div class="change-page">
+        {%if page > 1%}
+            <form action="{% url 'catalog:search_view' page2 %}" method="POST">
+                {% csrf_token %}
+                <button type="submit"> < </button>
+                
+            </form>
+        {%endif%}
+        <form action="{% url 'catalog:search_view' page1 %}" method="POST">
+            {% csrf_token %}
+            
+            <button  type="submit"> > </button>
+        </form>
+    </div>
 </div>
+
 <aside class="dual-conatiner">
     
     <div>

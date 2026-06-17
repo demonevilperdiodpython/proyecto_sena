@@ -20,28 +20,9 @@ def ia(request):
     return render(request, "catalog/ia.html")
 def home(request):
     pecheras = producto.objects.filter(categoria="pechera")
-    grupos = SepareByClass(producto)
-    grupo = topics_group.objects.all()
-    grupo = SepareByClass(topics_group)
-    
-    best_user  =  CustomUser.objects.order_by('-score')[:5]
-    best_group = topics_group.objects.order_by('-score')[:5]
-    print(best_user)
-    print(grupos)
-    return render(request, "catalog/home.html", {"pecheras" :pecheras, "grupos": grupo, "best_users" : best_user, "best_groups": best_group})
-#esto esparte de la anterior pagina pero, no es necesario pero no lo quiero borrar
-def product_list(request):
-    productos = producto.objects.all()
+    grupos = topics_group.objects.all()
 
-    if request.method == "POST":
-        form = productoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog:product_list')
-    else:
-        form = productoForm()
-
-    return render(request, "catalog/product_list.html", {"form": form,"productos": productos})
+    return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos})   
 
 def eliminate_product(request, product_id):
     product = producto.objects.get(id=product_id)
@@ -180,16 +161,28 @@ def ia_response(request):
             "description": description}
         return render(request, "catalog/ia_response.html", context=context)
 
-def search_view(request):
-    pecheras = producto.objects.filter(categoria="pechera")
-    grupos = SepareByClass(producto)
-    grupo = topics_group.objects.all()
-    
+def search_view(request, page_number):
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user  =  CustomUser.objects.order_by('-score')[:5]
-    return render(request, "catalog/groups.html", {"pecheras" :pecheras, "grupos": grupo, "best_users" : best_user, "best_groups": best_group})
+    if request.method == "POST":
+        query = request.POST.get("search")
+        if query:
+            grupo = topics_group.objects.filter(nombre__icontains=query)
+        else:
+            grupo = topics_group.objects.all()
+        
+    elif request.method == "GET":
+        grupo = topics_group.objects.all()
+    pages = (len(grupo) // 2) + 1
+    
+    comienzo = (page_number - 1) * 2
+    if comienzo == 0:
+        comienzo = 1
+    limite = comienzo + 2
+    grupo  = grupo[comienzo:limite]
+    return render(request, "catalog/groups.html", { "grupos": grupo, "best_users" : best_user, "best_groups": best_group ,"page1":page_number+1, "page2":page_number-1, "page":page_number})
 
 def search(request):
     query = request.GET.get("search")
     grupos = topics_group.objects.filter(name__icontains=query)
-    return render(request, "catalog/search_results.html", {"grupos": grupos, "query": query})   
+    return redirect(search_view, grupos=grupos)
