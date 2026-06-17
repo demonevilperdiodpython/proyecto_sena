@@ -43,6 +43,7 @@ form{
     color-mix(in srgb, violet 80%, transparent),
     color-mix(in srgb, purple 60%, transparent));
     padding: 10px;
+    z-index:5;
 }
 
 
