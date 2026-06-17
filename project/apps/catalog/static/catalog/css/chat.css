@@ -10,3 +10,10 @@
     height: 87vh;
     overflow-y: show;
     overflow-x: hidden}
+
+html{background-color: var(--primary-color-darker);
+overflow-y:hidden;}
+.nav-links a{
+    margin-right:1rem;
+    color:white;
+}

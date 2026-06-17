@@ -384,16 +384,16 @@ in the web, the photo and the text*/
 
 
 
-
-.foto-perfil {border: solid red 4px;
-border-radius: 50%;
-height: 60px;
-width: 60px;
-object-fit: cover;
+.foto-perfil {
+    border: 3px solid white;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+    display: block;
 }
 
-/*previously  a div that were used to have an animation to scroll*/
-/*now its just a class used to  move the  objets  like an netflix scroll*/
+
 .carousel{
     overflow-x: scroll;
     display: flex;
@@ -470,4 +470,3 @@ object-fit: cover;
 .nav-links a{
     margin-right:1rem;
     color:white;
-}

@@ -28,7 +28,7 @@
 }
 .toggle-btn{
     padding: 10px;
-    background-color: var(--primary-color-dark);
+    background-color: var(--primary-color-darker);
     border:None;
 }
 .toggle-btn .line:after{
@@ -108,7 +108,6 @@ body, html{
     height:100%;
     width:100%;
     font-family: 'Arial', sans-serif;
-    background: var(--full-white);
     padding-bottom: 50px; 
     
 
@@ -172,7 +171,7 @@ border-radius: 50%;}
     display:flex;
     height: auto;
     width: 30vw;
-    background-color:var(--white-90) ;
+    background-color:var(--primary-color-lighter) ;
     padding: 25px;
     flex-direction: column;
     font-size: 1.2rem;

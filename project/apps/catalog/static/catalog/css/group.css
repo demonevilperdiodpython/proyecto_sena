@@ -1,9 +1,7 @@
 html:webkit-scrollbar{
     display: none;
 }
-html{
-    overflow: hidden;
-}
+
 .button-menu .button button{
     
     height: 100%;
@@ -74,12 +72,14 @@ background: linear-gradient(
     align-items: center;
 }
 
-.foto-perfil {border: solid red 4px;
-border-radius: 50%;
-height: 50px;
-width: 50px;
-object-fit: cover;
+.foto-perfil {
+    border: 3px solid white;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
 }
+
 
 
 
@@ -182,4 +182,7 @@ word-break: break-word;
 }
 .cabeza p{
     word-break: break-all;
+}
+.html{
+    background-color: var(--primary-color-darker);
 }

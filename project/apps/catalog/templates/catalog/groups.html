@@ -8,6 +8,7 @@
 {%block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
+<link rel="stylesheet" type="text/css" href ="{%static 'catalog/css/home.css'%}>
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
 {%endblock%}
 
@@ -63,26 +64,30 @@
 <aside class="dual-conatiner">
     
     <div>
-        <h1> mejores usuarios</h1>
+        <h1>mejores usuarios</h1>
         {%for x in best_users%}
-            
-            {% if x.imagen %}
-            <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
-            {%endif%}
-            <p>{{x.username}}</p>
+            <div class="perfil-item">
+                <p class="perfil-nombre">{{x.username}}</p>
+                {% if x.imagen %}
+                    <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
+                {% else %}
+                    <div class="foto-perfil" style="background-color: #ccc;"></div>
+                {% endif %}
+            </div>
         {%endfor%}
     </div>
     <div>
         <h1>mejores grupos</h1>
         {%for x in best_groups%}
-            {% if x.imagen %}
-            <img src="{{x.imagen.url}}" alt="{{x.name}}" class="foto-perfil">
-            {%endif%}
-            <p>{{x.name}}</p>
-            {{x.name}}
-        
+            <div class="perfil-item">
+                <p class="perfil-nombre">{{x.nombre}}</p>
+                {% if x.imagen %}
+                    <img src="{{x.imagen.url}}" alt="{{x.nombre}}" class="foto-perfil">
+                {% else %}
+                    <div class="foto-perfil" style="background-color: #ccc;"></div>
+                {% endif %}
+            </div>
         {%endfor%}
-        
     </div> 
 
 </aside>
