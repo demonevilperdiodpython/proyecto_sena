@@ -38,8 +38,9 @@
     height: 5vh;
     border-radius: 50px;
 }
-.container{
-    height: 100%; ;
+.ccontainer{
+    height: 100%; 
+    background: var(--primary-color-darker)
 }
 p{color:white;}
 .searched-group{
@@ -50,6 +51,9 @@ p{color:white;}
     width: 80%;
     padding: 10px;
     row-gap:  20px;
+    column-gap:10px;
+    background: var(--primary-color-darker)
+    
 }
 html body{
     height:100%}
@@ -62,35 +66,29 @@ html{background: var(--primary-color-darker);}
     height:fit-content;
     box-sizing: border-box;
     
+    background: var(--primary-color-darker)
 }
 .group{
-    padding:5px;
-    display:flex;
-    flex-grow: 1;
     background-color: var(--primary-color-lighter);
     box-sizing: border-box;
-    margin:10px;
-    height: 30vh;
-    overflow: hidden;
-
-    border-radius: 15px;
-    border: black 2px solid;
-}
-.group-text p {color:black}
-.group-img{
-    width: 40%;
-    height:100%;
-    overflow: hidden;
-    border-radius: 15px 0px 0px 15px;
-    border: black 2px solid;
-    box-sizing: border-box;
-
-}
-.group-img img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    
+    display: flex;
+    flex-direction: row;
+    border-radius:10px;
+}
+.group p {color:black}
+.group h5{color:black}
+.group-img{
+   overflow:hidden;
+   position:relative;
+}
+.group-img img{
+    display:block;
+    height:100%;
+    width: 100%;
+    border-radius: 10px 0px 0px 10px
+        
 }
 .dual-conatiner{
     display:grid;
@@ -103,6 +101,7 @@ html{background: var(--primary-color-darker);}
     position: relative;
     align-items: column;
     box-sizing: border-box;
+    
 }
 .dual-conatiner div{
     box-shadow: 1px 1px 20px var(--primary-color-dark);
@@ -153,12 +152,7 @@ html{background: var(--primary-color-darker);}
 }
 
 .group-text{
-    margin-left: 5px;
-    display:flex;
-    flex-grow: 1;
-    box-sizing: border-box;
-    border: 2px solid black;
-    border-radius: 0px 15px 15px 0px
+    
 }
 
 .change-page{

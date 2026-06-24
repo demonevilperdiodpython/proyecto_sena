@@ -47,7 +47,7 @@
     pointer-events: none;
 }
 
-.container {
+.ccontainer {
     position:relative;
     display:flex;
     margin-top: 10%;
