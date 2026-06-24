@@ -1,16 +1,16 @@
 :root {
-    --primary-color-lighter: #ebe6f3;
+    --primary-color-lighter: #233b3d;
     --primary-color:#5500dc;
-    --primary-color-dark:#340087;
+    --primary-color-dark:#290466;
     --primary-color-darker:#130032;
-
-
+    --tertiary-color: rgb(15, 19, 49);
+    --pie-color: rgb(35, 15, 43);
 
     --secondary-color: hsl(83, 100, 26%);
     --secondary-color-dark:#1f3200;
-    --secondary-color-lighter: hsl(83 100 90%);
+    --secondary-color-lighter: hsl(133, 18%, 30%);
     
-    --font-primary-black: hsl(0 0% 50%);
+    --font-primary-black: hsl(0, 6%, 84%);
     --font-primary-black-light: hsl(0 0% 60%);
     
 }
