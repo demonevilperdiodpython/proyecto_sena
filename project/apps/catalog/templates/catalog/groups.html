@@ -8,7 +8,6 @@
 {%block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
-<link rel="stylesheet" type="text/css" href ="{%static 'catalog/css/home.css'%"}>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script src="{% static 'catalog/js/scroll.js'%}"></script>
 {%endblock%}
@@ -30,18 +29,20 @@
     {%for i in grupos%}
     <a href="{%url 'catalog:topic_group' i.id%}">
     <section class="group">
-        
+        <div class="group-img">
+            <img src="{{i.imagen.url}}">
+        </div>
 
-            <div class="group-img">
-                <img src="{{i.imagen.url}}">
-            </div>
-            <div class="group-text">
-                <h5>{{i.nombre}}</h5>
-                <p>{{i.descripcion}}</p>
-                <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, dolorem? </p>
-            </div>
-        
-        </section>
+        <div class="group-text"> 
+
+            <h5>
+                {{i.score}}
+                {{i.nombre}}
+                {{i.categoria}}
+                {{i.descripcion}}
+            </h5></div>
+
+    </section>
     </a>
     
     {%endfor%}

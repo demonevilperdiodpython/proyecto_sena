@@ -1,9 +1,9 @@
 .container-2{
- margin-top:12.3vh;
+    margin-top:12.3vh;
     height:85.5vh;
     border-radius: 0px;
     
-    
+    width: 100%;
 }
 .container-2 > :first-child{
     width: 100%;
@@ -17,3 +17,4 @@ overflow-y:hidden;}
     margin-right:1rem;
     color:white;
 }
+

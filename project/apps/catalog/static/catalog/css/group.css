@@ -49,27 +49,20 @@ html:webkit-scrollbar{
 .container-2 {
 background: linear-gradient(
     
-    color-mix(in srgb, rgba(141, 34, 141, 0.918) 95%, transparent)
-);
-    display: flex; flex-direction: column; align-items: flex-start;
-    width: 50%;
-    height: 100vh%;
-    padding:10px;
-    position:relative;
-    border-radius: 20px;
-    
+    color-mix(in srgb, rgba(141, 34, 141, 0.918) 95%, transparent));
 
+    
 }
 
 
 
 
-.ccontainer {
-    background-color: transparent;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    align-items: center;
+.ccontainer{
+    height: 100%; 
+    background: var(--primary-color-darker);
+    display:grid;
+    grid-template-columns:20% 60% 20%;
+    grid-template-rows: 100%
 }
 
 .foto-perfil {
