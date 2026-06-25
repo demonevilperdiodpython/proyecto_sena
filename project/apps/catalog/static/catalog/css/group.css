@@ -47,18 +47,16 @@ html:webkit-scrollbar{
 
 
 .container-2 {
-background: linear-gradient(
-    
-    color-mix(in srgb, rgba(141, 34, 141, 0.918) 95%, transparent)
-);
-    display: flex; flex-direction: column; align-items: flex-start;
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start;
     width: 50%;
-    height: 100vh%;
+    height: 100vh;
     padding:10px;
     position:relative;
     border-radius: 20px;
-    
-
+    background: linear-gradient( rgba(141, 255, 244, 0.8), rgba(139, 0, 255, 0.6));
+    z-index: 5;
 }
 
 
