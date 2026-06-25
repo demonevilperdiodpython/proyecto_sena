@@ -15,7 +15,28 @@
 <div>
 </div>
 <div class="container-2">
-    <div>
+    <form method="post" class="post-form" enctype="multipart/form-data">
+        <div class="form-input-container-1">
+        {% for field in form %}
+            <div>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+
+        <button type="submit">publicar</button>
+        </div>
+        <div class="form-input-container-2">
+        {% csrf_token %}
+
+
+        {{ videoform}}
+        {{ imagenform}}
+        </div>
+        <input type="hidden" name="user.id" value="{{ request.user.id }}">
+    </form>
+
+    <div class="posts-container">
         {%for i in posts%}
         <div class="post">
             
@@ -28,7 +49,7 @@
             {%endif%}
 
             <div class="cabeza" id="cabeza-{{i.id}}">
-                <p class="username-post">{{i.user.username}}</p>
+                <h5 class="username-post">{{i.user.username}}</h5>
                 <div class="post-text view">
                     <p>
                         {{i.content}}
@@ -54,8 +75,6 @@
                             {% if imagen.imagen %}
                                 <img src="{{ imagen.imagen.url }}" alt="{{ imagen.tittle }}" style="max-width: 100%;" />
                             {% endif %}
-                        {% empty %}
-                            <p>No hay imágenes en este post.</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -93,28 +112,7 @@
         </div>
         {%endfor%}
     </div>
-    <form method="post" class="post-form" enctype="multipart/form-data">
-        {% csrf_token %}
 
-        {{ form.non_field_errors }}
-        {{ videoform.non_field_errors }}
-        {{ imagenform.non_field_errors }}
-
-        {{ videoform }}
-        {{ imagenform }}
-
-        <input type="hidden" name="user.id" value="{{ request.user.id }}">
-
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
-        {% endfor %}
-
-        <button type="submit">publicar</button>
-    </form>
 </div>
 
 <div>
