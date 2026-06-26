@@ -48,9 +48,9 @@
 }
 
 .ccontainer {
-    position:relative;
+    
     display:flex;
-    margin-top: 10%;
+  
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
