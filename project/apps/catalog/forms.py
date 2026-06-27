@@ -63,14 +63,15 @@ class postVideoForm(forms.ModelForm):
             })
         self.fields["video"].widget.attrs.update({
             'class': 'form-control-video',
-            'placeholder': ' ',
-            'label': 'video',
             'accept': 'video/*',
-            'content': ''
+            'content': '',
+            'style': 'display:none;',
+            'id': 'videoButton'
             })
+        self.fields["video"].label = ""
         self.fields["tittle"].widget = forms.HiddenInput()  
     class Meta:
-        model = postvideo
+        model = postvideo   
         fields = ["tittle", "video"]
         
         
@@ -79,15 +80,19 @@ class postImagenForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["tittle"].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': ' ',
+            'placeholder': '',
             'label': ''
             })
         self.fields["imagen"].widget.attrs.update({
             'class': 'form-control-imagen',
-            'placeholder': ' ',
-            'label': 'imagen'
+            'placeholder': '',
+            'label': '',
+            'style': 'display:none;',
+            'id': 'imagenButton'
             })
-        self.fields["tittle"].widget = forms.HiddenInput()    
+        self.fields["tittle"].widget = forms.HiddenInput() 
+        self.fields["imagen"].label = ""
+        
     class Meta:
         model = postimagen
         fields = ["tittle", "imagen"]

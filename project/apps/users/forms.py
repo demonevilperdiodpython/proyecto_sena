@@ -32,6 +32,7 @@ class CustomUserCreationForm(UserCreationForm):
             'file': "image/*",
             'placeholder': ' ',
             'id': 'id_imagen'
+            
         })
         self.fields["username"].label = "username"
         self.fields["password2"].label = "password"

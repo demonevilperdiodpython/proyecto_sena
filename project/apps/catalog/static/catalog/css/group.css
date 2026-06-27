@@ -76,8 +76,8 @@
 .foto-perfil {
     border: 3px solid white;
     border-radius: 50%;
-    height: 80px;
-    width: 80px;
+    height: 40px;
+    width: 40px;
     object-fit: cover;
 }
 
@@ -86,7 +86,11 @@
 
 
 .post-text {padding-top: 15px;}
-.username-post {font-size: 13px;}
+.username-post{
+    font-size: 13px;
+    margin-block-start: 0.2rem;
+    margin-block-end: 1rem;
+}
 
 .botoness button {display: flex;
 flex-direction: column;
@@ -193,4 +197,63 @@ word-break: break-word;
 
 .form-input-container-1{
     display:flex;
+}
+.foto-perfil {
+    border: 3px solid white;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    display: block;
+}
+.user-post-buttons div{
+    border: 1px solid black;;
+    border-radius: 5px;
+ 
+}
+.user-post-buttons{
+    display:grid;
+    grid-template-columns: 30px 30px 30px 30px;
+    grid-template-rows:30px;
+    gap:5px;
+    margin-top: 1rem;
+
+}
+.user-post-buttons div{
+    display:flex;
+    padding:0px;
+    margin:0px;
+   
+}
+.user-post-buttons div svg{
+    display: block; /* Elimina el espacio extra que deja inline-block */
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+.form-input-container-2 button{
+    display: block; /* Elimina el espacio extra que deja inline-block */
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background-color:transparent;
+    
+}
+.form-input-container-2{
+    display:flex;
+}
+.form-input-container-1 textarea{
+    margin-right: 1rem;
+    width: 40%;
+
+}
+.form-input-container-1 button{
+    border-radius: 10px;
+}
+.form-input-container-1{
+    margin-bottom:1rem;
 }

@@ -401,14 +401,6 @@ background-color: var(--tertiary-color);
 
 
 
-.foto-perfil {
-    border: 3px solid white;
-    border-radius: 50%;
-    height: 80px;
-    width: 80px;
-    object-fit: cover;
-    display: block;
-}
 
 
 .carousel{
