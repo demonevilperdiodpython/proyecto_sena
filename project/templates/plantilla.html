@@ -4,18 +4,21 @@
     <head>
         <title>{% block title %}Plantilla Base{% endblock %}</title>
         {% load static %}
-        {%block css%}
-        {% endblock %}
+
+
         <script src="https://unpkg.com/htmx.org@1.9.4"></script>
         <script src="{% static 'js/plantilla.js'%}"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="{%static 'css/styles.css'%}">
+        <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+        {%block css%}
+        {% endblock %}
     </head>
 
 
     <body>
-    <div class="navbar-sticky">
+    
         <div class="navbar">
             <section class="left-navbar">
                 <a href="{% url 'catalog:home' %}">
@@ -60,19 +63,28 @@
                 </div>
             </section>
         </div>
-    </div>
-        <div class="ccontainer">
-            {% block content %}
-<!--that the hml from the other templante is written here inside content-->
-            
-            {% endblock %}
-        </div>
 
-        <div>
-            {%block extraContent%}
+        <div class="cccontainer">
+
+                
+            {%block extraContent1%}
             
             {%endblock%}
-        </div>
     
+        <div class="ccontainer"> 
+        
+            {% block content %}
+
+            
+            {% endblock %}
+        
+        </div>
+
+        
+            {%block extraContent2%}
+            
+            {%endblock%}
+        
+        </div>
     </body>
 </html>

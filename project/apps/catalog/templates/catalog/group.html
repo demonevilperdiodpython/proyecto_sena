@@ -2,19 +2,151 @@
 {% load static %}
 {% block css %}
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/css/coreui.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/js/coreui.bundle.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{%static 'css/styles.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
-<link rel="stylesheet" type="text/css" href="{%static 'catalog/css/chat.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
-{% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
+
+
+{% endblock %}f
 
 
 
 
 {% block content %}
-<div>
-</div>
+ <div class="sidebar border-end h-100">
+    <button id="sidebar-btn"></button> 
+  <div class="sidebar-header position-relative">
+    <button class="btn btn-ghost btn-sm d-sidebar-narrow-none d-flex" type="button" data-coreui-toggle="unfoldable">
+      <i class="icon icon-lg cil-sidebar-open d-sidebar-narrow-unfoldable"></i>
+      <i class="icon icon-lg cil-sidebar-close d-sidebar-narrow-unfoldable-none"></i>
+    </button>
+  </div>
+  <ul class="sidebar-nav sidebar-nav-tree" data-coreui-navigation>
+    <li class="nav-title">Nav Title</li>
+    <li class="nav-item">
+      <a class="nav-link active" href="#">
+        <i class="nav-icon cil-speedometer"></i> Nav item
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">
+        <i class="nav-icon cil-speedometer"></i> Nav item
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="nav-icon cil-layers"></i> With badge
+        <span class="badge bg-primary ms-auto">NEW</span>
+      </a>
+    </li>
+    <li class="nav-item nav-group show">
+      <a class="nav-link nav-group-toggle" href="#">
+        <i class="nav-icon cil-puzzle"></i> Items group
+        <span class="nav-group-toggle-indicator">
+          <i class="icon icon-sm cil-minus show"></i>
+          <i class="icon icon-sm cil-plus hide"></i>
+        </span>
+      </a>
+      <ul class="nav-group-items compact">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Item
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Item
+          </a>
+        </li>
+        <li class="nav-item nav-group show">
+          <a class="nav-link nav-group-toggle" href="#">
+            <span class="nav-icon"><span class="nav-icon-bullet"></span></span>
+            Items group 2
+            <span class="nav-group-toggle-indicator">
+              <i class="icon icon-sm cil-minus show"></i>
+              <i class="icon icon-sm cil-plus hide"></i>
+            </span>
+          </a>
+          <ul class="nav-group-items">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                Item
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                Item
+              </a>
+            </li>
+            <li class="nav-item nav-group">
+              <a class="nav-link nav-group-toggle" href="#">
+                <span class="nav-icon"><span class="nav-icon-bullet"></span></span>
+                Items group 3
+                <span class="nav-group-toggle-indicator">
+                  <i class="icon icon-sm cil-minus show"></i>
+                  <i class="icon icon-sm cil-plus hide"></i>
+                </span>
+              </a>
+              <ul class="nav-group-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    Item
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    Item
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="https://coreui.io">
+        <i class="nav-icon cil-cloud-download"></i> Download CoreUI</a>
+    </li>
+  </ul>
+  <div class="sidebar-footer">
+    <div class="dropdown dropend w-100">
+      <a class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+        <div class="avatar avatar-md">
+          <img class="avatar-img rounded" src="/assets/img/avatars/7.jpg" alt="user@email.com">
+        </div>
+        <div class="small text-start d-sidebar-narrow-none">
+          <div class="fw-semibold">Lena Scaffold</div>
+          <div>lena@acme.com</div>
+        </div>
+        <i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
+      </a>
+      <ul class="dropdown-menu w-100">
+        <li>
+        <div class="d-flex gap-2 px-2">
+          <div class="avatar avatar-md">
+            <img class="avatar-img rounded" src="/assets/img/avatars/7.jpg" alt="user@email.com">
+          </div>
+          <div class="small text-start">
+            <div class="fw-semibold">Lena Scaffold</div>
+            <div>lena@acme.com</div>
+          </div>
+        </div>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="cil-user"></i>Account</a></li>
+        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="cil-credit-card"></i>Billing</a></li>
+        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="cil-settings"></i>Settings</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="cil-account-logout"></i>Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>  
 <div class="container-2">
+    
     <form method="post" class="post-form" enctype="multipart/form-data">
         <div class="form-input-container-1">
         {% for field in form %}
@@ -77,7 +209,7 @@
                         <video controls>
                             <source src="{{ video.video.url }}" type="video/mp4">
                         </video>
-                        {% endif %}>
+                        {% endif %}
                     {% endfor %}
                     {% for imagen in i.imagen.all%}
                         {% if imagen.imagen %}
@@ -155,27 +287,36 @@
 
 </div>
 
-<div class  >
+<div class="hot-topic">
+    <div>
+        {%for i in recent_post%}
+        <div>
+            <div>
+                <img src="{{i.group.imagen.url}}">
+            </div>
+            {{i.group.name}}
+
+        </div>
+        <div>
+            <div>
+            {{i.content}}
+            </div>
+            <div>
+                <img src="{{i.imagen.url}}">
+            </div>
+            
+        </div>
+        {%  endfor%}
+    </div>
 </div>
 {%endblock%}
 
 
-{% block extraContent %}
-
-<div class="button-menu">
-    <div class="button ">
-        <button></button>
-    </div>
-    <div class="menu menu-close">
-        {% for i in sections %}
-        <div class="section">
-            <a href="{% url 'catalog:section' section.id %}">{{ section.name }}</a>
-            {%endfor%}
-        </div>
-    </div>
+{% block extraContent2 %}
 
 
     <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
     <script src="{% static 'catalog/js/edit_post.js' %}"></script>
-    <script src="{ static'catalog/js/file_chooser.js'}"></script>
+    <script src="{% static 'catalog/js/file_chooser.js'%}"></script>
+    <script src="{% static 'catalog/js/sidebar.js'%}"> </script>
     {%endblock%} 
