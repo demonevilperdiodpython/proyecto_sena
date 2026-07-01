@@ -280,9 +280,14 @@ html{
     width:100%;
     padding-right: 2rem;
     background-color: var(--primary-color-darker);
-    color:white;
+    color:var(--font-primary-black);
 }
-
+.sidebar-nav{color:var(--font-primary-black);
+--cui-sidebar-nav-link-color:var(--font-primary-black);
+--cui-sidebar-nav-title-color: var(--font-primary-black);
+--cui-sidebar-nav-link-active-color: var(--font-primary-black);
+--cui-sidebar-nav-link-hover-color: var(--font-primary-black);
+--cui-sidebar-nav-group-toggle-show-color: var(--font-primary-black);}
 .hot-topic{
     width:90%;
     position:relative;

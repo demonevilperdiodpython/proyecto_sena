@@ -478,4 +478,4 @@ background-color: var(--tertiary-color);
 }
 .nav-links a{
     margin-right:1rem;
-    color:white;
+    color:var(--font-primary-black);}
