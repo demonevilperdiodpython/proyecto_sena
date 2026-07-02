@@ -101,7 +101,9 @@ def acounts_view(request):
         userssessions = UserSession.objects.filter(ip_address = ip, user_agent= user_agent, device_id=device_id, is_active=True)
         response = render(request, 'users/acounts.html', {"ingresed_users": userssessions})
         return response
-    
+
+def perfil_view(request):
+    return render(request, "users/perfil.html")
 
 def logOut_view(request):
     ip = get_client_ip(request)
