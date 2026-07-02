@@ -22,10 +22,33 @@ form{
     align-items: center;
     background-color: transparent;
     width:100%;
-    justify-content: center;¿;
+    justify-content: center;
     height: 100%;   
     background: var(--primary-color-darker);
 }
+
+.per1{background: var(--primary-color-darker);
+color: var(--font-primary-black);
+display: flex;
+
+flex-direction: column;
+padding: 35px;
+align-items: center;
+width:90%;
+height: 90%;
+gap: 15px;
+font-size: 400%;
+
+}
+
+.userImagen{height: 300px;
+width: 300px;
+
+border: 3px solid white;
+border-radius: 50%;
+object-fit: cover;
+}
+.user-info{font-size: 150%;}
 
 
 .container-2{

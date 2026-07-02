@@ -45,10 +45,10 @@
 
                     <ul class="menu">
                         {%if user.is_authenticated%}
-                            {{user.username}}
-                            <img src="{{user.imagen.url}}" alt="" class="userImagen">
+                            
                             <li><button onclick="window.location.href='{%url 'users:logout'%}'">logout</button></li>
                             <li><button onclick="window.location.href='{% url 'catalog:add_group'%}'">groups</BUTTON></li>
+                            <li><button onclick="window.location.href='{% url 'users:perfil'%}'">Perfil</button></li>   
                         {%else%}
                             <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
                             <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>
