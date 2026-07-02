@@ -278,7 +278,7 @@ html{
 }
 .sidebar{
     width:100%;
-    padding-right: 2rem;
+    padding-right: 1rem;
     background-color: var(--primary-color-darker);
     color:var(--font-primary-black);
 }
@@ -299,3 +299,8 @@ html{
     color:white;
 
 }
+
+
+ .mi-icono-svg {
+    fill: #ff5733 !important;
+  }
