@@ -21,6 +21,9 @@ class topics_group(models.Model):
     imagen_url = models.URLField(null=True, blank=True)
     posts = models.ManyToManyField('post', blank=True)
     score = models.IntegerField(default=0)
+    likes = models.ManyToManyField(user, related_name='liked_groups', blank=True)
+    dislikes = models.ManyToManyField(user, related_name='disliked_groups', blank=True)
+    subscriptions = models.ManyToManyField(user, related_name='subscribed_groups', blank=True)
     def __str__(self):
         return self.nombre
 

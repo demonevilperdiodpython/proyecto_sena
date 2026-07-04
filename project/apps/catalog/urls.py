@@ -14,5 +14,9 @@ urlpatterns = [
     path("ia/" , views.ia , name="ia"),
     path("ia_response/" , views.ia_response , name="ia_response"),
     path("search/<int:page_number>", views.search_view, name="search_view"),
+    path("rate_group/", views.rate_group, name="rate_group"),
+    path("subscribe/", views.subscribe, name="subscribe"),
+   
+    
 ]
 

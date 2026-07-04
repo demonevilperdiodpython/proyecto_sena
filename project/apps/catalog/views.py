@@ -186,3 +186,29 @@ def search(request):
     query = request.GET.get("search")
     grupos = topics_group.objects.filter(name__icontains=query)
     return redirect(search_view, grupos=grupos)
+
+def rate_group(request):
+    print("working")
+    group_id = request.GET.get('group_id')
+    rate = request.GET.get('rate')
+    group = topics_group.objects.get(id=group_id)
+    if rate == 'like':
+        group.likes.add(request.user)
+        group.dislikes.remove(request.user)
+    elif rate == 'dislike':
+        group.dislikes.add(request.user)
+        group.likes.remove(request.user)
+    group.save()
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(redirect_url)
+
+def subscribe(request):
+    group_id = request.POST.get('group_id')
+    group = topics_group.objects.get(id=group_id)
+    if request.user in group.subscriptions.all():
+        group.subscriptions.remove(request.user)
+    else:
+        group.subscriptions.add(request.user)
+    group.save()
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(redirect_url)

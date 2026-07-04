@@ -1,4 +1,6 @@
-{% extends 'plantilla.html'%} {% load static %} {% block css %}
+{% extends 'plantilla.html'%} 
+{% load static %} 
+{% block css %}
 
 <link
   rel="stylesheet"
@@ -18,7 +20,8 @@
   href="{% static 'catalog/css/group.css'%}"
 />
 
-{% endblock %}f {% block content %}
+{% endblock %}
+{% block content %}
 <div class="sidebar border-end h-100">
   <button id="sidebar-btn"></button>
   <div class="sidebar-header position-relative">
@@ -57,11 +60,18 @@
       </a>
       <ul class="nav-group-items compact">
         <li class="nav-item">
-          <a class="nav-link" href="#"> Item </a>
+        
         </li>
+        {% for i in request.user.subscribed_groups.all %} 
         <li class="nav-item">
-          <a class="nav-link" href="#"> Item </a>
-		</li>
+          <div class="small-img">
+            <img src="{{i.imagen.url}}">
+          </div>
+          <a class="nav-link" href="{%url 'catalog:topic_group' i.id%}"> 
+            {{i.nombre}}
+          </a>
+        </li>
+      {% endfor %}
           </ul>
         </li>
       </ul>

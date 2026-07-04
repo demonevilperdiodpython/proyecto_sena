@@ -36,12 +36,31 @@
         </div>
 
         <div class="group-text"> 
+      
+            <form action="{% url 'catalog:subscribe'%}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="group_id" value="{{i.id}}">
+            <button type="submit"> unirse </button>
+            </form>
+            
+            <form action="{%static 'catalog:rate_group'%}" method="GET">
+                <input type="hidden" name="group_id" value="{{i.id}}">
 
+                <input type="radio"  name="rate" value="like">    
+                <label for="option1">like</label>
+
+                <input type="radio" name="rate" value="dislike">
+                <label for="option2">dislike</label>
+            </form>
             <h5>
-                {{i.score}}
                 {{i.nombre}}
                 {{i.categoria}}
                 {{i.descripcion}}
+                
+
+                {{i.likes.count}}
+                {{i.dislikes.count}}
+                {{i.subscriptions.count}}
             </h5></div>
 
     </section>
