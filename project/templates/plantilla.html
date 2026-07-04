@@ -27,8 +27,7 @@
                     </div>
                 </a>
 
-            <div class="nav-links">
-                <a href="{% url 'catalog:search_view' 1 %}">Grupos</a>
+            <div class="nav-links">f
                 <a>more</a>
                 <a href="{%url 'catalog:home'%}"></a>
             </div>
@@ -47,8 +46,6 @@
                         {%if user.is_authenticated%}
                             
                             <li><button onclick="window.location.href='{%url 'users:logout'%}'">logout</button></li>
-                            <li><button onclick="window.location.href='{% url 'catalog:add_group'%}'">groups</BUTTON></li>
-                            <li><button onclick="window.location.href='{% url 'users:perfil'%}'">Perfil</button></li>   
                         {%else%}
                             <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
                             <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>

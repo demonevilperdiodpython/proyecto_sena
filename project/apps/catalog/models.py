@@ -19,7 +19,6 @@ class topics_group(models.Model):
     
     imagen = models.ImageField(upload_to='catalog/group/image', null=True, blank=True)
     imagen_url = models.URLField(null=True, blank=True)
-    posts = models.ManyToManyField('post', blank=True)
     score = models.IntegerField(default=0)
     likes = models.ManyToManyField(user, related_name='liked_groups', blank=True)
     dislikes = models.ManyToManyField(user, related_name='disliked_groups', blank=True)

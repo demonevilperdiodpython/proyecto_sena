@@ -1,147 +1,8 @@
-{% extends 'plantilla.html'%} 
-{% load static %} 
-{% block css %}
+{%extends 'catalog/home.html'%}
 
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/css/coreui.min.css"
-/>
-<script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/js/coreui.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
-<link rel="stylesheet" type="text/css" href="{%static 'css/styles.css'%}" />
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'catalog/css/home.css'%}"
-/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'catalog/css/group.css'%}"
-/>
-
-{% endblock %}
-{% block content %}
-<div class="sidebar border-end h-100">
-  <button id="sidebar-btn"></button>
-  <div class="sidebar-header position-relative">
-  </div>
-  <ul class="sidebar-nav sidebar-nav-tree" data-coreui-navigation>
-    <li class="nav-title">descubre</li>
-
-    <li class="nav-item">
-      <a class="nav-link active" href="#">
-        <i class="nav-icon cil-speedometer"></i> home
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link active" href="#">
-        <i class="nav-icon cil-speedometer"></i> popular
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="#">
-        <i class="nav-icon cil-speedometer"></i> start a group
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="#">
-        <i class="nav-icon cil-speedometer"></i> explore
-      </a>
-    </li>
-    <li class="nav-item nav-group show">
-      <a class="nav-link nav-group-toggle" href="#">
-        <i class="nav-icon cil-puzzle"></i> subscriptions
-        <span class="nav-group-toggle-indicator">
-          <i class="icon icon-sm cil-paperclip show"></i>
-          <i class="icon icon-sm cil-plus hide"></i>
-        </span>
-      </a>
-      <ul class="nav-group-items compact">
-        <li class="nav-item">
-        
-        </li>
-        {% for i in request.user.subscribed_groups.all %} 
-        <li class="nav-item">
-          <div class="small-img">
-            <img src="{{i.imagen.url}}">
-          </div>
-          <a class="nav-link" href="{%url 'catalog:topic_group' i.id%}"> 
-            {{i.nombre}}
-          </a>
-        </li>
-      {% endfor %}
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <div class="sidebar-footer">
-    <div class="dropdown dropend w-100">
-      <a
-        class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center"
-        href="#"
-        role="button"
-        data-coreui-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <div class="avatar avatar-md">
-          <img
-            class="avatar-img rounded"
-            src="{{request.user.imagen.url}}"
-          />
-        </div>
-        <div class="small text-start d-sidebar-narrow-none">
-          <div class="fw-semibold">{{request.user.username}}</div>
-          <div>{{request.user.email}}</div>
-        </div>
-        <i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
-      </a>
-      <ul class="dropdown-menu w-100">
-        <li>
-          <div class="d-flex gap-2 px-2">
-            <div class="avatar avatar-md">
-              <img
-                class="avatar-img rounded"
-                src="/assets/img/avatars/7.jpg"
-                alt="user@email.com"
-              />
-            </div>
-            <div class="small text-start">
-              <div class="fw-semibold">Lena Scaffold</div>
-              <div>lena@acme.com</div>
-            </div>
-          </div>
-        </li>
-        <li><hr class="dropdown-divider" /></li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center gap-2" href="#"
-            ><i class="cil-user"></i>Account</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center gap-2" href="#"
-            ><i class="cil-credit-card"></i>Billing</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center gap-2" href="#"
-            ><i class="cil-settings"></i>Settings</a
-          >
-        </li>
-        <li><hr class="dropdown-divider" /></li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center gap-2" href="#"
-            ><i class="cil-account-logout"></i>Logout</a
-          >
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="container-2">
-  <form method="post" class="post-form" enctype="multipart/form-data">
+{%block post%}
+<div>
+<form method="post" class="post-form" enctype="multipart/form-data">
     <div class="form-input-container-1">
       {% for field in form %} {{ field }} {{ field.errors }} {% endfor %}
 
@@ -189,16 +50,15 @@
     </div>
     <input type="hidden" name="user.id" value="{{ request.user.id }}" />
   </form>
+  </div>
+{%endblock%}
 
-  <div class="posts-container">
+{%block show_post%}
     {%for i in posts%}
     <div class="post">
-      {%if i.user.imagen%} {{i.id}}
+
       <img src="{{i.user.imagen.url}}" class="foto-perfil" />
 
-      {%else%}
-      <img src="default" class="foto-perfil" />
-      {%endif%}
 
       <div class="cabeza" id="cabeza-{{i.id}}">
         <h5 class="username-post">{{i.user.username}}</h5>
@@ -208,16 +68,20 @@
             {% for video in i.videos.all %}
             <p>{{ video.tittle }}</p>
             {% if video.video %}
+            <div class="video-container">
             <video controls>
               <source src="{{ video.video.url }}" type="video/mp4" />
             </video>
+            <div>
             {% endif %} {% endfor %} {% for imagen in i.imagen.all%} 
 			{% if imagen.imagen %}
+            <div class="image-container">
             <img
               src="{{ imagen.imagen.url }}"
               alt="{{ imagen.tittle }}"
               style="max-width: 100%"
-            />
+            /> 
+            </div>
             {% endif %} {% endfor %}
           </div>
           <div>
@@ -327,30 +191,4 @@
     </div>
     {%endfor%}
   </div>
-</div>
-
-<div class="hot-topic">
-  <div>
-    {%for i in recent_post%}
-    <div>
-      <div>
-        <img src="{{i.group.imagen.url}}" />
-      </div>
-      {{i.group.name}}
-    </div>
-    <div>
-      <div>{{i.content}}</div>
-      <div>
-        <img src="{{i.imagen.url}}" />
-      </div>
-    </div>
-    {% endfor%}
-  </div>
-</div>
-{%endblock%} {% block extraContent2 %}
-
-<script src="{% static 'catalog/js/sidemenu.js' %}"></script>
-<script src="{% static 'catalog/js/edit_post.js' %}"></script>
-<script src="{% static 'catalog/js/file_chooser.js'%}"></script>
-<script src="{% static 'catalog/js/sidebar.js'%}"></script>
 {%endblock%}

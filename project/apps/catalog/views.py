@@ -21,8 +21,9 @@ def ia(request):
 def home(request):
     pecheras = producto.objects.filter(categoria="pechera")
     grupos = topics_group.objects.all()
+    posts = post_model.objects.order_by('-created_at')[:10]
 
-    return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos})   
+    return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos, "posts": posts})   
 
 def eliminate_product(request, product_id):
     product = producto.objects.get(id=product_id)
