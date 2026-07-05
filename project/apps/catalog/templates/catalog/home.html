@@ -27,6 +27,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
+{% block extra_css %}
+{% endblock %}
 {%endblock%}
 
 
@@ -38,7 +41,7 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
+
 <div class="sidebar border-end h-100">
   <button id="sidebar-btn"></button>
   <div class="sidebar-header position-relative">
@@ -47,7 +50,7 @@
     <li class="nav-title">descubre</li>
 
     <li class="nav-item">
-      <a class="nav-link active" href="#">
+      <a class="nav-link active" href="{%url 'catalog:home'%}">
         <i class="nav-icon cil-speedometer"></i> home
       </a>
     </li>
@@ -149,7 +152,7 @@
         </li>
         <li><hr class="dropdown-divider" /></li>
         <li>
-          <a class="dropdown-item d-flex align-items-center gap-2" href="#"
+          <a class="dropdown-item d-flex align-items-center gap-2" href="{%url 'users:logout'%}"
             ><i class="cil-account-logout"></i>Logout</a
           >
         </li>
@@ -159,14 +162,12 @@
 </div>
 
 <div class="container-2">
-    
-    {%block post%}
+    {% block post %}
+    {% endblock %}
 
-    {%endblock%}
-    
-
-  <div class="posts-container">
-    {%block show_post%}
+    {% block all %}
+    <div class="posts-container">
+        {% block show_post %}
     {%for i in posts%}
     <div class="post">
 
@@ -188,9 +189,9 @@
             </div>
             {% endif %}
             {% endfor %} 
+
             {% for imagen in i.imagen.all%} 
-			
-			{% if imagen.imagen %}
+			      {% if imagen.imagen %}
             <div class="image-container">
             <img
               src="{{ imagen.imagen.url }}"
@@ -201,13 +202,15 @@
             {% endif %} {% endfor %}
           </div>
           <div>
-            {% for imagen in i.imagenes.all %} {% if imagen.imagen %}
+            {% for imagen in i.imagenes.all %}
+            {% if imagen.imagen %}
             <img
               src="{{ imagen.imagen.url }}"
               alt="{{ imagen.tittle }}"
               style="max-width: 100%"
             />
-            {% endif %} {% endfor %}
+            {% endif %}
+            {% endfor %}
           </div>
         </div>
         <div class="post-text edit">
@@ -306,12 +309,16 @@
       </div>
     </div>
     {%endfor%}
-  </div>
-  {%endblock%}
+    </div>
+    {% endblock %}
+    {% endblock %}
 </div>
 
+
 <div class="hot-topic">
+ 
   <div>
+     {% block hot_topic %}
     {%for i in recent_post%}
     <div>
       <div>
@@ -326,183 +333,187 @@
       </div>
     </div>
     {% endfor%}
+    {% endblock %}
   </div>
-</div>
-{%else%}
-<div class="main">
-    
-    <div class="main-tittle glowborder">
-        <h1 class="main-tittle">SHARP MIND</h1>
-    </div>
-    <div class="main-search">
-        <div class="search-bar">
-            <form action="{% url 'catalog:search_view' 1%}" method="POST">
-                
-                {% csrf_token %}              
-                <input type="text" placeholder="search" name="search">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <div class="mainmain">
-        
-        <div class="main-background ">
-            <div class="main-bd-image">
-            <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Compartir con compañeros" class="main-bg-image">
-            <section class="main-text-container"> 
-                <p class="main-text">
-                    habla y comparte con compañeros con los cuales
-                    compartes gustos e intereses
-                </p>
-            </section>
-            </div>
-            
-        </div>
-        
-        <section class="main-background">
-            <div class="main-bd-image">
-                <img src="{% static 'catalog/img/reading1.jpg' %}" alt="Grupos de estudio" class="main-bg-image">
-                <section class="main-text-container"> 
-                    <p class="main-text">
-                        encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
-                    </p>
-                </section>
-            </div>    
-        </section>
-        <section class="main-background">
-            <div class="main-bd-image">
-                <img src="{% static 'catalog/img/cuadernos.jpg' %}" alt="Compartir conocimientos" class="main-bg-image">
-                <section class="main-text-container"> 
-                    <p class="main-text">
-                        encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
-                    </p>
-                </section>
-            </div>
-        </section>
-    </div>
-</div>
-
-<div class="f-background">
-    <h1>titulo</h1>
-<div class="flex-grid">
-    <section class="bigflex"  style="background-color: var(--primary-color-lighter)">
-        <div class="bigflex-media">
-            <img src="{% static 'catalog/img/bochi-the-rock-guitarra.jpg' %}" alt="Guitarra en estudio">
-        </div>
-        <section class="bigflex-info">
-            <h2>Estudia guitarra</h2>
-            <p>busca quienes esten interesados en tocar guitarra con tigo.</p>
-        </section>
-    </section>
-
-    <section class="shortflex"  style="background-color: var(--primary-color-lighter)">
-        <div class="shortflex-media">
-            <img src="{% static 'catalog/img/berserk_gym.jpg' %}" alt="Gym y estudio">
-            <div class="overlay-text">
-                <p>Rutinas simples para equilibrar ejercicio y estudio.</p>
-            </div>
-        </div>
-    </section>
-</div>
-
-<div class="flex-grid">
-    <section class="shortflex" style="background-color: var(--secondary-color-lighter)">
-        <div class="shortflex-media">
-            <img src="{% static 'catalog/img/estudiar.jpg' %}" alt="Estudio académico">
-            <div class="overlay-text">
-                <p>Organiza tu estudio con reglas claras y breves.</p>
-            </div>
-        </div>
-    </section>
-    <section class="bigflex" style="background-color: var(--secondary-color-lighter)">
-        <div class="bigflex-media">
-            <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Estudio digital">
-        </div>
-        <section class="bigflex-info">
-            <h2>Estudia online</h2>
-            <p>Aprende desde casa con materiales prácticos y rápidos.</p>
-        </section>
-    </section>
-</div>
-
-</div>
-<div class="carousel-repeat">
-    
    
-    <div style="position:relative;">
-    <div class="carousel">
-        <div class="container-3">
-            <div class="products-list" id="1">
-                {% for x in grupos %}
-                    {% if x.imagen %}
-                        <div class="product">
-                            <div class="img-container">
-                                <a href="{% url 'catalog:topic_group' x.id %}">
-                                    <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
-                                </a>
-                            </div>
-                            <div class="text">
-                                <h4>{{ x.nombre }}</h4>
-                                <p>{{ x.descripcion|truncatechars:80 }}</p>
-                                <div class="hidden-text">
-                                    <p>{{ x.descripcion }}</p>
-                                    <p>score: {{ x.score }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% elif x.imagen_url %}
-                        <div class="product">
-                            <div class="img-container">
-                                <a href="{% url 'catalog:topic_group' x.id %}">
-                                    <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
-                                </a>
-                            </div>
-                            <div class="text">
-                                <h4>{{ x.nombre }}</h4>
-                                <p>{{ x.descripcion|truncatechars:80 }}</p>
-                                <div class="hidden-text">
-                                    <p>{{ x.descripcion }}</p>
-                                    <p>score: {{ x.score }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% empty %}
-                    <p>No hay grupos disponibles.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    </div>
 </div>
 
 
-<div class="footer">
-    <div class="footer-container">
-        <h1>sharp mind</h1>
-        <p>alimenta tu mente</p>
-        
-        <div class="redes-sociales">
-        </div>
-    </div>
+{% else %}
+  <div class="main">
+      
+      <div class="main-tittle glowborder">
+          <h1 class="main-tittle">SHARP MIND</h1>
+      </div>
+      <div class="main-search">
+          <div class="search-bar">
+              <form action="{% url 'catalog:search_view' 1%}" method="POST">
+                  
+                  {% csrf_token %}              
+                  <input type="text" placeholder="search" name="search">
+                  <button type="submit">Search</button>
+              </form>
+          </div>
+      </div>
+      <div class="mainmain">
+          
+          <div class="main-background ">
+              <div class="main-bd-image">
+              <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Compartir con compañeros" class="main-bg-image">
+              <section class="main-text-container"> 
+                  <p class="main-text">
+                      habla y comparte con compañeros con los cuales
+                      compartes gustos e intereses
+                  </p>
+              </section>
+              </div>
+              
+          </div>
+          
+          <section class="main-background">
+              <div class="main-bd-image">
+                  <img src="{% static 'catalog/img/reading1.jpg' %}" alt="Grupos de estudio" class="main-bg-image">
+                  <section class="main-text-container"> 
+                      <p class="main-text">
+                          encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
+                      </p>
+                  </section>
+              </div>    
+          </section>
+          <section class="main-background">
+              <div class="main-bd-image">
+                  <img src="{% static 'catalog/img/cuadernos.jpg' %}" alt="Compartir conocimientos" class="main-bg-image">
+                  <section class="main-text-container"> 
+                      <p class="main-text">
+                          encuentra grupos de estudio, con los cuales puedas compartir tus conocimientos
+                      </p>
+                  </section>
+              </div>
+          </section>
+      </div>
+  </div>
 
-    <div class="footer-container">
-        <h1>sobre sharp mind</h1>
-        <p>nosotros</p>
+  <div class="f-background">
+      <h1>titulo</h1>
+  <div class="flex-grid">
+      <section class="bigflex"  style="background-color: var(--primary-color-lighter)">
+          <div class="bigflex-media">
+              <img src="{% static 'catalog/img/bochi-the-rock-guitarra.jpg' %}" alt="Guitarra en estudio">
+          </div>
+          <section class="bigflex-info">
+              <h2>Estudia guitarra</h2>
+              <p>busca quienes esten interesados en tocar guitarra con tigo.</p>
+          </section>
+      </section>
 
-    </div>
+      <section class="shortflex"  style="background-color: var(--primary-color-lighter)">
+          <div class="shortflex-media">
+              <img src="{% static 'catalog/img/berserk_gym.jpg' %}" alt="Gym y estudio">
+              <div class="overlay-text">
+                  <p>Rutinas simples para equilibrar ejercicio y estudio.</p>
+              </div>
+          </div>
+      </section>
+  </div>
+
+  <div class="flex-grid">
+      <section class="shortflex" style="background-color: var(--secondary-color-lighter)">
+          <div class="shortflex-media">
+              <img src="{% static 'catalog/img/estudiar.jpg' %}" alt="Estudio académico">
+              <div class="overlay-text">
+                  <p>Organiza tu estudio con reglas claras y breves.</p>
+              </div>
+          </div>
+      </section>
+      <section class="bigflex" style="background-color: var(--secondary-color-lighter)">
+          <div class="bigflex-media">
+              <img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Estudio digital">
+          </div>
+          <section class="bigflex-info">
+              <h2>Estudia online</h2>
+              <p>Aprende desde casa con materiales prácticos y rápidos.</p>
+          </section>
+      </section>
+  </div>
+
+  </div>
+  <div class="carousel-repeat">
+      
     
-    <div class="footer-container">
-        <h1>atencion al cliente</h1>
-        <p>whatsap</p>
-        <p>telefono</p>
-        <p>correo: </p>
-        <p>horario:</p>
-    </div>
-</div>
+      <div style="position:relative;">
+      <div class="carousel">
+          <div class="container-3">
+              <div class="products-list" id="1">
+                  {% for x in grupos %}
+                      {% if x.imagen %}
+                          <div class="product">
+                              <div class="img-container">
+                                  <a href="{% url 'catalog:topic_group' x.id %}">
+                                      <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
+                                  </a>
+                              </div>
+                              <div class="text">
+                                  <h4>{{ x.nombre }}</h4>
+                                  <p>{{ x.descripcion|truncatechars:80 }}</p>
+                                  <div class="hidden-text">
+                                      <p>{{ x.descripcion }}</p>
+                                      <p>score: {{ x.score }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      {% elif x.imagen_url %}
+                          <div class="product">
+                              <div class="img-container">
+                                  <a href="{% url 'catalog:topic_group' x.id %}">
+                                      <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                                  </a>
+                              </div>
+                              <div class="text">
+                                  <h4>{{ x.nombre }}</h4>
+                                  <p>{{ x.descripcion|truncatechars:80 }}</p>
+                                  <div class="hidden-text">
+                                      <p>{{ x.descripcion }}</p>
+                                      <p>score: {{ x.score }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      {% endif %}
+                  {% empty %}
+                      <p>No hay grupos disponibles.</p>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
 
-{%endif%}
-{%endblock%}
+
+  <div class="footer">
+      <div class="footer-container">
+          <h1>sharp mind</h1>
+          <p>alimenta tu mente</p>
+          
+          <div class="redes-sociales">
+          </div>
+      </div>
+
+      <div class="footer-container">
+          <h1>sobre sharp mind</h1>
+          <p>nosotros</p>
+
+      </div>
+      
+      <div class="footer-container">
+          <h1>atencion al cliente</h1>
+          <p>whatsap</p>
+          <p>telefono</p>
+          <p>correo: </p>
+          <p>horario:</p>
+      </div>
+  </div>
+
+{% endif %}
+{% endblock %}
 
 {% block extraContent2 %}
 

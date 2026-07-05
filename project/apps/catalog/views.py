@@ -15,6 +15,10 @@ from .forms import postImagenForm
 from .forms import postVideoForm
 from .models import postvideo
 from ollama import Client
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+
+
 
 def ia(request):
     return render(request, "catalog/ia.html")
@@ -104,16 +108,6 @@ def topic_group(request, id):
                                                 "videoform": videoform,
                                                 "imagenform": imagenform
                                                 })
-                                                #"postvideos": post_video,
-                                                #"postimagen": post_imagen,
-                                                
-                                                
-                                                #"imagen_form": imagen_form})
-
-def topic_section(request, group_id, section_id):
-    group = topics_group.objects.get(id=group_id)
-    section = group.sections.get(id=section_id)
-    return render(request, "catalog/section.html", {"group": group, "section": section})
 def post( request, group_id, section_id):
     group = topics_group.objects.get(id=group_id)
     section = group.sections.get(id=section_id)
@@ -122,6 +116,12 @@ def post( request, group_id, section_id):
         messages.success(request, "Post creado exitosamente.")
         return redirect('catalog:topic_section', group_id=group_id, section_id=section_id)
     return render(request, "catalog/post.html", {"group": group, "section": section})
+
+def topic_section(request, group_id, section_id):
+    group = topics_group.objects.get(id=group_id)
+    section = group.sections.get(id=section_id)
+    return render(request, "catalog/section.html", {"group": group, "section": section})
+
 
 
 
@@ -163,6 +163,7 @@ def ia_response(request):
         return render(request, "catalog/ia_response.html", context=context)
 
 def search_view(request, page_number):
+    page_number = int(page_number or 1)
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user  =  CustomUser.objects.order_by('-score')[:5]
     if request.method == "POST":
@@ -206,10 +207,11 @@ def rate_group(request):
 def subscribe(request):
     group_id = request.POST.get('group_id')
     group = topics_group.objects.get(id=group_id)
+    page = request.POST.get('page') or 1
     if request.user in group.subscriptions.all():
         group.subscriptions.remove(request.user)
     else:
         group.subscriptions.add(request.user)
     group.save()
-    redirect_url = request.META.get('HTTP_REFERER', '/')
-    return redirect(redirect_url)
+    
+    return HttpResponseRedirect(reverse_lazy('catalog:search_view', kwargs={'page_number': page}))

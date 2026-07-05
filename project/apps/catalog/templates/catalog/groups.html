@@ -1,21 +1,18 @@
 
-{% extends "plantilla.html" %}
+{% extends 'catalog/home.html' %}
 {% load static %}
 
 {% block title %}Grupos Catalog{% endblock %}
 
 
-{%block css%}
 
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-<script src="{% static 'catalog/js/scroll.js'%}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
-{%endblock%}
 
 
-{% block content %}
+
+{% block all %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
 <div class="search-container">
     <div class="search-options">
         <form action="{% url 'catalog:search_view' 1 %}" method ="POST">
@@ -40,6 +37,7 @@
             <form action="{% url 'catalog:subscribe'%}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="group_id" value="{{i.id}}">
+            <input type ="hidden" name="page" value="{{page}}">
             <button type="submit"> unirse </button>
             </form>
             
@@ -82,7 +80,10 @@
         </form>
     </div>
 </div>
+</div>
+{% endblock %}
 
+{%block hot_topic%}
 <aside class="dual-conatiner">
     
     <div>
@@ -116,5 +117,6 @@
 <div>
     
 
-{% endblock %}
+{%endblock%}
+
 
