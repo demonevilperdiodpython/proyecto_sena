@@ -75,27 +75,25 @@ TEMPLATES = [
         },
     },
 ]
+mysqlittle = True
 
-WSGI_APPLICATION = 'project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
-        'NAME': 'sharp_mind',              # 2. El nombre que usaste en phpMyAdmin
-        'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
-        'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
-        'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)
-        'PORT': '3306',                         # 6. El puerto estándar de MySQL
-    },
-    'sqlite':{
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',# O la ruta de tu base SQLite original
+if mysqlittle == False:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
+            'NAME': 'sharp_mind',              # 2. El nombre que usaste en phpMyAdmin
+            'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
+            'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
+            'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)
+            'PORT': '3306',                         # 6. El puerto estándar de MySQL
+        }
     }
-}
+else: 
+    DATABASES = {
+    'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',}
+    }
 
 AUTH_USER_MODEL = "users.customuser"
 # Password validation
