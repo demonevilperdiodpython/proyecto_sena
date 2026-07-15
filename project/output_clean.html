@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- this templante is the base for the other templantes, -->
+<html>
+    <head>
+        <title>Plantilla Base</title>
+        
+        
+
+<link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+<link rel="stylesheet" type="text/css" href="/static/catalog/css/group.css">
+<link rel="stylesheet" type="text/css" href="/static/catalog/css/group.css">
+
+        <script src="/static/js/plantilla.js"></script>
+
+    <script src="http://127.0.0.1:35729/livereload.js"></script></head>
+    <body style="display: flex; flex-direction: column; align-items: center;">
+        <div class="navbar">
+            <div class="nav-container">
+                
+                <a href="/">
+                    <div class="nav-logo">
+                        <img src="/static/img/yokse.png" alt="logo">
+                    </div>
+                </a>
+                
+
+                <div class="nav-links">
+                </div>
+
+                <div>
+                    <div class="nav_extensable-button">
+                        <button class="toggle-btn">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </button>
+                        <ul class="menu">
+<!-- not sure of why this causes an erro on vs code, but still runs so dont worry-->
+                            
+                                <li><button onclick="window.location.href='/acounts/login/'">login</button></li>
+                                <li><button onclick="window.location.href='/acounts/signup/'">sing up </button></li>
+                            
+
+                            <li><button onclick="window.location.href='/acounts/acounts/'">profiles</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="container">
+            
+<div class="container-2">
+    <div>
+        
+        <div class="post">
+
+            
+            <img src="default" class="foto-perfil">
+            
+
+            <div class="cabeza" id="cabeza-15">
+                <p class="username-post"></p>
+                <div class="post-text view">
+                    <p>
+                        sdfasdfDFGSFDGSD
+                    </p>
+                </div>
+                <div class="post-text edit">
+                    <form method="POST">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                        <input type="hidden" name="post_id" value="15">
+                        <textarea name="content">sdfasdfDFGSFDGSD</textarea>
+                        <button type="submit" id="EPBB-15"
+                            formaction="/edit_post/">guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="botoness">
+                <form method="POST">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                    <input type="hidden" name="post_id" value="15">
+                    <div class="button-eliminate">
+                        <button type="submit" formaction="/eliminate_post/">
+                            eliminar
+                        </button>
+                    </div>
+                </form>
+                <div class="button_editate">
+
+                    <button id="EPb-15" onclick="toggleEdit(15)">
+                        editar
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        
+        <div class="post">
+
+            
+            <img src="default" class="foto-perfil">
+            
+
+            <div class="cabeza" id="cabeza-16">
+                <p class="username-post"></p>
+                <div class="post-text view">
+                    <p>
+                        asdfa
+                    </p>
+                </div>
+                <div class="post-text edit">
+                    <form method="POST">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                        <input type="hidden" name="post_id" value="16">
+                        <textarea name="content">asdfa</textarea>
+                        <button type="submit" id="EPBB-16"
+                            formaction="/edit_post/">guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="botoness">
+                <form method="POST">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                    <input type="hidden" name="post_id" value="16">
+                    <div class="button-eliminate">
+                        <button type="submit" formaction="/eliminate_post/">
+                            eliminar
+                        </button>
+                    </div>
+                </form>
+                <div class="button_editate">
+
+                    <button id="EPb-16" onclick="toggleEdit(16)">
+                        editar
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        
+        <div class="post">
+
+            
+            <img src="default" class="foto-perfil">
+            
+
+            <div class="cabeza" id="cabeza-18">
+                <p class="username-post"></p>
+                <div class="post-text view">
+                    <p>
+                        azxs
+                    </p>
+                </div>
+                <div class="post-text edit">
+                    <form method="POST">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                        <input type="hidden" name="post_id" value="18">
+                        <textarea name="content">azxs</textarea>
+                        <button type="submit" id="EPBB-18"
+                            formaction="/edit_post/">guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="botoness">
+                <form method="POST">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                    <input type="hidden" name="post_id" value="18">
+                    <div class="button-eliminate">
+                        <button type="submit" formaction="/eliminate_post/">
+                            eliminar
+                        </button>
+                    </div>
+                </form>
+                <div class="button_editate">
+
+                    <button id="EPb-18" onclick="toggleEdit(18)">
+                        editar
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        
+        <div class="post">
+
+            
+            <img src="default" class="foto-perfil">
+            
+
+            <div class="cabeza" id="cabeza-19">
+                <p class="username-post"></p>
+                <div class="post-text view">
+                    <p>
+                        asdasdada
+                    </p>
+                </div>
+                <div class="post-text edit">
+                    <form method="POST">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                        <input type="hidden" name="post_id" value="19">
+                        <textarea name="content">asdasdada</textarea>
+                        <button type="submit" id="EPBB-19"
+                            formaction="/edit_post/">guardar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="botoness">
+                <form method="POST">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+                    <input type="hidden" name="post_id" value="19">
+                    <div class="button-eliminate">
+                        <button type="submit" formaction="/eliminate_post/">
+                            eliminar
+                        </button>
+                    </div>
+                </form>
+                <div class="button_editate">
+
+                    <button id="EPb-19" onclick="toggleEdit(19)">
+                        editar
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        
+    </div>
+    <form method="post" class="post-form">
+        <div class="postear">
+            <div class="make-post">
+                
+                <input type="hidden" name="csrfmiddlewaretoken" value="B7M5BUN3Wz7qWG9ImxThzUAHUJtlKGoqWWu71sLFztLx1gCjUBP9izYFJgaX0dNs">
+
+                <textarea name="content" cols="40" rows="10" class="form-control" placeholder="Escribe tu post aquí..." required aria-invalid="true" aria-describedby="id_content_error" id="id_content">
+</textarea>
+
+                
+            </div>
+            <button type="submit">publicar</button>
+        </div>
+    </form>
+</div>
+
+
+
+        </div>
+        <div class="no-style">
+            
+
+<div class="button-menu">
+    <div class="button ">
+        <button></button>
+    </div>
+    <div class="menu menu-close">
+        
+        </div>
+    </div>
+
+
+    <script src="/static/catalog/js/sidemenu.js"></script>
+    <script src="/static/catalog/js/edit_post.js"></script>
+    
+        </div>
+    </body>
+</html>
