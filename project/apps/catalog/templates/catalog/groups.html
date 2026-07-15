@@ -25,46 +25,46 @@
 
 <div class="asidemain">
 <div class="searched-group">
-    {%for i in grupos%}
-    <a href="{%url 'catalog:topic_group' i.id%}">
-    <section class="group">
-        <div class="group-img">
-            <img src="{{i.imagen.url}}">
-        </div>
+        {%for i in a%}
+        <a href="{%url 'catalog:topic_group' i.id%}">
+        <section class="group">
+            <div class="group-img">
+                <img src="{{i.imagen.url}}">
+            </div>
 
-        <div class="group-text"> 
-      
-            <form action="{% url 'catalog:subscribe'%}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="group_id" value="{{i.id}}">
-            <input type ="hidden" name="page" value="{{page}}">
-            <button type="submit"> unirse </button>
-            </form>
-            
-            <form action="{%static 'catalog:rate_group'%}" method="GET">
+            <div class="group-text"> 
+        
+                <form action="{% url 'catalog:subscribe'%}" method="POST">
+                {% csrf_token %}
                 <input type="hidden" name="group_id" value="{{i.id}}">
-
-                <input type="radio"  name="rate" value="like">    
-                <label for="option1">like</label>
-
-                <input type="radio" name="rate" value="dislike">
-                <label for="option2">dislike</label>
-            </form>
-            <h5>
-                {{i.nombre}}
-                {{i.categoria}}
-                {{i.descripcion}}
+                <input type ="hidden" name="page" value="{{page}}">
+                <button type="submit"> unirse </button>
+                </form>
                 
+                <form action="{%static 'catalog:rate_group'%}" method="GET">
+                    <input type="hidden" name="group_id" value="{{i.id}}">
 
-                {{i.likes.count}}
-                {{i.dislikes.count}}
-                {{i.subscriptions.count}}
-            </h5></div>
+                    <input type="radio"  name="rate" value="like">    
+                    <label for="option1">like</label>
 
-    </section>
-    </a>
-    
-    {%endfor%}
+                    <input type="radio" name="rate" value="dislike">
+                    <label for="option2">dislike</label>
+                </form>
+                <h5>
+                    {{i.nombre}}
+                    {{i.categoria}}
+                    {{i.descripcion}}
+                    
+
+                    {{i.likes.count}}
+                    {{i.dislikes.count}}
+                    {{i.subscriptions.count}}
+                </h5></div>
+
+        </section>
+        </a>
+        
+        {%endfor%}
     <div class="change-page">
         {%if page > 1%}
             <form action="{% url 'catalog:search_view' page2 %}" method="POST">

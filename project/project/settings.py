@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
-        'NAME': 'sharp_mind',              # 2. El nombre que usaste en phpMyAdmin
+        'NAME': 'sharpmind',              # 2. El nombre que usaste en phpMyAdmin
         'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
         'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
         'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)

@@ -178,11 +178,12 @@ def search_view(request, page_number):
     pages = (len(grupo) // 2) + 1
     
     comienzo = (page_number - 1) * 2
-    if comienzo == 0:
-        comienzo = 1
+    limite = comienzo + 2
+    grupo = grupo[comienzo:limite]
     limite = comienzo + 2
     grupo  = grupo[comienzo:limite]
-    return render(request, "catalog/groups.html", { "grupos": grupo, "best_users" : best_user, "best_groups": best_group ,"page1":page_number+1, "page2":page_number-1, "page":page_number})
+    print(grupo)
+    return render(request, "catalog/groups.html", { "a": grupo, "best_users" : best_user, "best_groups": best_group ,"page1":page_number+1, "page2":page_number-1, "page":page_number})
 
 def search(request):
     query = request.GET.get("search")

@@ -3,15 +3,74 @@
 {%block post%}
 <div>
   <form action="">
+    <form method="post" class="post-form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-input-container-1">
+        {% for field in form %}
+            {{ field }}
+            {{ field.errors }}
+        {% endfor %}
+    </div>
+
+    <div class="form-input-container-2">
+        {{ videoform }}
+        {{ imagenform }}
+
+        <button
+            type="button"
+            class="btn-custom"
+            onclick="document.getElementById('imagenButton').click()"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                fill="currentColor"
+                class="bi bi-file-image"
+                viewBox="0 0 16 16"
+            >
+                <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                <path
+                    d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z"
+                />
+            </svg>
+        </button>
+
+        <button
+            type="button"
+            class="btn-custom"
+            onclick="document.getElementById('videoButton').click()"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                fill="currentColor"
+                class="bi bi-file-play-fill"
+                viewBox="0 0 16 16"
+            >
+                <path
+                    d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M6 5.883a.5.5 0 0 1 .757-.429l3.528 2.117a.5.5 0 0 1 0 .858l-3.528 2.117a.5.5 0 0 1-.757-.43V5.884z"
+                />
+            </svg>
+        </button>
+    </div>
+
+    <input type="hidden" name="user.id" value="{{ request.user.id }}">
+
+    <button type="submit">Publicar</button>
+</form>
   <BUTTON>make a post<button>
   <form>
 </div>
 {%endblock%}
 
-{%block show_post%}
+{% block show_post %}
+  <div>
     {%for i in posts%}
     <div class="post">
-
+      
       <img src="{{i.user.imagen.url}}" class="foto-perfil" />
 
 
@@ -146,4 +205,4 @@
     </div>
     {%endfor%}
   </div>
-{%endblock%}
+{% endblock %}
