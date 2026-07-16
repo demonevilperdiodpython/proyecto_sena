@@ -176,11 +176,7 @@
         {% endblock %}
 
         
-      <div class="posts-container">
-        {% block show_post% }
-        
-        
-      </div>
+      
 
     {% block all %}
         <div class="hot-topic">
@@ -200,13 +196,13 @@
                   <p>{{i.content}}</p>
                   <div>
                     {% for video in i.videos.all %}
-                    <p>{{ video.tittle }}</p>
-                    {% if video.video %}
-                    <div class="video-container">
-                    <video controls>
-                      <source src="{{ video.video.url }}" type="video/mp4" />
-                    </video>
-                    </div>
+                      <p>{{ video.tittle }}</p>
+                      {% if video.video %}
+                        <div class="video-container">
+                          <video controls>
+                            <source src="{{ video.video.url }}" type="video/mp4" />
+                          </video>
+                        </div>
                     {% endif %} {% endfor %} {% for imagen in i.imagen.all%} 
               {% if imagen.imagen %}
                     <div class="image-container">
