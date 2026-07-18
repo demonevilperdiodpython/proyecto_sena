@@ -2,6 +2,7 @@
 
 from django.conf import settings
 import django.core.validators
+import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 
@@ -60,6 +61,24 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sections', to='catalog.topics_group')),
                 ('posts', models.ManyToManyField(blank=True, to='catalog.post')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='postvideo',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('video', models.FileField(blank=True, null=True, upload_to='catalog/post/videos', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['mp4', 'avi', 'mov'])])),
+                ('tittle', models.CharField(blank=True, help_text='Optional title for the video', max_length=200)),
+                ('post', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='videos', to='catalog.post')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='postimagen',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('imagen', models.ImageField(blank=True, null=True, upload_to='catalog/post/imagenes/')),
+                ('tittle', models.CharField(blank=True, help_text='Optional title for the image', max_length=200)),
+                ('post', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='imagenes', to='catalog.post')),
             ],
         ),
         migrations.CreateModel(

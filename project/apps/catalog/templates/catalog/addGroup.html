@@ -5,20 +5,28 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
+
+
 
 {% endblock %}
+
+
 {% block content %}
+
 <div class="addgroup">
-<form method = "POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% for field in form %}
-        <div>
-            {{ field.label_tag }}
-            {{ field }}
-            {{ field.errors }}
-        </div>
-    {% endfor %}
-    <button type="submit">Registrar</button>
-</form>
+    <div class="groupz">
+        <form method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="boton-registrar">Registrar</button>
+        </form>
+    </div>
 <div>
 {% endblock %}
