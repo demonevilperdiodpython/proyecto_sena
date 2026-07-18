@@ -23,11 +23,15 @@ from django.http import HttpResponseRedirect
 def ia(request):
     return render(request, "catalog/ia.html")
 def home(request):
-    pecheras = producto.objects.filter(categoria="pechera")
-    grupos = topics_group.objects.all()
-    posts = post_model.objects.order_by('-created_at')[:10]
+    if request.user.is_authenticated:
+        posts = post_model.objects.order_by('-created_at')[:10]
+        grupos = topics_group.objects.all()
+        return render(request, "catalog/home.html", {"grupos": grupos, "posts": posts}) 
 
-    return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos, "posts": posts})   
+    else:
+        pecheras = producto.objects.filter(categoria="pechera")
+        
+        return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos, "posts": posts}) 
 
 def eliminate_product(request, product_id):
     product = producto.objects.get(id=product_id)
@@ -163,26 +167,41 @@ def ia_response(request):
         return render(request, "catalog/ia_response.html", context=context)
 
 def search_view(request, page_number):
-    page_number = int(page_number or 1)
+    print('---------------------------------------------------------------------------------------------------------------')
+    page_number = max(1, int(page_number or 1))
     best_group = topics_group.objects.order_by('-score')[:5]
-    best_user  =  CustomUser.objects.order_by('-score')[:5]
+    best_user = CustomUser.objects.order_by('-score')[:5]
+
     if request.method == "POST":
-        query = request.POST.get("search")
+        query = request.POST.get("search", "")
         if query:
             grupo = topics_group.objects.filter(nombre__icontains=query)
         else:
             grupo = topics_group.objects.all()
-        
-    elif request.method == "GET":
-        grupo = topics_group.objects.all()
-    pages = (len(grupo) // 2) + 1
-    
+    else:
+        query = request.GET.get("search", "")
+        if query:
+            grupo = topics_group.objects.filter(nombre__icontains=query)
+        else:
+            grupo = topics_group.objects.all()
+
     comienzo = (page_number - 1) * 2
-    if comienzo == 0:
-        comienzo = 1
     limite = comienzo + 2
-    grupo  = grupo[comienzo:limite]
-    return render(request, "catalog/groups.html", { "grupos": grupo, "best_users" : best_user, "best_groups": best_group ,"page1":page_number+1, "page2":page_number-1, "page":page_number})
+    grupo = grupo[comienzo:limite]
+    print(grupo)
+    print("puta")
+    return render(
+        request,
+        "catalog/groups.html",
+        {
+            "grupos": grupo,
+            "best_users": best_user,
+            "best_groups": best_group,
+            "page1": page_number + 1,
+            "page2": page_number - 1,
+            "page": page_number,
+        },
+    )
 
 def search(request):
     query = request.GET.get("search")

@@ -11,112 +11,103 @@
 
 
 {% block all %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
-<div class="search-container">
-    <div class="search-options">
-        <form action="{% url 'catalog:search_view' 1 %}" method ="POST">
-            {% csrf_token %}
-            <input type="text" name="search" placeholder="search">
-            <button type="submit">search</button>
-        </form> 
-    </div>
-</div>
-
-<div class="asidemain">
-<div class="searched-group">
-    {%for i in grupos%}
-    <a href="{%url 'catalog:topic_group' i.id%}">
-    <section class="group">
-        <div class="group-img">
-            <img src="{{i.imagen.url}}">
-        </div>
-
-        <div class="group-text"> 
-      
-            <form action="{% url 'catalog:subscribe'%}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="group_id" value="{{i.id}}">
-            <input type ="hidden" name="page" value="{{page}}">
-            <button type="submit"> unirse </button>
-            </form>
-            
-            <form action="{%static 'catalog:rate_group'%}" method="GET">
-                <input type="hidden" name="group_id" value="{{i.id}}">
-
-                <input type="radio"  name="rate" value="like">    
-                <label for="option1">like</label>
-
-                <input type="radio" name="rate" value="dislike">
-                <label for="option2">dislike</label>
-            </form>
-            <h5>
-                {{i.nombre}}
-                {{i.categoria}}
-                {{i.descripcion}}
-                
-
-                {{i.likes.count}}
-                {{i.dislikes.count}}
-                {{i.subscriptions.count}}
-            </h5></div>
-
-    </section>
-    </a>
-    
-    {%endfor%}
-    <div class="change-page">
-        {%if page > 1%}
-            <form action="{% url 'catalog:search_view' page2 %}" method="POST">
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css'%}">
+    <div class="search-container">
+        <div class="search-options">
+            <form action="{% url 'catalog:search_view' 1 %}" method ="POST">
                 {% csrf_token %}
-                <button type="submit"> < </button>
-                
-            </form>
-        {%endif%}
-        <form action="{% url 'catalog:search_view' page1 %}" method="POST">
-            {% csrf_token %}
-            
-            <button  type="submit"> > </button>
-        </form>
+                <input type="text" name="search" placeholder="search">
+                <button type="submit">search</button>
+            </form> 
+        </div>
     </div>
-</div>
-</div>
+
+    <div class="asidemain">
+        <div class="searched-group">
+            {{grupos}}
+            {%for i in grupos%}
+                <a href="{%url 'catalog:topic_group' i.id%}">
+                    <section class="group">
+                        <div class="group-img">
+                            <img src="{{i.imagen.url}}">
+                        </div>
+
+                        <div class="group-text"> 
+                            <form action="{% url 'catalog:subscribe'%}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="group_id" value="{{i.id}}">
+                                <input type ="hidden" name="page" value="{{page}}">
+                                <button type="submit"> unirse </button>
+                            </form>
+                            
+                            <form action="{%static 'catalog:rate_group'%}" method="GET">
+                                <input type="hidden" name="group_id" value="{{i.id}}">
+                                <input type="radio"  name="rate" value="like">    
+                                <label for="option1">like</label>
+                                <input type="radio" name="rate" value="dislike">
+                                <label for="option2">dislike</label>
+                            </form>
+                            <h5>
+                                {{i.nombre}}
+                                {{i.categoria}}
+                                {{i.descripcion}}
+                                
+
+                                {{i.likes.count}}
+                                {{i.dislikes.count}}
+                                {{i.subscriptions.count}}
+                            </h5>
+                        </div>
+                    </section>
+                </a>
+            
+            {%endfor%}
+            <div class="change-page">
+                {%if page > 1%}
+                    <form action="{% url 'catalog:search_view' page2 %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit"> < </button>  
+                    </form>
+                {%endif%}
+                <form action="{% url 'catalog:search_view' page1 %}" method="POST">
+                    {% csrf_token %}
+                    <button  type="submit"> > </button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {%block hot_topic%}
-<aside class="dual-conatiner">
-    
-    <div>
-        <h1>mejores usuarios</h1>
-        {%for x in best_users%}
-            <div class="perfil-item">
-                <p class="perfil-nombre">{{x.username}}</p>
-                {% if x.imagen %}
-                    <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
-                {% else %}
-                    <div class="foto-perfil" style="background-color: #ccc;"></div>
-                {% endif %}
-            </div>
-        {%endfor%}
-    </div>
-    <div>
-        <h1>mejores grupos</h1>
-        {%for x in best_groups%}
-            <div class="perfil-item">
-                <p class="perfil-nombre">{{x.nombre}}</p>
-                {% if x.imagen %}
-                    <img src="{{x.imagen.url}}" alt="{{x.nombre}}" class="foto-perfil">
-                {% else %}
-                    <div class="foto-perfil" style="background-color: #ccc;"></div>
-                {% endif %}
-            </div>
-        {%endfor%}
-    </div> 
-
-</aside>
-<div>
-    
-
+    <aside class="dual-conatiner">
+        
+        <div>
+            <h1>mejores usuarios</h1>
+            {%for x in best_users%}
+                <div class="perfil-item">
+                    <p class="perfil-nombre">{{x.username}}</p>
+                    {% if x.imagen %}
+                        <img src="{{x.imagen.url}}" alt="{{x.username}}" class="foto-perfil">
+                    {% else %}
+                        <div class="foto-perfil" style="background-color: #ccc;"></div>
+                    {% endif %}
+                </div>
+            {%endfor%}
+        </div>
+        <div>
+            <h1>mejores grupos</h1>
+            {%for x in best_groups%}
+                <div class="perfil-item">
+                    <p class="perfil-nombre">{{x.nombre}}</p>
+                    {% if x.imagen %}
+                        <img src="{{x.imagen.url}}" alt="{{x.nombre}}" class="foto-perfil">
+                    {% else %}
+                        <div class="foto-perfil" style="background-color: #ccc;"></div>
+                    {% endif %}
+                </div>
+            {%endfor%}
+        </div> 
+    </aside>
 {%endblock%}
 
 
