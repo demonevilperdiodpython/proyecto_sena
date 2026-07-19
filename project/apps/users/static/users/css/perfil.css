@@ -1,0 +1,86 @@
+.per1{background: var(--primary-color-darker);
+color: var(--font-primary-black);
+display: flex;
+position: relative;
+flex-direction: column;
+padding: 35px;
+align-items: flex-start;
+width:90%;
+height: 90%;
+gap: 15px;
+font-size: 400%;
+font-size: 115%;
+
+}
+.userImagen{height: 300px;
+width: 300px;
+
+border: 3px solid white;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.foto-perfil{
+height: 90px;
+width: 90px;
+border-radius: 50%;
+object-fit:cover ;
+
+}
+.cabeza{display: flex;
+justify-content: flex-start;
+flex-direction: column;
+text-align: left;
+}
+.post{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-bottom: 1px solid black;
+    padding:1rem;
+    border-radius: 10px;
+    margin-right:1rem;
+    box-sizing: border-box;
+    transition:all 0.5S ease-in-out;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    position:relative;
+    
+}
+.los-post {margin-left: 3rem;
+margin-right: 11rem;
+}
+.post p{
+    text-decoration:none;
+    font-size: 3rem;
+    color: var(--font-primary-black);
+    
+    text-align: left;
+}
+.post:hover{
+    background: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
+    transition:all 0.5S ease-in-out;
+}
+.post-text {padding-top: 15px;}
+.username-post{
+    font-size: 13px;
+    margin-block-start: 0.2rem;
+    margin-block-end: 1rem;
+    color: var(--font-primary-black);
+}
+
+.posts-container{
+    width: 100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:fit-content;
+    padding:2rem;
+}
+
+.contenedor {display: flex;
+justify-content: center;
+padding: 20px;
+margin: auto;
+height: 100%;
+width: 100%;
+}

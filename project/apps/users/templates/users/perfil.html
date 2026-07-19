@@ -12,24 +12,45 @@
 <link rel="stylesheet" type="text/css" href="{%static 'users/css/styleEspesific.css' %}">
 <script src="{% static 'user/js/user-button.js'}"></script>
 <link rel="stylesheet" type="text/css" href="{%static 'catalog/css/home.css'%}">
+
+<link rel="stylesheet" type="text/css" href="{%static 'users/css/perfil.css'%}">
+
 {% endblock %}
 
 {% block content %}
-  <div class="per1">
-   
-      {%if user.is_authenticated%}
-            <img src="{{user.imagen.url}}" alt="" class="userImagen">
-                {{user.username}}
-                
-      {%endif%}
-    
-  </div> 
-    <div class="user-info">
-        <p>Gmail: {{user.email}}</p>
-        <p>estado: {{i.user.estado}}</p>
-              
-                    
 
-    </div>  
-  
+  <div class="contenedor">  
+    <div class="per1">
+    
+        {%if user.is_authenticated%}
+                <img src="{{user.imagen.url}}" alt="" class="userImagen">
+                    {{user.username}}
+                    
+        {%endif%}
+         <div class="user-info">
+            <p>Gmail: {{user.email}}</p>
+            <p>estado: {{i.user.estado}}</p>
+                
+                        
+
+        </div>  
+    </div> 
+       
+        <div class="los-post">
+            {% for i in posts %}
+                <div class="post">
+                    <img src="{{ i.user.imagen.url }}" class="foto-perfil" />
+
+                    <div class="cabeza" id="cabeza-{{ i.id }}">
+                        <h5 class="username-post">{{ i.user.username }}</h5>
+                        <div class="post-text view">
+                            <p>{{ i.content }}</p>
+            
+                        </div>
+                    </div>       
+                </div>    
+            {%endfor%}                      
+            <p>hola</p>  
+        </div>
+  </div>    
 {%endblock%}

@@ -9,7 +9,7 @@ from .models import customuser as User
 from .forms import CustomUserCreationForm as UserCreationForm
 import re
 from django.contrib.auth import logout
-
+from apps.catalog.models import post
 from apps.users.models import imagen as ImagenModel
 # Create your views here.cu
 def login_view(request):
@@ -102,8 +102,14 @@ def acounts_view(request):
         response = render(request, 'users/acounts.html', {"ingresed_users": userssessions})
         return response
 
-def perfil_view(request):
-    return render(request, "users/perfil.html")
+def perfil_view(request, id):
+    posts = post.objects.filter(user=request.user)
+
+    return render(request, "users/perfil.html", {
+        "posts": posts,
+    })
+
+
 
 def logOut_view(request):
     ip = get_client_ip(request)
