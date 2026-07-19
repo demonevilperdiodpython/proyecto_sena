@@ -23,6 +23,9 @@ from django.http import HttpResponseRedirect
 def ia(request):
     return render(request, "catalog/ia.html")
 def home(request):
+
+    posts = post_model.objects.order_by('-created_at')[:10]
+    grupos = topics_group.objects.all()
     if request.user.is_authenticated:
         posts = post_model.objects.order_by('-created_at')[:10]
         grupos = topics_group.objects.all()

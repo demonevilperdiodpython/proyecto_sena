@@ -16,7 +16,7 @@
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/css/coreui.min.css"
-/>
+>
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/js/coreui.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
 
@@ -34,7 +34,7 @@
 
 {%else%}
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group.css'%}">
+
 {%endif%}
 
 
@@ -102,74 +102,74 @@
 				{{i.nombre}}
 			</a>
 			</li>
-		{% endfor %}
+			{% endfor %}
 			</ul>
 			</li>
 		</ul>
 		</li>
 	</ul>
-	<div class="sidebar-footer">
-		<div class="dropdown dropend w-100">
-		<a
-			class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center"
-			href="#"
-			role="button"
-			data-coreui-toggle="dropdown"
-			aria-expanded="false"
-		>
-			<div class="avatar avatar-md">
-			<img
-				class="avatar-img rounded"
-				src="{{request.user.imagen.url}}"
-			/>
-			</div>
-			<div class="small text-start d-sidebar-narrow-none">
-			<div class="fw-semibold">{{request.user.username}}</div>
-			<div>{{request.user.email}}</div>
-			</div>
-			<i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
-		</a>
-		<ul class="dropdown-menu w-100">
-			<li>
-			<div class="d-flex gap-2 px-2">
+		<div class="sidebar-footer">
+			<div class="dropdown dropend w-100">
+			<a
+				class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center"
+				href="#"
+				role="button"
+				data-coreui-toggle="dropdown"
+				aria-expanded="false"
+			>
 				<div class="avatar avatar-md">
 				<img
 					class="avatar-img rounded"
 					src="{{request.user.imagen.url}}"
-					alt="user@email.com"
 				/>
 				</div>
-				<div class="small text-start">
+				<div class="small text-start d-sidebar-narrow-none">
 				<div class="fw-semibold">{{request.user.username}}</div>
 				<div>{{request.user.email}}</div>
 				</div>
+				<i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
+			</a>
+			<ul class="dropdown-menu w-100">
+				<li>
+				<div class="d-flex gap-2 px-2">
+					<div class="avatar avatar-md">
+					<img
+						class="avatar-img rounded"
+						src="{{request.user.imagen.url}}"
+						alt="user@email.com"
+					/>
+					</div>
+					<div class="small text-start">
+					<div class="fw-semibold">{{request.user.username}}</div>
+					<div>{{request.user.email}}</div>
+					</div>
+				</div>
+				</li>
+				<li><hr class="dropdown-divider" /></li>
+				<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="{%url 'users:perfil'%} "
+					><i class="cil-user"></i>Account</a
+				>
+				</li>
+				<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="#"
+					><i class="cil-credit-card"></i>Billing</a
+				>
+				</li>
+				<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="#"
+					><i class="cil-settings"></i>Settings</a
+				>
+				</li>
+				<li><hr class="dropdown-divider" /></li>
+				<li>
+				<a class="dropdown-item d-flex align-items-center gap-2" href="{%url 'users:logout'%}"
+					><i class="cil-account-logout"></i>Logout</a
+				>
+				</li>
+			</ul>
 			</div>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
-			<li>
-			<a class="dropdown-item d-flex align-items-center gap-2" href="#"
-				><i class="cil-user"></i>Account</a
-			>
-			</li>
-			<li>
-			<a class="dropdown-item d-flex align-items-center gap-2" href="#"
-				><i class="cil-credit-card"></i>Billing</a
-			>
-			</li>
-			<li>
-			<a class="dropdown-item d-flex align-items-center gap-2" href="#"
-				><i class="cil-settings"></i>Settings</a
-			>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
-			<li>
-			<a class="dropdown-item d-flex align-items-center gap-2" href="{%url 'users:logout'%}"
-				><i class="cil-account-logout"></i>Logout</a
-			>
-			</li>
-		</ul>
 		</div>
-	</div>
 	</div>
 
 	<div class="container-2">
@@ -406,50 +406,50 @@
 					</div>
 				</section>
 			</div>
-		</div>
+		
 
 		<div class="f-background">
 			<h1>titulo</h1>
-		<div class="flex-grid">
-			<section class="bigflex"  style="background-color: var(--primary-color-lighter)">
-				<div class="bigflex-media">
-					<img src="{% static 'catalog/img/bochi-the-rock-guitarra.jpg' %}" alt="Guitarra en estudio">
-				</div>
-				<section class="bigflex-info">
-					<h2>Estudia guitarra</h2>
-					<p>busca quienes esten interesados en tocar guitarra con tigo.</p>
-				</section>
-			</section>
-
-			<section class="shortflex"  style="background-color: var(--primary-color-lighter)">
-				<div class="shortflex-media">
-					<img src="{% static 'catalog/img/berserk_gym.jpg' %}" alt="Gym y estudio">
-					<div class="overlay-text">
-						<p>Rutinas simples para equilibrar ejercicio y estudio.</p>
+			<div class="flex-grid">
+				<section class="bigflex"  style="background-color: var(--primary-color-lighter)">
+					<div class="bigflex-media">
+						<img src="{% static 'catalog/img/bochi-the-rock-guitarra.jpg' %}" alt="Guitarra en estudio">
 					</div>
-				</div>
-			</section>
-		</div>
-
-		<div class="flex-grid">
-			<section class="shortflex" style="background-color: var(--secondary-color-lighter)">
-				<div class="shortflex-media">
-					<img src="{% static 'catalog/img/estudiar.jpg' %}" alt="Estudio académico">
-					<div class="overlay-text">
-						<p>Organiza tu estudio con reglas claras y breves.</p>
-					</div>
-				</div>
-			</section>
-			<section class="bigflex" style="background-color: var(--secondary-color-lighter)">
-				<div class="bigflex-media">
-					<img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Estudio digital">
-				</div>
-				<section class="bigflex-info">
-					<h2>Estudia online</h2>
-					<p>Aprende desde casa con materiales prácticos y rápidos.</p>
+					<section class="bigflex-info">
+						<h2>Estudia guitarra</h2>
+						<p>busca quienes esten interesados en tocar guitarra con tigo.</p>
+					</section>
 				</section>
-			</section>
-		</div>
+
+				<section class="shortflex"  style="background-color: var(--primary-color-lighter)">
+					<div class="shortflex-media">
+						<img src="{% static 'catalog/img/berserk_gym.jpg' %}" alt="Gym y estudio">
+						<div class="overlay-text">
+							<p>Rutinas simples para equilibrar ejercicio y estudio.</p>
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<div class="flex-grid">
+				<section class="shortflex" style="background-color: var(--secondary-color-lighter)">
+					<div class="shortflex-media">
+						<img src="{% static 'catalog/img/estudiar.jpg' %}" alt="Estudio académico">
+						<div class="overlay-text">
+							<p>Organiza tu estudio con reglas claras y breves.</p>
+						</div>
+					</div>
+				</section>
+				<section class="bigflex" style="background-color: var(--secondary-color-lighter)">
+					<div class="bigflex-media">
+						<img src="{% static 'catalog/img/fieren_python.jpg' %}" alt="Estudio digital">
+					</div>
+					<section class="bigflex-info">
+						<h2>Estudia online</h2>
+						<p>Aprende desde casa con materiales prácticos y rápidos.</p>
+					</section>
+				</section>
+			</div>
 
 		</div>
 		<div class="carousel-repeat">
