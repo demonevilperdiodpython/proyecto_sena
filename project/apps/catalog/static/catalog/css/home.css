@@ -9,19 +9,20 @@
 
 
 .dark{
-    --primary-color-lighter: #c9caf5;
-    --primary-color: ;
-    --primary-color-dark:#290466;
-    --primary-color-darker:#c5d6ec;
-    --tertiary-color: rgb(248, 255, 255);
-    --pie-color: rgb(251, 254, 255);
-
-    --secondary-color: ;
-    --secondary-color-dark:#9f91d1;
-    --secondary-color-lighter: hsl(117, 88%, 90%);
-    
-    --font-primary-black: hsl(0, 3%, 8%);
-    --font-primary-black-light: hsl(0 0% 60%);
+--primary-color-lighter: #e35555;
+  --primary-color: ;
+  --primary-color-dark: #3d0b3f;
+  --primary-color-darker: #ffffea;
+  --tertiary-color: rgb(255, 222, 187);
+  --pie-color: #fff3d7;
+  --secondary-color: ;
+  --secondary-color-dark: rgb(236, 84, 112);
+  --secondary-color-lighter: hsl(50.7, 88.2%, 90%);
+  --font-primary-black: hsl(0, 9.8%, 10%);
+  --font-primary-black-light: hsl(0 0% 60%);
+  --containers-primary: linear-gradient( rgba(255, 236, 160, 0.8), #3d98ad);
+  --boton-sito: #ffff7b;
+  --menu-despl: #e35555;
 }
 
 .carousel-repeat{
