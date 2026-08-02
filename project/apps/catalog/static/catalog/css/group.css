@@ -202,7 +202,7 @@ word-break: break-word;
     font-size: 3rem;
 }
 .post:hover{
-    background: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
+    background: var(--click-touch);
     transition:all 0.5S ease-in-out;
 }
 

@@ -24,10 +24,10 @@
     
         {%if user.is_authenticated%}
                 <img src="{{user.imagen.url}}" alt="" class="userImagen">
-                    {{user.username}}
                     
         {%endif%}
          <div class="user-info">
+            <p>{{user.username}}</p>
             <p>Gmail: {{user.email}}</p>
             <p>estado: {{i.user.estado}}</p>
                 
@@ -50,7 +50,6 @@
                     </div>       
                 </div>    
             {%endfor%}                      
-            <p>hola</p>  
         </div>
   </div>    
 {%endblock%}

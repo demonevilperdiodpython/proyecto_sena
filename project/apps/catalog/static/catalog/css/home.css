@@ -10,7 +10,7 @@
 
 .dark{
 --primary-color-lighter: #e35555;
-  --primary-color: ;
+  --primary-color: #bc214d;
   --primary-color-dark: #3d0b3f;
   --primary-color-darker: #ffffea;
   --tertiary-color: rgb(255, 222, 187);
@@ -23,6 +23,8 @@
   --containers-primary: linear-gradient( rgba(255, 236, 160, 0.8), #3d98ad);
   --boton-sito: #ffff7b;
   --menu-despl: #e35555;
+  --click-touch: linear-gradient( rgba(255, 236, 161, 0.8), #33829a); 
+  --rank-box: linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), rgba(78, 15, 80, 0.6));
 }
 
 .carousel-repeat{
