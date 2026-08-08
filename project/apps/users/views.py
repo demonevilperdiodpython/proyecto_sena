@@ -20,13 +20,12 @@ def login_view(request):
        
         if form.is_valid():
             ip = get_client_ip(request)
-            device_id = get_device_id(request, response)
             user_agent = request.META.get('HTTP_USER_AGENT','')
             user = form.get_user()
-            other_users = UserSession.objects.filter(ip_address = ip,
-                                                    user_agent= user_agent,
-                                                    device_id=device_id).update(is_active=False)
+            other_users = UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
 
+            response = redirect('catalog:home')
+            device_id = get_device_id(request, response)
             init_sesion = UserSession.objects.create(
                 user=user,
                 ip_address=ip,
@@ -34,7 +33,7 @@ def login_view(request):
                 device_id=device_id)
             init_sesion.save()
             login(request, user)
-            return redirect('catalog:home')
+            return response
             
     return response
 
@@ -78,16 +77,17 @@ def Register_view(request):
 
             user.save()
 
-
+            response = redirect('catalog:home')
+            device_id = get_device_id(request, response)
+            other_users = UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
             init_sesion = UserSession.objects.create(
                 device_id = device_id,
                 user=user,
                 ip_address=ip,
                 user_agent= user_agent)
-            
             init_sesion.save()
             login(request, user)
-            return redirect('catalog:home')
+            return response
         else:
             print('----------form is invalid-----------')
             print(form.errors)
@@ -118,38 +118,31 @@ def logOut_view(request):
     
     print(f"DEBUG Logout: ip={ip}, user_agent={user_agent}, device_id={device_id}, user={request.user}")
     
-    if device_id:
-        queryset = UserSession.objects.filter(
-            ip_address=ip,
-            user_agent=user_agent,
-            device_id=device_id,
-            user=request.user
-        )
+    if request.user.is_authenticated:
+        queryset = UserSession.objects.filter(user=request.user, is_active=True)
+        if device_id:
+            queryset = queryset.filter(device_id=device_id)
         print(f"DEBUG: Sessions found before update: {list(queryset.values('id', 'is_active'))}")
         updated = queryset.update(is_active=False)
         print(f"DEBUG: Sessions updated: {updated}")
-        # Verifica después del update
-        queryset_after = UserSession.objects.filter(
-            ip_address=ip,
-            user_agent=user_agent,
-            device_id=device_id,
-            user=request.user
-        )
+        queryset_after = UserSession.objects.filter(user=request.user, is_active=True)
         print(f"DEBUG: Sessions after update: {list(queryset_after.values('id', 'is_active'))}")
     else:
-        print("DEBUG: No device_id in cookies")
+        print("DEBUG: Logout requested without authenticated user")
     
     logout(request)
-    return redirect('users:login')
+    response = redirect('users:login')
+    response.delete_cookie('device_id')
+    return response
 
 def eliminate_user_session_view(request, user_id):
     if request.method == 'POST':
-        response= redirect('users:acounts')
+        response = redirect('users:acounts')
         ip = get_client_ip(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         device_id = request.COOKIES.get("device_id")
         
-        user =UserSession.objects.get(user_id = user_id, user_agent=user_agent, ip_address=ip, device_id=device_id, is_active=True)
+        user = UserSession.objects.filter(user=request.user, user_id=user_id, is_active=True).first()
         if user.user_id == request.user.id:
             logout(request)
             

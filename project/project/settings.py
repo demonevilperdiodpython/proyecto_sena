@@ -40,12 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'livereload',
+    "django.contrib.sites",
     'django.contrib.staticfiles',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+
     'apps.users',
     'apps.catalog',  
 ]
 
-
+SITE_ID = 1
 MIDDLEWARE = [
     
     'django.middleware.security.SecurityMiddleware',
@@ -56,9 +62,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'livereload.middleware.LiveReloadScript',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
+
 ROOT_URLCONF = 'project.urls'
+
 
 TEMPLATES = [
     {
@@ -80,7 +89,7 @@ if mysqlittle == False:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
-            'NAME': 'sharp_mind',              # 2. El nombre que usaste en phpMyAdmin
+            'NAME': 'sharp_mind',                    # 2. El nombre que usaste en phpMyAdmin
             'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
             'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
             'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)
@@ -93,9 +102,9 @@ else:
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',}
     }
-
-AUTH_USER_MODEL = "users.customuser"
-# Password validation
+AUTH_USER_MODEL = "users.CustomUser"
+LOGIN_REDIRECT_URL = "/"
+    # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [

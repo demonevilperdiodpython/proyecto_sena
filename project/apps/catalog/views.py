@@ -17,11 +17,12 @@ from .models import postvideo
 from ollama import Client
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 
 
 
-def ia(request):
-    return render(request, "catalog/ia.html")
 def home(request):
 
     posts = post_model.objects.order_by('-created_at')[:10]
@@ -36,11 +37,13 @@ def home(request):
         
         return render(request, "catalog/home.html", {"pecheras": pecheras, "grupos": grupos, "posts": posts}) 
 
+@login_required
 def eliminate_product(request, product_id):
-    product = producto.objects.get(id=product_id)
+    product = get_object_or_404(producto, id=product_id)
     product.delete()
     return redirect('catalog:product_list')
-#comienza lo creado para el proyecto
+
+@login_required
 def add_group(request):
     if request.method == "POST":
         form = topic_groupForm(request.POST,request.FILES)
@@ -56,11 +59,12 @@ def add_group(request):
     return render(request, "catalog/addGroup.html", {"form": form})
 
 
-
+@login_required
 def topic_group(request, id):
     print('--------------------DEBUG---------------------')
     form = postForm(request.POST or None)
-    group = topics_group.objects.get(id=id)
+    
+    group = get_object_or_404(topics_group, id=id)
     sections = group.sections.all()
     group_post = group.post.all()
     videoform = postVideoForm(request.POST or None, request.FILES or None)
@@ -70,12 +74,13 @@ def topic_group(request, id):
         print('--------------------POST REQUEST---------------------')
         if form.is_valid():
             print('--------------------FORM VALID---------------------')
-            print(request.POST.get("ia"))
+            print("ia response:", request.POST.get("ia"))
             post = form.save(commit=False)
             post.user = request.user
             post.group = group
             post.save()
-            if request.POST.get("ia") == "True":
+            
+            if request.POST.get("ia") == "on":
                 print('--------------------IA REQUEST---------------------')
                 client = Client()
                 output = client.generate(
@@ -115,9 +120,10 @@ def topic_group(request, id):
                                                 "videoform": videoform,
                                                 "imagenform": imagenform
                                                 })
+@login_required
 def post( request, group_id, section_id):
     group = topics_group.objects.get(id=group_id)
-    section = group.sections.get(id=section_id)
+    section = get_object_or_404(group.sections, id=section_id)
     if request.method == "POST":
         content = request.POST.get("content")
         messages.success(request, "Post creado exitosamente.")
@@ -125,31 +131,31 @@ def post( request, group_id, section_id):
     return render(request, "catalog/post.html", {"group": group, "section": section})
 
 def topic_section(request, group_id, section_id):
-    group = topics_group.objects.get(id=group_id)
+    group = get_object_or_404(topics_group, id=group_id)
     section = group.sections.get(id=section_id)
     return render(request, "catalog/section.html", {"group": group, "section": section})
 
 
 
-
+@login_required
 def eliminate_post(request):
     post_id = request.POST.get("post_id")
-    post = post_model.objects.get(id=post_id)
+    post = get_object_or_404(post_model, id=post_id)
     post.delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
 def edit_post(request):
     if request.method == "POST":
         post_id = request.POST.get("post_id")
-        Post = post_model.objects.get(id=post_id)
+        
+        Post = get_object_or_404(post_model, id=post_id)
         content = request.POST.get("content")
         Post.content = content
         Post.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def ia_response(request):
-        # Support htmx/htmlx detection without requiring middleware
-  
-    
     if request.method == "POST" and request.POST.get("input_text"):
         print("-------------------------    -------------------------")
         description = request.POST.get("input_text")
@@ -169,53 +175,51 @@ def ia_response(request):
             "description": description}
         return render(request, "catalog/ia_response.html", context=context)
 
-def search_view(request, page_number):
-    print('---------------------------------------------------------------------------------------------------------------')
-    page_number = max(1, int(page_number or 1))
+
+@login_required
+def search_view(request, page_number=1):
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user = CustomUser.objects.order_by('-score')[:5]
 
-    if request.method == "POST":
-        query = request.POST.get("search", "")
-        if query:
-            grupo = topics_group.objects.filter(nombre__icontains=query)
-        else:
-            grupo = topics_group.objects.all()
-    else:
-        query = request.GET.get("search", "")
-        if query:
-            grupo = topics_group.objects.filter(nombre__icontains=query)
-        else:
-            grupo = topics_group.objects.all()
+    query = request.POST.get("search") or request.GET.get("search") or ""
 
-    comienzo = (page_number - 1) * 2
-    limite = comienzo + 2
-    grupo = grupo[comienzo:limite]
-    print(grupo)
-    print("puta")
+    if query:
+        groups = topics_group.objects.filter(nombre__icontains=query)
+    else:
+        groups = topics_group.objects.all()
+
+    paginator = Paginator(groups, 2)
+    page = request.GET.get("page") or request.POST.get("page") or 1
+    obj = paginator.get_page(page)
+   
+
+    
     return render(
         request,
         "catalog/groups.html",
         {
-            "grupos": grupo,
+            "grupos": obj,
             "best_users": best_user,
             "best_groups": best_group,
-            "page1": page_number + 1,
-            "page2": page_number - 1,
-            "page": page_number,
+            "page": obj.number,
+            "page1": obj.next_page_number() if obj.has_next() else obj.number,
+            "page2": obj.previous_page_number() if obj.has_previous() else obj.number,
+            "query": query,
         },
     )
 
+@login_required
 def search(request):
     query = request.GET.get("search")
     grupos = topics_group.objects.filter(name__icontains=query)
     return redirect(search_view, grupos=grupos)
 
+@login_required
 def rate_group(request):
     print("working")
     group_id = request.GET.get('group_id')
     rate = request.GET.get('rate')
-    group = topics_group.objects.get(id=group_id)
+    group = get_object_or_404(topics_group, id=group_id)
     if rate == 'like':
         group.likes.add(request.user)
         group.dislikes.remove(request.user)
@@ -226,6 +230,7 @@ def rate_group(request):
     redirect_url = request.META.get('HTTP_REFERER', '/')
     return redirect(redirect_url)
 
+@login_required
 def subscribe(request):
     group_id = request.POST.get('group_id')
     group = topics_group.objects.get(id=group_id)

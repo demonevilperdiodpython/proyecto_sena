@@ -8,7 +8,7 @@
                     {{ field }}
                     {{ field.errors }}
                 {% endfor %}
-
+                <input type="radio" name="ia"></input>
                 <button type="submit">publicar</button>
             </div>
             <div class="form-input-container-2">
@@ -67,7 +67,9 @@
                 <div class="cabeza" id="cabeza-{{ i.id }}">
                     <h5 class="username-post">{{ i.user.username }}</h5>
                     <div class="post-text view">
+                        <h6>{{i.tittle}}</h6>
                         <p>{{ i.content }}</p>
+                        <h10>{{i.ia_response}}</h10>
                         <div>
                             {% for video in i.videos.all %}
                                 <p>{{ video.tittle }}</p>
