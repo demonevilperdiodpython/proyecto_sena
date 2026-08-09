@@ -45,11 +45,25 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-
+    "allauth.socialaccount.providers.discord",
+    "allauth.socialaccount.providers.facebook",
+    'allauth.socialaccount.providers.github',
     'apps.users',
     'apps.catalog',  
     'rest_framework',
 ]
+SOCIALACCOUNT_PROVIDERS = {
+    'discord': {
+        'SCOPE': ['identify', 'email'],
+    },
+    'github': {
+        'SCOPE': [
+            'read:user',
+            'user:email',
+        ],
+    },
+ }
+
 
 SITE_ID = 1
 MIDDLEWARE = [
@@ -63,6 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'livereload.middleware.LiveReloadScript',
     "allauth.account.middleware.AccountMiddleware",
+    
 ]
 
 SOCIALACCOUNT_ADAPTER = 'apps.users.adapters.CustomSocialAdapter'
@@ -88,7 +103,11 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
 mysqlittle = False 
+
 
 
 if mysqlittle == False:
