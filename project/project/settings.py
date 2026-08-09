@@ -18,8 +18,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
+    # Quick-start development settings - unsuitable for productionF
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
 
     'apps.users',
     'apps.catalog',  
+    'rest_framework',
 ]
 
 SITE_ID = 1
@@ -65,6 +65,11 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+SOCIALACCOUNT_ADAPTER = 'apps.users.adapters.CustomSocialAdapter'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_QUERY_EMAIL = True
 
 ROOT_URLCONF = 'project.urls'
 
@@ -83,17 +88,26 @@ TEMPLATES = [
         },
     },
 ]
-mysqlittle = True
+mysqlittle = False 
+
 
 if mysqlittle == False:
+    # 1. Ignorar la restricción de versión mínima de MariaDB para XAMPP (MariaDB 10.4)
+    from django.db.backends.mysql.base import DatabaseWrapper
+    from django.db.backends.mysql.features import DatabaseFeatures
+
+    DatabaseWrapper.check_database_version_supported = lambda self: None
+    DatabaseFeatures.can_return_columns_from_insert = property(lambda self: False)
+    DatabaseFeatures.can_return_rows_from_bulk_insert = property(lambda self: False)
+
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',   # 1. Motor cambiado a MySQL
-            'NAME': 'sharp_mind',                    # 2. El nombre que usaste en phpMyAdmin
-            'USER': 'root',                         # 3. Usuario (casi siempre 'root' en XAMPP)
-            'PASSWORD': '',                         # 4. Tu contraseña (en XAMPP por defecto está VACÍA)
-            'HOST': 'localhost',                    # 5. La dirección del servidor (localhost)
-            'PORT': '3306',                         # 6. El puerto estándar de MySQL
+            'ENGINE': 'django.db.backends.mysql',    # Motor oficial de Django para MySQL
+            'NAME': 'sharp_mind',                    # El nombre en phpMyAdmin
+            'USER': 'root',                         # Usuario por defecto en XAMPP
+            'PASSWORD': '',                         # Contraseña por defecto en XAMPP
+            'HOST': 'localhost',                    # Servidor
+            'PORT': '3306',                         # Puerto estándar
         }
     }
 else: 
@@ -102,7 +116,7 @@ else:
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',}
     }
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "users.customuser"
 LOGIN_REDIRECT_URL = "/"
     # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

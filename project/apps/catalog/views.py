@@ -177,7 +177,7 @@ def ia_response(request):
 
 
 @login_required
-def search_view(request, page_number=1):
+def search_view(request):
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user = CustomUser.objects.order_by('-score')[:5]
 
@@ -191,9 +191,6 @@ def search_view(request, page_number=1):
     paginator = Paginator(groups, 2)
     page = request.GET.get("page") or request.POST.get("page") or 1
     obj = paginator.get_page(page)
-   
-
-    
     return render(
         request,
         "catalog/groups.html",
@@ -208,11 +205,6 @@ def search_view(request, page_number=1):
         },
     )
 
-@login_required
-def search(request):
-    query = request.GET.get("search")
-    grupos = topics_group.objects.filter(name__icontains=query)
-    return redirect(search_view, grupos=grupos)
 
 @login_required
 def rate_group(request):

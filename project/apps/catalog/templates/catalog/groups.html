@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css' %}">
     <div class="search-container">
         <div class="search-options">
-            <form action="{% url 'catalog:search_view' 1 %}" method="POST">
+            <form action="{% url 'catalog:search_view'  %}" method="POST">
                 {% csrf_token %}
                 <input type="text" name="search" placeholder="search" value="{{ query }}">
                 <button type="submit">search</button>
@@ -57,14 +57,14 @@
             {% endfor %}
             <div class="change-page">
                 {% if page > 1 %}
-                    <form action="{% url 'catalog:search_view' page2 %}" method="POST">
+                    <form action="{% url 'catalog:search_view' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="search" value="{{ query }}">
                         <input type="hidden" name="page" value="{{ page2 }}">
                         <button type="submit"><</button>
                     </form>
                 {% endif %}
-                <form action="{% url 'catalog:search_view' page1 %}" method="POST">
+                <form action="{% url 'catalog:search_view'%}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="search" value="{{ query }}">
                     <input type="hidden" name="page" value="{{ page1 }}">
@@ -77,7 +77,7 @@
 
 {% block hot_topic %}
     <aside class="dual-conatiner">
-        <div>
+        <div>*
             <h1>mejores usuarios</h1>
             {% for x in best_users %}
                 <div class="perfil-item">
