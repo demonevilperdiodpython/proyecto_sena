@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.core.paginator import Paginator
 from .forms import CustomAuthenticationForm as AuthenticationForm
 from django.shortcuts import redirect
 from django.contrib.auth import login
@@ -105,9 +105,12 @@ def acounts_view(request):
 def perfil_view(request, id):
     posts = post.objects.filter(user=request.user)
 
-    return render(request, "users/perfil.html", {
-        "posts": posts,
-    })
+    paginator = Paginator(posts, 5) 
+    numero_pagina = request.GET.get('page')
+    page_obj = paginator.get_page(numero_pagina)
+    contexto = {'page_obj': page_obj, 'posts': posts}
+
+    return render(request, "users/perfil.html",  contexto)
 
 
 

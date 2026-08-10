@@ -114,6 +114,7 @@ body, html{
 
 body{
     padding-top:100px;
+    background: var(--primary-color-darker);
 }
 h2 {margin-left: 4% ;}
 
