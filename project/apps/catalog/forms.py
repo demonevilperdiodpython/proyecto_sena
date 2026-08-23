@@ -65,8 +65,7 @@ class postVideoForm(forms.ModelForm):
             'class': 'form-control-video',
             'accept': 'video/*',
             'content': '',
-            'style': 'display:none;',
-            'id': 'videoButton'
+            'style': 'display:none;'
             })
         self.fields["video"].label = ""
         self.fields["tittle"].widget = forms.HiddenInput()  
@@ -87,8 +86,7 @@ class postImagenForm(forms.ModelForm):
             'class': 'form-control-imagen',
             'placeholder': '',
             'label': '',
-            'style': 'display:none;',
-            'id': 'imagenButton'
+            'style': 'display:none;'
             })
         self.fields["tittle"].widget = forms.HiddenInput() 
         self.fields["imagen"].label = ""

@@ -25,10 +25,10 @@ from django.core.paginator import Paginator
 
 def home(request):
 
-    posts = post_model.objects.order_by('-created_at')[:10]
+    posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
     grupos = topics_group.objects.all()
     if request.user.is_authenticated:
-        posts = post_model.objects.order_by('-created_at')[:10]
+        posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
         grupos = topics_group.objects.all()
         return render(request, "catalog/home.html", {"grupos": grupos, "posts": posts}) 
 
@@ -66,7 +66,7 @@ def topic_group(request, id):
     
     group = get_object_or_404(topics_group, id=id)
     sections = group.sections.all()
-    group_post = group.post.all()
+    group_post = group.post.filter(parent__isnull=True).order_by('-created_at')
     videoform = postVideoForm(request.POST or None, request.FILES or None)
     imagenform = postImagenForm(request.POST or None, request.FILES or None)
     
@@ -78,6 +78,11 @@ def topic_group(request, id):
             post = form.save(commit=False)
             post.user = request.user
             post.group = group
+            
+            parent_id = request.POST.get("parent_id")
+            if parent_id:
+                post.parent_id = parent_id
+                
             post.save()
             
             if request.POST.get("ia") == "on":

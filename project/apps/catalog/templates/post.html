@@ -13,7 +13,7 @@
       <button
         type="button"
         class="btn-custom"
-        onclick="document.getElementById('imagenButton').click()"
+        onclick="this.closest('form').querySelector('.form-control-imagen').click()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
       <button
         type="button"
         class="btn-custom"
-        onclick="document.getElementById('videoButton').click()"
+        onclick="this.closest('form').querySelector('.form-control-video').click()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
