@@ -25,6 +25,17 @@
             {%if user.is_authenticated%}
                     <img src="{{user.imagen.url}}" alt="" class="userImagen">
                         
+                    <form method="post" enctype="multipart/form-data">
+                        
+                        {% csrf_token %}
+                        
+                        <input type="file" name="cambio_foto">
+                        
+                        <button type="submit">cambiar imagen de perfil</button>
+
+                    </form>
+
+
             {%endif%}
             <div class="user-info">
                 <p>{{user.username}}</p>

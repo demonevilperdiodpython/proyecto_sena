@@ -103,12 +103,19 @@ def acounts_view(request):
         return response
 
 def perfil_view(request, id):
+
     posts = post.objects.filter(user=request.user)
 
     paginator = Paginator(posts, 5) 
     numero_pagina = request.GET.get('page')
     page_obj = paginator.get_page(numero_pagina)
     contexto = {'page_obj': page_obj, 'posts': posts}
+
+    if request.method == "POST":
+        imagen = request.FILES["cambio_foto"]
+        request.user.imagen = imagen
+        request.user.save()
+        return redirect("users:Perfil", id=request.user.id)
 
     return render(request, "users/perfil.html",  contexto)
 
