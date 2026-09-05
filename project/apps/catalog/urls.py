@@ -15,6 +15,7 @@ urlpatterns = [
     path('edit_post/', views.edit_post, name='edit_post'),
     path("ia_response/" , views.ia_response , name="ia_response"),
     path("search/", views.search_view, name="search_view"),
+    path("search_view_post/", views.search_view_post, name="search_view_post"),
     path("rate_group/", views.rate_group, name="rate_group"),
     path("subscribe/", views.subscribe, name="subscribe"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

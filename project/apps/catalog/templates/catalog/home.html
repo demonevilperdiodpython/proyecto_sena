@@ -217,12 +217,7 @@
 			</div>
 			<div class="main-search">
 				<div class="search-bar">
-					<form action="{% url 'catalog:search_view' %}" method="POST">
-						
-						{% csrf_token %}              
-						<input type="text" placeholder="search" name="search">
-						<button type="submit">Search</button>
-					</form>
+					{% include 'catalog/_search_view.html' %}
 				</div>
 			</div>
 			<div class="mainmain">

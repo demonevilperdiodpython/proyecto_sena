@@ -28,8 +28,14 @@ def home(request):
     posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
     grupos = topics_group.objects.all()
     if request.user.is_authenticated:
+        query = request.GET.get("search_post") or request.POST.get("search_post") or ""
+        print("query:", query)
         posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
         grupos = topics_group.objects.all()
+        if query:
+            posts = post_model.objects.filter(content__icontains=query)
+            posts =posts.filter(parent__isnull=True)
+        
         return render(request, "catalog/home.html", {"grupos": grupos, "posts": posts}) 
 
     else:
@@ -192,7 +198,6 @@ def search_view(request):
         groups = topics_group.objects.filter(nombre__icontains=query)
     else:
         groups = topics_group.objects.all()
-
     paginator = Paginator(groups, 2)
     page = request.GET.get("page") or request.POST.get("page") or 1
     obj = paginator.get_page(page)
@@ -211,6 +216,27 @@ def search_view(request):
     )
 
 
+def search_view_post(request):
+
+    query = request.POST.get("search_post") or request.GET.get("search") or ""
+    if query:
+        posts = post_model.objects.filter(content__icontains=query)
+    else:
+        posts = post_model.objects.all()
+        paginator = Paginator(posts, 2)
+        page = request.GET.get("page") or request.POST.get("page") or 1
+        obj = paginator.get_page(page)
+    return render(
+        request,
+        "catalog/groups.html",
+        {
+            "grupos": obj,
+            "page": obj.number,
+            "page1": obj.next_page_number() if obj.has_next() else obj.number,
+            "page2": obj.previous_page_number() if obj.has_previous() else obj.number,
+            "query": query,
+        },
+    )
 @login_required
 def rate_group(request):
     print("working")

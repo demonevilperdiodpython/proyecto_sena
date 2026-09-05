@@ -1,0 +1,11 @@
+	{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css' %}">
+
+    
+        <div class="search-options">
+            <form action="{% url 'catalog:home'  %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="search_post" placeholder="search" value="{{ query }}">
+                <button type="submit">search</button>
+            </form>
+        </div>
