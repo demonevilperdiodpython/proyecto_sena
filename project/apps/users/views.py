@@ -7,6 +7,7 @@ from .utils import get_client_ip, get_device_id, es_gmail_valido
 from .models import UserSession
 from .models import customuser as User
 from .forms import CustomUserCreationForm as UserCreationForm
+from apps.catalog.models import post
 import re
 from django.contrib.auth import logout
 from apps.catalog.models import post

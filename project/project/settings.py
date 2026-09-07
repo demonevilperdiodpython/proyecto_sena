@@ -106,7 +106,7 @@ TEMPLATES = [
 
 
 
-mysqlittle = False 
+mysqlittle =True 
 
 
 
