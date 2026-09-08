@@ -18,6 +18,7 @@ urlpatterns = [
     path("search_view_post/", views.search_view_post, name="search_view_post"),
     path("rate_group/", views.rate_group, name="rate_group"),
     path("subscribe/", views.subscribe, name="subscribe"),
+    path("obtener_input_video/", views.obtener_input_video, name="obtener_input_video"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
     

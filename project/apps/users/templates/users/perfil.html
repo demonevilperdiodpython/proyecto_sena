@@ -23,15 +23,20 @@
         <div class="per1">
         
             {%if user.is_authenticated%}
-                    <img src="{{user.imagen.url}}" alt="" class="userImagen">
+                    <img src="{{user.imagen.url}}" alt="" id="user-imagen" class="userImagen">
                         
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'users:Perfil' user.id %}">
                         
                         {% csrf_token %}
                         
-                        <input type="file" name="cambio_foto">
+                        <input type="file" name="cambio_foto" 
+                               hx-post="{% url 'users:Perfil' user.id %}" 
+                               hx-trigger="change" 
+                               hx-target=".contenedor" 
+                               hx-select=".contenedor"
+                               hx-swap="outerHTML" 
+                               hx-encoding="multipart/form-data" />
                         
-                        <button type="submit">cambiar imagen de perfil</button>
 
                     </form>
 

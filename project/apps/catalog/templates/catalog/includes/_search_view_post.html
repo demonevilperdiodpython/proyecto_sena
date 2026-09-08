@@ -1,11 +1,23 @@
-	{%load static%}
+{%load static%}
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css' %}">
 
-    
-        <div class="search-options">
-            <form action="{% url 'catalog:home'  %}" method="POST">
-                {% csrf_token %}
-                <input type="text" name="search_post" placeholder="search" value="{{ query }}">
-                <button type="submit">search</button>
-            </form>
-        </div>
+<div class="search-options">
+    <form action="{% url 'catalog:home' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" 
+               name="search_post" 
+               placeholder="search" 
+               value="{{ query }}" 
+                /* hx post  es para elegir de que view sacas el html*/
+               hx-post="{% url 'catalog:home' %}" 
+               /*cuando quiero hacer la accion o como */
+               hx-trigger="input changed delay:50ms, search"
+               /*lo que se quiere cambiar*/
+               hx-target=".posts-container" 
+               /*por lo que se cambiara*/
+               hx-select=".posts-container"
+               /*tipo de cambio */
+               hx-swap="outerHTML">
+        <button type="submit">search</button>
+    </form>
+</div>

@@ -111,7 +111,7 @@ def topic_group(request, id):
                 video.post = post
                 video.save()
             else:
-                print('videoform errors:', videoform.errors)
+                print ('videoform errors:', videoform.errors)
 
             if imagenform.is_valid() and imagenform.cleaned_data.get('imagen'):
                 imagen = imagenform.save(commit=False)
@@ -265,3 +265,8 @@ def subscribe(request):
     group.save()
     
     return HttpResponseRedirect(reverse_lazy('catalog:search_view', kwargs={'page_number': page}))
+
+def obtener_input_video(request):
+    if request.method == "GET":
+        videoform = postVideoForm()
+        return render(request, "catalog/includes/_video_form_input.html", {"videoform": videoform})
