@@ -1,6 +1,6 @@
 .search-container{
     display:flex;
-    margin-top:10%;
+    
     z-index: 40;
     background:white;
     
@@ -10,6 +10,12 @@
     justify-content:center;
     background:var(--primary-color-darker);
     
+}
+.container-2{
+    padding: 50px;
+    display:grid;
+    grid-template-rows: 10% 90%;
+    background-color: var(--primary-color-darker);
 }
 .search-options{
     
@@ -43,19 +49,18 @@ body{
     background: var(--primary-color-darker)
 
 }
-.cccontainer{
-    height: 100%;
-}
+
 p{color:white;}
 .searched-group{
+    margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr ;
-    grid-template-rows:250px auto;  
+    grid-template-rows:200px auto;  
     box-sizing: border-box;
     width: 80%;
     padding: 10px;
     row-gap:  20px;
-    column-gap:10px;
+    column-gap:20px;
     background: var(--primary-color-darker)
     
 }
@@ -74,41 +79,36 @@ p{color:white;}
 
 
 
-.dual-conatiner{
+.dual-container{
     display:grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
     grid-template-rows: 1fr 1fr;
     width: 100%;
-    row-gap: 30px;
+    row-gap: 1.5rem;
     
     z-index: 0;
     position: relative;
     align-items: column;
     box-sizing: border-box;
-    
 } 
-.dual-conatiner div{
-    box-shadow: 1px 1px 20px var(--primary-color-dark);
-    border-radius: 20px;
-    background: var(--rank-box);
-    transition:all 0.6s ease-in-out;
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-.dual-conatiner div h1{
-    margin: 0;
+
+.dual-conatiner  h1{
+    color:white;
+    display:inline-block;
     font-size: 1.2rem;
-    text-align: center;
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
+    overflow-x: hidden;
+    overflow: scroll;
 }
+.dual-conatiner::-webkit-scrollbar{
+    width: 100%;
+}
+
 .perfil-item{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    text-align: center;
+
 }
 .perfil-nombre{
     margin: 0;
@@ -179,3 +179,26 @@ p{color:white;}
     margin-inline-start: 1rem;
 }
 
+.dual-container div {
+    display:flex;
+    
+}
+.dual-div{
+    
+    box-shadow: 1px 1px 20px var(--primary-color-dark);
+    display:flex;
+    flex-direction: row;
+    border-radius: 20px;
+    flex-wrap: wrap;
+    background: var(--rank-box);
+    transition:all 0.6s ease-in-out;
+    padding: 1.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.text-dual-div{
+    display: flex;
+    flex-direction: column;
+}

@@ -47,15 +47,6 @@
     pointer-events: none;
 }
 
-.ccontainer {
-    
-    display:flex;
-  
-    box-sizing: border-box;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-}
 .div-users{
     display: flex;
     flex-direction: row;

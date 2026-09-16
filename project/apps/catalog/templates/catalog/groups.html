@@ -6,6 +6,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/search_group.css' %}">
 
+
 {% block all %}
     {% include 'catalog/includes/_search_view_.html' %}
     
@@ -67,32 +68,38 @@
 {% endblock %}
 
 {% block hot_topic %}
-    <aside class="dual-conatiner">
-        <div>*
+    <aside class="dual-container">
+        <div class="text-dual-div">
             <h1>mejores usuarios</h1>
-            {% for x in best_users %}
-                <div class="perfil-item">
-                    <p class="perfil-nombre">{{ x.username }}</p>
-                    {% if x.imagen %}
-                        <img src="{{ x.imagen.url }}" alt="{{ x.username }}" class="foto-perfil">
-                    {% else %}
-                        <div class="foto-perfil" style="background-color: #ccc;"></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <div class="dual-div">   
+                
+                {% for x in best_users %}
+                    <div class="perfil-item">
+                        <p class="perfil-nombre">{{ x.username }}</p>
+                        {% if x.imagen %}
+                            <img src="{{ x.imagen.url }}" alt="{{ x.username }}" class="foto-perfil">
+                        {% else %}
+                            <div class="foto-perfil" style="background-color: #ccc;"></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        <div>
+        <div class="text-dual-div">
             <h1>mejores grupos</h1>
-            {% for x in best_groups %}
-                <div class="perfil-item">
-                    <p class="perfil-nombre">{{ x.nombre }}</p>
-                    {% if x.imagen %}
-                        <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" class="foto-perfil">
-                    {% else %}
-                        <div class="foto-perfil" style="background-color: #ccc;"></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <div class="dual-div"> 
+                
+                {% for x in best_groups %}
+                    <div class="perfil-item">
+                        <p class="perfil-nombre">{{ x.nombre }}</p>
+                        {% if x.imagen %}
+                            <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" class="foto-perfil">
+                        {% else %}
+                            <div class="foto-perfil" style="background-color: #ccc;"></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </aside>
 {% endblock %}

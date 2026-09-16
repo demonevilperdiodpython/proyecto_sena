@@ -1,0 +1,19 @@
+.cccontainer.sidebar-closed {
+    grid-template-columns: 5% 65% 30%; /* Sidebar más pequeño */
+    transition: all 0.5s ease-in-out;
+}
+
+.cccontainer{
+    margin: 0%;
+    margin-top: 100px;
+    display: grid;
+    height: calc(100%-100);
+    padding: 0px;
+    overflow: visible;
+    flex-shrink: 1;
+    flex-grow:1;
+    background-color:var(--primary-color-darker);
+    grid-template-columns: 15% 55% 30%; /* Sidebar más pequeño */
+    transition: all 0.5s ease-in-out;
+    
+}

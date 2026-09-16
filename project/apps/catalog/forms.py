@@ -91,7 +91,12 @@ class postImagenForm(forms.ModelForm):
             'class': 'form-control-imagen',
             'placeholder': '',
             'label': '',
-            'style': 'display:none;'
+            'style': 'display:none;',
+            'hx-get': '/obtener_input_video/',
+            'hx-target': 'closest .video-form-container', 
+            'hx-select': '.video-form-container', 
+            'hx-swap' : 'afterend',
+            'hx-trigger' : 'change'
             })
         self.fields["tittle"].widget = forms.HiddenInput() 
         self.fields["imagen"].label = ""

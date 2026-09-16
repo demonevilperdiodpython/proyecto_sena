@@ -49,7 +49,6 @@
     height: calc(100vh - 100px);
     position:relative;
     border-radius: 0px;
-    background:  var(--containers-primary);
     z-index: 1;
     box-sizing: border-box;
     grid-template-rows:30% 70%;
@@ -66,21 +65,6 @@
 
 
 
-.ccontainer{
-    position:relative;
-    height: 100%; 
-    background: var(--primary-color-darker);
-    display:grid;
-    grid-template-columns:25% 50% 25%;
-    grid-template-rows: 100%;
-    transition:all 0.5s ease-in-out;
-
-}
-
-.ccontainer.sidebar-closed {
-    grid-template-columns: 5% 65% 30%; /* Sidebar más pequeño */
-    transition: all 0.5s ease-in-out;
-}
 
 .foto-perfil {
     border: 3px solid white;
@@ -308,29 +292,20 @@ html{
 --cui-sidebar-nav-link-hover-color: var(--font-primary-black);
 --cui-sidebar-nav-group-toggle-show-color: var(--font-primary-black);}
 .hot-topic{
-    width:100%;
-    position:relative;
-    box-sizing: border-box;
-    height: 100%;
-    color:white;
-    overflow: auto;
-    overflow-x:hidden;
-}
-.hot-topic div{
-    height:110%;
-    width: 90%;
-    background:var(--tertiary-color);
-    padding: 0.5rem;
-    margin: 1rem;
-    box-sizing: border-box;
+    overflow: HIDDEN;
+    overflow-Y: scroll;
+    height: 80%;
 }
 .hot-topic::-webkit-scrollbar{
-    display:none;}
+   display: none;
+}
 
 
  .mi-icono-svg {
     fill: #ff5733 !important;
   }
+
+
 .small-img{
     width: 50px;
     height: 50px;
