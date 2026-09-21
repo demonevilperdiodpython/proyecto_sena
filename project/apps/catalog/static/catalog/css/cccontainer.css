@@ -5,9 +5,9 @@
 
 .cccontainer{
     margin: 0%;
-    margin-top: 100px;
+    
     display: grid;
-    height: calc(100%-100);
+    height:100%;
     padding: 0px;
     overflow: visible;
     flex-shrink: 1;

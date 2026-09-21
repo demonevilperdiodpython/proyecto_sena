@@ -1,11 +1,12 @@
 {% extends 'catalog/home.html' %}
 
-{% block post %}
-{% include 'catalog/includes/_post_form_card.html'%}
 
-{% endblock %}
 
 {% block show_post %}
+   
+
+    {% include 'catalog/includes/_post_form_card.html'%}
+    
     <div>
         {% for i in posts %}
             {% include 'catalog/includes/_post_card.html' with i=i %}
