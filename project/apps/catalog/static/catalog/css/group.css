@@ -78,7 +78,8 @@
 
 
 
-.post-text {padding-top: 15px;}
+.post-text {padding-top: 15px;
+color: var(--font-primary-black)}
 .username-post{
     font-size: 13px;
     margin-block-start: 0.2rem;

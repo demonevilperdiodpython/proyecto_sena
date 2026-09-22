@@ -115,7 +115,6 @@ h1 {
 }
 
 p {
-    color: #666;
     line-height: 1.6;
     margin:0;
     margin-block-start: 0em;
@@ -127,7 +126,8 @@ body, html{
     margin:0px;
     height:100%;
     width:100%;
-    font-family: -apple-system, BlinkMacSystemFont, "avenir next", "avenir, segoe ui", "helvetica neue", "Adwaita Sans", Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif
+    font-family: -apple-system, BlinkMacSystemFont, "avenir next", "avenir, segoe ui", "helvetica neue", "Adwaita Sans", Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
+    color: var(--font-primary-black)
 }
 
 body{
