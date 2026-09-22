@@ -17,13 +17,14 @@
   --rank-box:linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
 } 
 .dark{
---primary-color-lighter: #e35555;
-  --primary-color: #bc214d;
+--primary-color-lighter: #7AAEB3;
+  --primary-color: #9cf0f5;
   --primary-color-dark: #3d0b3f;
-  --primary-color-darker: #ffffea;
-  --tertiary-color: rgb(255, 222, 187);
-  --pie-color: #fff3d7;
-  --secondary-color: ;
+  --primary-color-darker: #b8bbd8
+;
+  --tertiary-color: rgb(122, 138, 226);
+  --pie-color: rgb(150, 125, 191);
+  --secondary-color: hsl(78, 100, 59);
   --secondary-color-dark: rgb(236, 84, 112);
   --secondary-color-lighter: hsl(50.7, 88.2%, 90%);
   --font-primary-black: hsl(0, 9.8%, 10%);
@@ -47,16 +48,21 @@
     display: inline-block;
 }
 .toggle-btn{
-    padding: 5px;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: var(--primary-color-darker);
     border:None;
+    box-sizing: border-box;
 }
 .toggle-btn .line:after{
-    padding:1px;
     content: "";
-    border-radius: 10%;
-    height: 8px;
-    width: 50px;
+    display: block;
+    border-radius: 3px;
+    height: 4px;
+    width: 100%;
     background-color: var(--menu-despl);
 }
 
@@ -66,12 +72,19 @@ html{
     overflow-x: hidden;
 }
 
-.toggle-btn .line{
-    padding:1px;
+.toggle-btn .line:after{
+    box-sizing: border-box;
+   height: 8px;
+
 }
 .toggle-btn:hover .line:after{
     transition: all 0.3s ease-out;
     box-shadow: 0px 0px 15px var(--secondary-color);
+    
+}
+.toggle-btn:hover .line:after{
+    transition: all 0.3s ease-out;
+    height: 10px;
 }
 
 .nav-logo p{
@@ -138,7 +151,7 @@ h2 {margin-left: 4% ;}
 
 .cccontainer{
     margin: 0%;
-    margin-top:calc(100%-100px);
+    
     display: flex;
     height: fit-content;
     padding: 0px;
@@ -285,6 +298,7 @@ a:active {
 }
 .nav_extensable-button button:hover {
     color: var(--font-primary-black);
+   
 }
 
 

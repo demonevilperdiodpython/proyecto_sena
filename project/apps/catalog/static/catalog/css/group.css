@@ -56,6 +56,7 @@
     overflow: auto;
     overflow-x: hidden;
     scrollbar-width: 100%;
+    padding: 0%;
 
 }
 
@@ -282,7 +283,7 @@ html{
 }
 .sidebar{
     width:100%;
-    padding-right: 1rem;
+    
     background-color: var(--primary-color-darker);
     color:var(--font-primary-black);
 }
@@ -295,7 +296,7 @@ html{
 .hot-topic{
     overflow: HIDDEN;
     overflow-Y: scroll;
-    height: 80%;
+    height:100%;
 }
 .hot-topic::-webkit-scrollbar{
    display: none;
@@ -338,4 +339,9 @@ img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.posts-container{
+
+    background: linear-gradient(to right, #441bd7, #2C0032);
 }

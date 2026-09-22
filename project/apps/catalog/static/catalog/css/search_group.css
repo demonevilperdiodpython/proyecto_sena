@@ -12,7 +12,7 @@
     
 }
 .container-2{
-    padding: 50px;
+   
     display:grid;
     grid-template-rows: 10% 90%;
     background-color: var(--primary-color-darker);
@@ -23,10 +23,10 @@
     width:70%;
     height:100%;
     display:flex;
-    flex-direction:column;
-    justify-items: center;
+    
     background-color: var(--primary-color-darker);
     align-items:center;
+    justify-content: center;
 
     
 }
@@ -34,15 +34,14 @@
     width: 40vw;
     height:5vh;
     border-radius: 15px;
-    background:var(--primary-color-dark);
-    color: white;
+    color: black;
 }
 
 .search-options button{
 
-    width: 7vh;
+    width: 10vh;
     height: 5vh;
-    border-radius: 50px;
+    border-radius: 10px;
 }
 body{
 
@@ -201,4 +200,16 @@ p{color:white;}
 .text-dual-div{
     display: flex;
     flex-direction: column;
+}
+.button_editate button{
+    width: 6vw;
+    background: white;
+    color:black;
+    font-size: 1rem;
+}
+.button-eliminate button{
+    width: 6vw;
+    background: white;
+    color:black;
+    font-size: 1rem;
 }

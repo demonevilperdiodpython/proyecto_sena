@@ -370,7 +370,7 @@ background-color: var(--tertiary-color);
     scale:1.1;
     
     transition: all 0.3s ease-in-out;
-    box-shadow: 1px 1px 20px cyan;
+    box-shadow: 1px 1px 20px  var(--boton-sito);
 }
 
 .footer-container p,
@@ -380,7 +380,7 @@ background-color: var(--tertiary-color);
     transition: transform 0.3s ease;
 }
 .footer-container p:hover{
-    color:cyan;
+    color:var( --boton-sito);
     font-size: larger;
     transform: scale(1.1);
 }
