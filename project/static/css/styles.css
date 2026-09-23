@@ -13,14 +13,14 @@
   --containers-primary: linear-gradient( rgba(141, 255, 244, 0.8), rgba(139, 0, 255, 0.6));
   --boton-sito: #67c6ff;
   --menu-despl: white;
-  --click-touch: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
+  --click-touch: linear-gradient( rgb(159, 207, 202), rgba(121, 22, 125, 0.6));
   --rank-box:linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
   --foot-pie :#8c6edd;
 } 
 .dark{
 --primary-color-lighter: #7AAEB3;
   --primary-color: #9cf0f5;
-  --primary-color-dark: #3d0b3f;
+  --primary-color-dark: #2a5f5d;
   --primary-color-darker: #b8bbd8;
   --tertiary-color: rgb(122, 138, 226);
   --pie-color: rgb(150, 125, 191);
@@ -29,10 +29,10 @@
   --secondary-color-lighter: hsl(187, 88%, 90%);
   --font-primary-black: hsl(0, 9.8%, 10%);
   --font-primary-black-light: hsl(0 0% 60%);
-  --containers-primary: linear-gradient( rgba(255, 236, 160, 0.8), #3d98ad);
+  --containers-primary: linear-gradient( rgba(192, 255, 249, 0.8), #923589);
   --boton-sito: #ffff7b;
   --menu-despl: #990c5aaa;
-  --click-touch: linear-gradient( rgba(255, 161, 222, 0.8), #9a3348); 
+  --click-touch: linear-gradient( rgba(255, 236, 161, 0.8), #33829a); 
   --rank-box: linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), rgba(78, 15, 80, 0.6));
   --foot-pie :#990c5aaa;
 }
