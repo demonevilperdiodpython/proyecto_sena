@@ -21,6 +21,6 @@ urlpatterns = [
     path("obtener_input_video/", views.obtener_input_video, name="obtener_input_video"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
-    
+    path("settings/", views.settings, name="settings"),
 ]
 

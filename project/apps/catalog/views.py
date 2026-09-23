@@ -22,6 +22,10 @@ from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 
 
+def settings(request):
+
+    return render(request, 'catalog/settings.html')
+
 
 def home(request):
 

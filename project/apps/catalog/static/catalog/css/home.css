@@ -19,16 +19,13 @@
     background: var(--card);
 }
 
-#modo {width: 30px;
-    height: 30px;
-    font-size: 15px;
+#modo {width: 500px;
+    height: 500px;
+    font-size: 250px;
     border-radius: 55%;
     
 }
-.boton-tema {display: flex;
-flex-direction: row;
-gap: 10px ;
-}
+
 
 .products-list{
     display: grid;

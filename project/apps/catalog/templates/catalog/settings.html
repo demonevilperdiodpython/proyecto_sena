@@ -1,0 +1,28 @@
+{%extends "plantilla.html"%}
+
+{% block title %}settings{% endblock %}
+{% load static %}
+
+{%block css%}
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/settings.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css'%}">
+
+{%endblock%}
+
+{%block content%}
+<body>
+  <div class="cont-settings"> 
+        <h1>CONFIGURACIONES</h1>
+    
+        <div class="boton-tema">
+                <p>Tema: </p>
+                <button id="modo">🌙</button>
+                                        
+                <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+        </div> 
+  </div>
+
+</body>
+{%endblock%}
+</html>
