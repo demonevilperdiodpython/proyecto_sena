@@ -6,7 +6,7 @@
   --tertiary-color: rgb(15, 19, 49);
   --pie-color: rgb(35, 15, 43);
   --secondary-color: hsl(83, 100, 26%);
-  --secondary-color-dark: #16bdf0;
+  --secondary-color-dark: #8c6edd;
   --secondary-color-lighter: hsl(133, 18%, 30%);
   --font-primary-black: hsl(0, 6%, 84%);
   --font-primary-black-light: hsl(0 0% 60%);
@@ -15,25 +15,26 @@
   --menu-despl: white;
   --click-touch: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
   --rank-box:linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
+  --foot-pie :#8c6edd;
 } 
 .dark{
 --primary-color-lighter: #7AAEB3;
   --primary-color: #9cf0f5;
   --primary-color-dark: #3d0b3f;
-  --primary-color-darker: #b8bbd8
-;
+  --primary-color-darker: #b8bbd8;
   --tertiary-color: rgb(122, 138, 226);
   --pie-color: rgb(150, 125, 191);
   --secondary-color: hsl(78, 100, 59);
-  --secondary-color-dark: rgb(236, 84, 112);
-  --secondary-color-lighter: hsl(50.7, 88.2%, 90%);
+  --secondary-color-dark: #990c5aaa;
+  --secondary-color-lighter: hsl(187, 88%, 90%);
   --font-primary-black: hsl(0, 9.8%, 10%);
   --font-primary-black-light: hsl(0 0% 60%);
   --containers-primary: linear-gradient( rgba(255, 236, 160, 0.8), #3d98ad);
   --boton-sito: #ffff7b;
-  --menu-despl: #e35555;
-  --click-touch: linear-gradient( rgba(255, 236, 161, 0.8), #33829a); 
+  --menu-despl: #990c5aaa;
+  --click-touch: linear-gradient( rgba(255, 161, 222, 0.8), #9a3348); 
   --rank-box: linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), rgba(78, 15, 80, 0.6));
+  --foot-pie :#990c5aaa;
 }
 
     

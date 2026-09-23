@@ -356,12 +356,13 @@ background-color: var(--tertiary-color);
     justify-content: space-evenly;
     background: var(--pie-color);
     padding-bottom : 3rem; padding-top: 1rem;
+    background: var(--primary-color-darker);
 }
 .footer-container{
     border-radius: 10px;
     margin: 2rem 2em;
     transition: all 0.1s ease-in-out;
-   background: var(--primary-color-darker);
+   background: var(--foot-pie);
     transition: all 1.3s ease-in-out;
     
 }
