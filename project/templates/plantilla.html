@@ -47,6 +47,11 @@
                         {%else%}
                             <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
                             <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>
+                             <div class="boton-tema">
+                                <button id="modo">🌙</button>
+                                                        
+                                <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+                             </div>
                         {%endif%}
                         <li><button onclick="window.location.href='{% url 'users:acounts' %}'">profiles</button></li>
                       
