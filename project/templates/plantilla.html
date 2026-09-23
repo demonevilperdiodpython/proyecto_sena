@@ -47,8 +47,9 @@
                         {%else%}
                             <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
                             <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>
-                             <div class="boton-tema">
-                                <button id="modo">🌙</button>
+                             <div class="boton-tema" style="display: flex; flex-direction: row;">
+                                <p>tema: </p>
+                                <button id="modo" style="height: 30px; width: 30px;font-size: 15px; border-radius: 50%;">🌙</button>
                                                         
                                 <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
                              </div>
