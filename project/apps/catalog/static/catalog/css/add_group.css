@@ -5,10 +5,7 @@
     z-index: 3;
 }
 
-.ccontainer{background: var(--primary-color-darker);
-color: var( --font-primary-black);
 
-}
 
 .addgroup{display: flex;
 

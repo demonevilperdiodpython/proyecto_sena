@@ -1,0 +1,14 @@
+.boton-tema {display: flex;
+flex-direction: row;
+gap: 10px ;
+font-size: 50px;
+}
+
+
+
+.cont-settings {display: flex;
+flex-direction: column;
+align-items: center;
+height: 50%;
+width: 100%;
+}
