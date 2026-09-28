@@ -363,3 +363,18 @@ img{
     height: 100%;
     object-fit: cover;
 }
+.teto-container {display: flex;
+flex-direction: column;
+align-items: center;}
+
+.teto { height: 250px;
+width: 250px;
+object-fit: cover;
+border-radius: 10%;
+opacity: 0.5;
+}
+
+.posts-container{
+
+    background: linear-gradient(to right, #441bd7, #2C0032);
+}
