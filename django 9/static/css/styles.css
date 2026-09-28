@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0 20px 40px;
+    background: #f4f4f4;
+    color: #222;
+}
+
+header {
+    background: #1f4e79;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 0 0 6px 6px;
+}
+
+header h1 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+nav a {
+    color: #cfe2f3;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: #e8e8e8;
+}
+
+.mensajes {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.mensajes li {
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border-left: 5px solid;
+}
+
+.mensajes .success {
+    background: #e6f4ea;
+    border-color: #1e7e34;
+    color: #1e7e34;
+}
+
+.mensajes .error {
+    background: #fdecea;
+    border-color: #c62828;
+    color: #c62828;
+}
+
+.mensajes .warning {
+    background: #fff8e1;
+    border-color: #f9a825;
+    color: #8d6e00;
+}
+
+.mensajes .info {
+    background: #e8f0fe;
+    border-color: #1a73e8;
+    color: #1a73e8;
+}
+
+.error {
+    color: #c62828;
+    font-size: 14px;
+    display: block;
+}
+
+button {
+    background: #1f4e79;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #163a5a;
+}

@@ -24,7 +24,7 @@
     height:100%;
     display:flex;
     
-    background-color: var(--primary-color-darker);
+    background-color: var(--pie-color);
     align-items:center;
     justify-content: center;
 
