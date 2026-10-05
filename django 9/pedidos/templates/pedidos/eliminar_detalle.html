@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Quitar producto del pedido{% endblock %}
+
+{% block content %}
+<h2>Quitar del pedido</h2>
+<p>¿Quitar {{ detalle.cantidad }} x {{ detalle.producto.nombre }} del pedido?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Sí, quitar</button>
+    <a href="{% url 'agregar_producto_pedido' detalle.pedido.pk %}">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuevo pedido{% endblock %}
+
+{% block content %}
+<h2>Crear pedido</h2>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Crear pedido</button>
+</form>
+{% endblock %}

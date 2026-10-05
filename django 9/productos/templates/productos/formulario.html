@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<h2>{{ titulo }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+        <span class="error">{{ field.errors }}</span>
+        {% endif %}
+    </p>
+    {% endfor %}
+    {% if form.non_field_errors %}
+    <span class="error">{{ form.non_field_errors }}</span>
+    {% endif %}
+    <button type="submit">Guardar</button>
+    <a href="{% url 'lista_productos' %}">Cancelar</a>
+</form>
+{% endblock %}
