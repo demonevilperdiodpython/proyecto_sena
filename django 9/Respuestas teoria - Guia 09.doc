@@ -1,0 +1,257 @@
+﻿GUÍA DE APRENDIZAJE 09 - PYTHON DJANGO: MENSAJES Y VALIDACIONES
+
+Programa: Técnico en programación de Software (233104-V2)
+Proyecto formativo: Desarrollo de aplicaciones de software para el sector empresarial
+Competencia: 220501096 - Desarrollar la solución de software de acuerdo con el diseño y la programación establecida
+Resultado de aprendizaje RAP 3: Codificar el software empleando el lenguaje de programación según requerimiento y diseño
+Duración: 72 horas (24 sincrónicas + 48 asincrónicas)
+
+
+================================================================
+ACTIVIDAD 3.1 - REFLEXIÓN INICIAL
+================================================================
+
+1) Escribir al menos 3 consecuencias posibles de que una aplicación no valide
+   los datos que ingresan los usuarios.
+
+CONSECUENCIA 1: Datos sin sentido almacenados en la base de datos.
+Si la aplicación no valida, es posible guardar productos con precio 0, con
+precio negativo o con cantidades de stock negativas. Esa información queda
+registrada y contamina los reportes, las estadísticas y los cálculos de los
+totales de pedido, mostrando información que no corresponde con la realidad
+del negocio.
+
+CONSECUENCIA 2: Errores en la aplicación y en los procesos de negocio.
+Un precio negativo o una cantidad absurda producen resultados incorrectos al
+calcular el total de un pedido. La tienda terminaría cobrando sumas imposibles
+o aplicando descuentos que no existen, y la aplicación podría fallar con
+errores internos al operar sobre esos valores.
+
+CONSECUENCIA 3: Pérdida de confianza y datos corruptos por entradas ajenas.
+Sin validaciones, cualquier usuario (no solo el administrador) puede
+introducir información absurda, o incluso escribir una cadena de texto donde
+va un número. Esto genera pérdida de confianza en el sistema, posible
+corrupción de la información y, en el peor caso, la necesidad de restaurar la
+base de datos desde una copia de seguridad.
+
+Además, las validaciones son la forma más clara de comunicar las reglas del
+negocio: el propio formulario le dice al usuario cuál es la regla ("El precio
+debe ser mayor que 0"), de modo que puede corregir su error en lugar de
+recibir un fallo inesperado del sistema.
+
+
+================================================================
+ACTIVIDAD 3.4 - PARTE TEÓRICA: RESPUESTAS A LAS PREGUNTAS
+================================================================
+
+PREGUNTA 1
+"¿Cuál es la diferencia entre un mensaje creado con messages.success() y uno
+creado con messages.error()? ¿Cuándo usarías cada uno?"
+
+Los dos métodos hacen lo mismo: agregar un mensaje temporal a la cola de
+mensajes del usuario (django.contrib.messages). La diferencia está en el tipo
+de mensaje que se guarda y, por lo tanto, en la clase de CSS que se le aplica
+en el template mediante message.tags:
+
+- messages.success(request, 'texto'): mensaje de éxito (etiqueta "success",
+  estilo verde). Se usa cuando la operación se completó correctamente, por
+  ejemplo "Producto creado correctamente", "Producto actualizado
+  correctamente" o "Producto eliminado correctamente".
+
+- messages.error(request, 'texto'): mensaje de error (etiqueta "error",
+  estilo rojo). Se usa cuando la operación falló, por ejemplo "No hay stock
+  suficiente de este producto" o "El correo ya está registrado".
+
+En resumen: messages.success() confirma que la aplicación hizo lo que el
+usuario pidió; messages.error() le avisa que no pudo hacerlo y por qué. En esta
+guía se usaron los dos: success para las acciones de crear, editar y eliminar
+(productos y detalles de pedido), y error cuando una validación rechaza un
+dato.
+
+PREGUNTA 2
+"¿Qué hace el método clean_<campo>() en un formulario y qué debe devolver
+siempre?"
+
+clean_<campo>() es un método especial que Django ejecuta automáticamente al
+validar el formulario, después de la validación básica de tipo de cada campo.
+Por ejemplo, un ModelForm ya sabe que "precio" debe ser un número, pero -50 es
+un entero perfectamente válido para Django, aunque para una tienda no tenga
+sentido.
+
+Dentro del método se lee el valor ya validado por tipo desde
+self.cleaned_data (por ejemplo self.cleaned_data.get('precio')) y se revisa la
+regla de negocio. Si la regla no se cumple se lanza
+forms.ValidationError('mensaje'); eso hace que form.is_valid() devuelva False
+y que el mensaje aparezca junto al campo correspondiente en el formulario. Si el
+valor también puede transformarse (por ejemplo, convertir un texto en
+mayúsculas), este es el lugar adecuado para hacerlo.
+
+El método SIEMPRE debe devolver el valor. Aunque no lo modifique, hay que
+escribir return precio / return stock al final. Si el método no devuelve nada,
+Django no encuentra la clave en cleaned_data y el formulario termina fallando
+con el error "Este campo es obligatorio", aunque el usuario sí haya escrito el
+dato.
+
+En esta guía se implementaron clean_precio() (el precio debe ser mayor que 0)
+y clean_stock() (el stock no puede ser negativo).
+
+PREGUNTA 3
+"¿Por qué no basta con validar los datos solo en el formulario, y conviene
+agregar también validators en el modelo?"
+
+Porque el formulario es solo una de las puertas de entrada a los datos. Las
+validaciones de clean_<campo>() viven en el formulario, y el ProductoForm
+únicamente se usa cuando se entra por la aplicación web. Si un producto se
+crea directamente desde el shell de Django con Producto.objects.create(), o
+desde una vista que use otro ModelForm, o desde una tarea programada, esas
+reglas NO se ejecutan y el dato inválido entra a la base de datos sin filtro.
+
+Los validadores del modelo (MinValueValidator) se ejecutan automáticamente
+cuando cualquier ModelForm valida el modelo, incluido el panel de
+administración de Django, de modo que protegen los datos sin importar de dónde
+provengan.
+
+En models.py se dejó:
+
+    precio = models.IntegerField(validators=[MinValueValidator(1)])
+    stock  = models.IntegerField(validators=[MinValueValidator(0)])
+
+MinValueValidator(1) rechaza valores menores a 1 (el precio debe ser al menos
+1) y MinValueValidator(0) rechaza los negativos (el stock puede ser 0, pero no
+negativo). Estos validadores se aplican al hacer full_clean(), que es lo que
+Django ejecuta en el panel de administración y en los ModelForm.
+
+Importante: los validadores del modelo NO se ejecutan si se guardan datos
+directamente con producto.save() desde el shell. Para que se apliquen ahí
+también hay que llamar manualmente a producto.full_clean().
+
+PREGUNTA 4
+"¿En qué se diferencia clean_precio() (en el formulario) de clean() (también
+en el formulario)? ¿Cuándo usarías cada uno?"
+
+clean_<campo>() valida UN SOLO campo, de forma independiente. Revisa el valor
+de ese campo contra la regla que le pertenece, sin importar los demás. En este
+caso clean_precio() solo mira self.cleaned_data['precio'] y exige que sea
+mayor que 0.
+
+clean() valida el formulario COMPLETO, es decir, reglas que dependen de la
+combinación de varios campos a la vez. Por ejemplo, la regla "el precio de
+oferta debe ser menor que el precio normal" no se puede decidir mirando solo el
+campo precio_oferta, porque hace falta compararlo con el campo precio. Por eso
+se escribe dentro de clean(), y se llama primero a super().clean() para no
+perder las validaciones que ya hacen los campos individuales.
+
+Regla práctica:
+- Si la regla depende de un solo campo: clean_<campo>().
+- Si la regla depende de dos o más campos: clean() del formulario.
+- Si la regla debe protegerse aunque el dato no pase por un formulario: el
+  clean() y los validators del MODELO, porque ahí se ejecutan con
+  full_clean() desde el panel de administración y desde cualquier ModelForm.
+
+En este proyecto se aplicaron los tres niveles: clean_precio() y clean_stock()
+en ProductoForm, el clean() del modelo Producto para la comparación entre
+precio_oferta y precio, y el clean() de PedidoDetalleForm para la cantidad
+contra el stock.
+
+PREGUNTA 5
+"Explica con tus palabras qué problema resuelve la validación que comparaste
+entre cantidad y producto.stock en la actividad evaluativa."
+
+El problema que resuelve es la sobreventa: el caso en que se pide una cantidad
+de unidades de un producto que es mayor que las que realmente existen en el
+inventario.
+
+Para Django, por separado, cantidad = 50 y producto.stock = 10 son dos números
+válidos, y el detalle del pedido se guardaría sin problema. Pero ese registro
+describe algo imposible: se están comprometiendo 50 unidades de un producto del
+que solo hay 10. El cliente recibiría un pedido que la tienda no puede
+entregar, habría que cancelar órdenes, devolver dinero o conseguir el producto
+a un proveedor, con pérdida de tiempo y dinero.
+
+La validación en PedidoDetalleForm.clean() resuelve el problema con una regla
+de negocio explícita: si cantidad > producto.stock se lanza
+forms.ValidationError con el mensaje "No hay stock suficiente de X. Stock
+disponible: N". Entonces form.is_valid() devuelve False, el formulario se
+vuelve a mostrar con el error y el detalle NO se guarda.
+
+El beneficio es que la aplicación se documenta sola y el usuario recibe un
+mensaje claro en vez de un fallo inesperado del sistema. Además, la misma regla
+se programó también en el modelo PedidoDetalle.clean(), de modo que queda
+protegida aunque los datos no pasen por ese formulario concreto (por ejemplo,
+desde el panel de administración).
+
+
+================================================================
+RESUMEN DE LA IMPLEMENTACIÓN
+================================================================
+
+1. Mensajes (django.contrib.messages)
+   - productos/views.py: messages.success() en crear_producto,
+     editar_producto y eliminar_producto, justo antes de cada redirect.
+   - pedidos/views.py: messages.success() en crear_pedido,
+     agregar_producto_pedido y eliminar_detalle_pedido.
+   - productos/templates/base.html: bloque que recorre "messages" y crea un
+     <li> por mensaje usando message.tags.
+   - static/css/styles.css: estilos .mensajes .success (verde) y .mensajes
+     .error (rojo), además de warning e info.
+
+2. Validaciones en el formulario
+   - ProductoForm.clean_precio(): el precio debe ser mayor que 0.
+   - ProductoForm.clean_stock(): el stock no puede ser negativo.
+   - PedidoDetalleForm.clean(): la cantidad no puede superar producto.stock.
+
+3. Validaciones en el modelo
+   - Producto.precio con validators=[MinValueValidator(1)].
+   - Producto.stock con validators=[MinValueValidator(0)].
+   - Producto.clean(): el precio de oferta debe ser menor que el precio normal.
+   - PedidoDetalle.clean(): la cantidad no puede superar el stock disponible.
+   - Migraciones generadas y aplicadas con makemigrations y migrate.
+
+4. Verificación realizada
+   - Formulario: se rechaza precio 0 y stock negativo, y no se guarda el
+     producto.
+   - Modelo: full_clean() rechaza precio 0, stock negativo y precio de oferta
+     mayor o igual al precio normal.
+   - Pedido: agregar 999 unidades de un producto con stock 3 muestra el error y
+     no guarda el detalle; agregar 1 unidad sí se guarda.
+   - Panel de administración: guardar un producto con precio 0 o con stock
+     negativo muestra el error de validación también en el admin.
+
+
+================================================================
+GLOSARIO DE TÉRMINOS UTILIZADOS
+================================================================
+
+django.contrib.messages: sistema de Django para mostrar mensajes temporales
+(de éxito, error, advertencia o información) al usuario.
+messages.success() / messages.error(): funciones que agregan un mensaje de
+éxito o de error, mostrado una sola vez al usuario.
+message.tags: palabra asociada a un mensaje (success, error, etc.) que permite
+darle estilos distintos en el CSS.
+clean_<campo>(): método especial de un formulario que valida y/o transforma el
+valor de un campo específico.
+cleaned_data: diccionario con los valores de un formulario después de pasar las
+validaciones básicas de tipo.
+forms.ValidationError: excepción que se lanza para indicar que un dato no es
+válido; su mensaje se muestra al usuario.
+validators (MinValueValidator): reglas que se agregan a un campo del modelo
+para limitar los valores permitidos, sin importar de dónde provengan los
+datos.
+full_clean(): método que ejecuta todas las validaciones de un modelo,
+incluidos los validators y el método clean() del modelo.
+clean() (del formulario): método que valida un formulario completo, útil para
+reglas que dependen de varios campos a la vez.
+super(): forma de llamar al comportamiento original de una clase "padre"
+antes de agregar lógica adicional.
+
+
+================================================================
+REFERENTES BIBLIOGRÁFICOS
+================================================================
+
+Django Software Foundation. (2024). Django documentation. https://docs.djangoproject.com/
+Mozilla Developer Network. (2024). Django Web Framework (Python).
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django
+Holovaty, A. & Kaplan-Moss, J. (2009). The Definitive Guide to Django. Apress.
+Vincent, W. S. (2022). Django for Beginners. Leanpub.
+Python Software Foundation. (2024). The Python Tutorial. https://docs.python.org/3/tutorial/

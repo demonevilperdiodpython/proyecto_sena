@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Tienda{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Tienda de productos</h1>
+        <nav>
+            <a href="{% url 'lista_productos' %}">Productos</a>
+            <a href="{% url 'crear_pedido' %}">Nuevo pedido</a>
+            <a href="/admin/">Panel de administración</a>
+        </nav>
+    </header>
+
+    {% if messages %}
+    <ul class="mensajes">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

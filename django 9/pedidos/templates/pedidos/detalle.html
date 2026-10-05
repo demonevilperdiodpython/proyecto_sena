@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle del pedido{% endblock %}
+
+{% block content %}
+<h2>Pedido {{ pedido.pk }}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in detalles %}
+        <tr>
+            <td>{{ detalle.producto.nombre }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>
+                <a href="{% url 'eliminar_detalle_pedido' pedido.pk detalle.pk %}">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">El pedido no tiene productos.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+        <span class="error">{{ field.errors }}</span>
+        {% endif %}
+    </p>
+    {% endfor %}
+    {% if form.non_field_errors %}
+    <span class="error">{{ form.non_field_errors }}</span>
+    {% endif %}
+    <button type="submit">Agregar al pedido</button>
+</form>
+{% endblock %}
