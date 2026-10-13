@@ -1,28 +1,45 @@
-{%extends "plantilla.html"%}
+{% extends "plantilla.html" %}
 
-{% block title %}settings{% endblock %}
+{% block title %}Configuraciones{% endblock %}
 {% load static %}
 
-{%block css%}
-    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/settings.css'%}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css'%}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css'%}">
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/settings.css' %}">
+{% endblock %}
 
-{%endblock%}
+{% block content %}
+<div class="cont-settings"> 
+    <div class="card-settings">
+        <h1>Configuraciones</h1>
+        <div class="setting-item">
+            <div>
+                <h3>Tema de la aplicación</h3>
+                <p>Alterna entre el tema oscuro y el claro.</p>
+            </div>
+            <div class="boton-tema">
+                <button id="modo" title="Cambiar tema">🌙</button>
+            </div> 
+        </div>
 
-{%block content%}
-<body>
-  <div class="cont-settings"> 
-        <h1>CONFIGURACIONES</h1>
-    
-        <div class="boton-tema">
-                <p>Tema: </p>
-                <button id="modo" style="height: 500px; width: 500px; font-size: 250px; border-radius: 55%;">🌙</button>
-                                        
-                <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
-        </div> 
-  </div>
+        <div class="setting-item">
+            <div>
+                <h3>Asistente IA</h3>
+                <p>Pregunta sobre cualquier tema de estudio con el modelo local.</p>
+            </div>
+            <a href="{% url 'catalog:ia' %}" class="btn-publish" style="white-space: nowrap;">Abrir</a>
+        </div>
 
-</body>
-{%endblock%}
-</html>
+        <div class="setting-item">
+            <div>
+                <h3>Tu cuenta</h3>
+                <p>{% if request.user.is_authenticated %}Cambia tu foto y revisa tus publicaciones desde tu perfil.{% else %}Inicia sesión para editar tu perfil.{% endif %}</p>
+            </div>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'users:Perfil' request.user.id %}" class="btn-publish" style="white-space: nowrap;">Mi perfil</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="btn-publish" style="white-space: nowrap;">Entrar</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

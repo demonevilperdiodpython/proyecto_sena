@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.querySelector('.toggle-btn');
-    const menu = document.querySelector('.menu');
 
-    btn.addEventListener('click', (e) => {
-        e.preventDefault(); 
-        menu.classList.toggle('open');
-    });
-    
-    const btnLogOut = document.querySelector('#btnLogOut');
+    if (btn) {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Muestra/oculta el nav lateral (sidebar) en vez del menú antiguo
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('sidebar-open');
+            }
+        });
+    }
 });

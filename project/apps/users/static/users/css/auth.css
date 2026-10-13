@@ -1,0 +1,188 @@
+.login, .register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: calc(var(--navbar-height) + 1rem) 1rem 2rem;
+    background: var(--primary-color-darker);
+}
+
+.register {
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.container-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    min-height: fit-content;
+    padding: 2.5rem 2rem;
+    border-radius: 24px;
+    background: var(--containers-primary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    z-index: 5;
+    box-sizing: border-box;
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.input-group input, .Form-control {
+    width: 100%;
+    height: 48px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: color-mix(in srgb, var(--primary-color-darker) 70%, transparent);
+    color: var(--font-primary-black);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus, .Form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: var(--primary-color-dark);
+}
+
+.input-group label {
+    color: var(--font-primary-black-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+}
+
+.container-2 button[type="submit"] {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    background: var(--boton-sito);
+    color: var(--primary-color-darker);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.25s ease;
+}
+
+.container-2 button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+.conatiner-container-acount {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+#google_login {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 44px;
+    border-radius: 22px;
+    background: #4285F4 !important;
+    color: white !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 12px rgba(66,133,244,.3);
+    transition: transform 0.2s ease;
+}
+
+#google_login:hover { transform: translateY(-2px); }
+
+.container-acount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--primary-color-dark) 50%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    color: var(--font-primary-black);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.container-acount:hover {
+    background: var(--primary-color);
+    color: var(--primary-color-darker);
+    transform: scale(1.04);
+}
+
+.imagen-selecter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.img-show {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.img-show img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
+.image-option {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0.3rem;
+    transition: transform 0.2s ease;
+}
+
+.image-option:hover { transform: scale(1.1); }
+
+.default-image {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
+.image-radio { display: none; }
+
+.image-radio:checked + .default-image {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px var(--primary-color);
+    transform: scale(1.1);
+}
+
+.error {
+    color: #e35555;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}

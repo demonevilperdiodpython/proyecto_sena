@@ -1,0 +1,106 @@
+/* Botones de administracion del grupo (group.html) */
+
+.ga-creador {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 1rem 1.5rem 0;
+    font-size: 0.82rem;
+    color: var(--font-primary-black-light);
+}
+
+.ga-creador a {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.ga-creador a:hover {
+    text-decoration: underline;
+}
+
+.ga-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 1.5rem 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--primary-color-darker) 60%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
+.ga-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-color);
+    margin-right: 0.25rem;
+}
+
+.ga-btn {
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: color-mix(in srgb, var(--primary-color-dark) 50%, transparent);
+    color: var(--font-primary-black);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.ga-btn:hover {
+    background: var(--primary-color);
+    color: var(--primary-color-darker);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.ga-btn-peligro {
+    border-color: #e35555;
+    color: #e35555;
+}
+
+.ga-btn-peligro:hover {
+    background: #e35555;
+    color: white;
+    border-color: #e35555;
+}
+
+/* Herramientas al lado de cada sección */
+.sec-tab-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sec-tab-wrap .sec-tab {
+    padding-right: 1.6rem;
+}
+
+.sec-tab-tools {
+    position: absolute;
+    right: 0.45rem;
+    display: flex;
+    gap: 0.2rem;
+}
+
+.sec-tab-tools a {
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 2px;
+    border-radius: 4px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.sec-tab-tools a:hover {
+    opacity: 1;
+    background: var(--primary-color);
+}
+
+@media (max-width: 700px) {
+    .ga-bar { margin: 1rem 0.7rem 0.5rem; }
+    .ga-btn { font-size: 0.78rem; padding: 0.3rem 0.7rem; }
+}

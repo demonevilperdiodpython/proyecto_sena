@@ -1,84 +1,70 @@
-{%extends "plantilla.html" %}
+{% extends "plantilla.html" %}
 
-{% block title %}Home Catalog{% endblock %}
+{% block title %}Perfil de {{ perfil.username }}{% endblock %}
 {% load static %}
 
 {% block css %}
-
-
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-
-
-
-<link rel="stylesheet" type="text/css" href="{%static 'catalog/css/home.css'%}">
-
-<link rel="stylesheet" type="text/css" href="{%static 'users/css/perfil.css'%}">
-
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/posts.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/perfil.css' %}">
 {% endblock %}
 
 {% block content %}
+<div class="contenedor">  
+    <div class="per1">
+        {% if not perfil.is_banned %}
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            {% if perfil.imagen %}
+                <img src="{{perfil.imagen.url}}" alt="{{perfil.username}}" id="user-imagen" class="userImagen">
+            {% else %}
+                <div class="userImagen" style="display:flex; align-items:center; justify-content:center; background: var(--primary-color-dark); color:white; font-size:3rem; font-weight:bold;">SM</div>
+            {% endif %}
 
-  <div class="contenedor">  
-        <div class="per1">
-        
-            {%if user.is_authenticated%}
-                    <img src="{{user.imagen.url}}" alt="" id="user-imagen" class="userImagen">
-                        
-                    <form method="post" enctype="multipart/form-data" action="{% url 'users:Perfil' user.id %}">
-                        
-                        {% csrf_token %}
-                        
-                        <input type="file" name="cambio_foto" 
-                               hx-post="{% url 'users:Perfil' user.id %}" 
-                               hx-trigger="change" 
-                               hx-target=".contenedor" 
-                               hx-select=".contenedor"
-                               hx-swap="outerHTML" 
-                               hx-encoding="multipart/form-data" />
-                        
-
-                    </form>
-
-
-            {%endif%}
-            <div class="user-info">
-                <p>{{user.username}}</p>
-                <p>Gmail: {{user.email}}</p>
-                <p>estado: {{i.user.estado}}</p>
-                    
-                            
-
-            </div>  
-        </div> 
-       
-        
-        <div class="los-post">
-            {% for i in page_obj %}
-                <div class="post">
-                    <img src="{{ i.user.imagen.url }}" class="foto-perfil" />
-
-                    <div class="cabeza" id="cabeza-{{ i.id }}">
-                        <h5 class="username-post">{{ i.user.username }}</h5>
-                        <div class="post-text view">
-                            <p>{{ i.content }}</p>
-            
-                        </div>
-                    </div>       
-                </div>    
-            {%endfor%}     
-            
-            <div class="paginacion">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                {% endif %}
-                <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-                {% endif %}
-            </div>
+            {% if es_propio %}
+            <form method="post" enctype="multipart/form-data" action="{% url 'users:Perfil' perfil.id %}" style="margin-top: 0.4rem;">
+                {% csrf_token %}
+                <input type="file" name="cambio_foto" 
+                       hx-post="{% url 'users:Perfil' perfil.id %}" 
+                       hx-trigger="change" 
+                       hx-target=".contenedor" 
+                       hx-select=".contenedor"
+                       hx-swap="outerHTML" 
+                       hx-encoding="multipart/form-data"
+                       style="font-size: 0.8rem; max-width: 200px;" />
+            </form>
+            {% endif %}
         </div>
-        
+        {% endif %}
 
-    </div>    
-{%endblock%}
+        <div class="user-info">
+            <p>{{perfil.username}}</p>
+            <p style="color: var(--font-primary-black-light); font-weight: normal; font-size: 0.95rem;">📧 {{perfil.email}}</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">🏆 Puntos: {{perfil.score}}</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">📅 Miembro desde {{ perfil.date_joined|date:"d/m/Y" }}</p>
+            {% if es_propio %}
+                <a href="{% url 'catalog:settings' %}" class="nav-action-link" style="display: inline-block; margin-top: 0.5rem;">⚙️ Configuraciones</a>
+            {% endif %}
+        </div>  
+    </div> 
+   
+    <div class="los-post">
+        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1.4rem;">
+            {% if es_propio %}Mis publicaciones{% else %}Publicaciones de {{ perfil.username }}{% endif %}
+        </h3>
+        {% for i in page_obj %}
+            {% include 'catalog/includes/_post_card.html' with i=i %}
+        {% empty %}
+            <p style="opacity: 0.7; font-size: 0.95rem;">No hay publicaciones creadas por este usuario.</p>
+        {% endfor %}     
+        
+        <div class="paginacion">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </div>
+    </div>
+</div>    
+{% endblock %}

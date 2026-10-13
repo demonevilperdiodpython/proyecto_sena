@@ -1,0 +1,109 @@
+{% extends 'catalog/home.html' %}
+{% load static %}
+
+{% block title %}Popular{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/popular.css' %}">
+{% endblock %}
+
+{% block all %}
+<div class="asidemain">
+    <h1 class="popular-title">🔥 Popular en Sharp Mind</h1>
+
+    <!-- Grupos con mejor score. El score sube con likes y con la cantidad de miembros. -->
+    <section class="popular-bloque">
+        <h2 class="popular-subtitulo">🏆 Grupos con mejor score</h2>
+        <div class="popular-lista">
+            {% for g in ranking_grupos %}
+            <div class="popular-item">
+                <span class="popular-puesto">{{ forloop.counter }}</span>
+                {% if g.imagen %}
+                    <img src="{{ g.imagen.url }}" alt="{{ g.nombre }}" class="popular-img">
+                {% elif g.imagen_url %}
+                    <img src="{{ g.imagen_url }}" alt="{{ g.nombre }}" class="popular-img">
+                {% else %}
+                    <div class="popular-img popular-placeholder">{{ g.nombre|slice:":2"|upper }}</div>
+                {% endif %}
+
+                <div class="popular-info">
+                    <a href="{% url 'catalog:topic_group' g.id %}" class="popular-nombre">{{ g.nombre }}</a>
+                    <span class="popular-meta">{{ g.categoria }} · 👥 {{ g.subscriptions.count }} · 👍 {{ g.likes.count }}</span>
+                </div>
+
+                <span class="popular-score">{{ g.score }}</span>
+            </div>
+            {% empty %}
+            <p class="popular-vacio">Todavía no hay grupos.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Usuarios con mejor score -->
+    <section class="popular-bloque">
+        <h2 class="popular-subtitulo">⭐ Usuarios destacados</h2>
+        <div class="popular-lista">
+            {% for u in ranking_usuarios %}
+            <a href="{% url 'users:Perfil' u.id %}" class="popular-item">
+                <span class="popular-puesto">{{ forloop.counter }}</span>
+                {% if u.imagen %}
+                    <img src="{{ u.imagen.url }}" alt="{{ u.username }}" class="popular-img">
+                {% else %}
+                    <div class="popular-img popular-placeholder">SM</div>
+                {% endif %}
+                <div class="popular-info">
+                    <span class="popular-nombre">{{ u.username }}</span>
+                    <span class="popular-meta">{{ u.post.count }} publicaciones</span>
+                </div>
+                <span class="popular-score">{{ u.score }}</span>
+            </a>
+            {% empty %}
+            <p class="popular-vacio">Todavía no hay usuarios.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Posts más recientes -->
+    <section class="popular-bloque">
+        <h2 class="popular-subtitulo">💬 Publicaciones recientes</h2>
+        <div class="posts-container">
+            {% for p in top_posts %}
+                {% include 'catalog/includes/_post_card.html' with i=p %}
+            {% empty %}
+                <p class="popular-vacio">Todavía no hay publicaciones.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block hot_topic %}
+<aside class="dual-conatiner">
+    <div>
+        <h1>⭐ Mejores Usuarios</h1>
+        {% for x in top_users %}
+            <a class="perfil-item perfil-enlace" href="{% url 'users:Perfil' x.id %}">
+                {% if x.imagen %}
+                    <img src="{{ x.imagen.url }}" alt="{{ x.username }}" class="foto-perfil">
+                {% else %}
+                    <div class="foto-perfil" style="background-color: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-size: 0.9rem; font-weight:bold;">SM</div>
+                {% endif %}
+                <p class="perfil-nombre">{{ x.username }}</p>
+            </a>
+        {% endfor %}
+    </div>
+    <div>
+        <h1>🏆 Mejores Grupos</h1>
+        {% for x in top_groups %}
+            <a class="perfil-item perfil-enlace" href="{% url 'catalog:topic_group' x.id %}">
+                {% if x.imagen %}
+                    <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" class="foto-perfil">
+                {% else %}
+                    <div class="foto-perfil" style="background-color: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-size: 0.9rem; font-weight:bold;">SM</div>
+                {% endif %}
+                <p class="perfil-nombre">{{ x.nombre }}</p>
+            </a>
+        {% endfor %}
+    </div>
+</aside>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'catalog/home.html' %}
+{% load static %}
+
+{% block title %}Publicar en {{ section.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/section.css' %}">
+{% endblock %}
+
+{% block post %}
+<div class="sec-cabecera">
+    <a href="{% url 'catalog:topic_section' group.id section.id %}" class="sec-volver">
+        ← Volver a {{ section.name }}
+    </a>
+
+    <h1 class="sec-titulo">Publicar en {{ section.name }}</h1>
+    <p class="sec-sub">{{ group.nombre }} · sección del grupo</p>
+</div>
+
+{% include 'catalog/includes/_post_form_card.html' %}
+{% endblock %}
+
+{% block show_post %}
+<div class="sec-lista">
+    <p class="sec-vacio">Tu publicación aparecerá en la sección
+        <a href="{% url 'catalog:topic_section' group.id section.id %}">{{ section.name }}</a>
+        en cuanto la envíes.
+    </p>
+</div>
+{% endblock %}
