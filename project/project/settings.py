@@ -28,6 +28,8 @@ SECRET_KEY = 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d
 DEBUG = True
 
 ALLOWED_HOSTS = ['.onrender.com', 'proyecto-sena-jbwi.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://proyecto-sena-jbwi.onrender.com']
+
 
 
 # Application definition
