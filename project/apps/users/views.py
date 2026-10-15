@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .forms import CustomAuthenticationForm as AuthenticationForm
 from django.shortcuts import redirect
@@ -104,21 +104,30 @@ def acounts_view(request):
         return response
 
 def perfil_view(request, id):
+    # Antes ignoraba el id y siempre mostraba el perfil de quien visita.
+    # Ahora /acounts/perfil/5/ muestra el perfil del usuario 5.
+    perfil = get_object_or_404(User, id=id)
 
-    posts = post.objects.filter(user=request.user)
+    posts = post.objects.filter(user=perfil, parent__isnull=True).order_by('-created_at')
 
-    paginator = Paginator(posts, 5) 
+    paginator = Paginator(posts, 5)
     numero_pagina = request.GET.get('page')
     page_obj = paginator.get_page(numero_pagina)
-    contexto = {'page_obj': page_obj, 'posts': posts}
+    contexto = {
+        'page_obj': page_obj,
+        'posts': posts,
+        'perfil': perfil,
+        'es_propio': request.user == perfil,
+    }
 
-    if request.method == "POST":
-        imagen = request.FILES["cambio_foto"]
-        request.user.imagen = imagen
-        request.user.save()
-        return redirect("users:Perfil", id=request.user.id)
+    # Cambiar la foto y editar el perfil solo tiene sentido en el perfil propio.
+    if request.method == "POST" and perfil == request.user:
+        if request.FILES.get("cambio_foto"):
+            perfil.imagen = request.FILES["cambio_foto"]
+            perfil.save()
+        return redirect("users:Perfil", id=perfil.id)
 
-    return render(request, "users/perfil.html",  contexto)
+    return render(request, "users/perfil.html", contexto)
 
 
 

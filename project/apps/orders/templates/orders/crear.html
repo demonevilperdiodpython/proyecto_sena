@@ -1,0 +1,21 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+
+{% block title %}Nuevo pedido{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'orders/css/orders.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="addgroup">
+    <div class="groupz pedido-box">
+        <h2>Crear pedido</h2>
+        <p class="pedido-texto">Al crear un pedido podrás ir agregándole productos del catálogo.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="boton-registrar">Crear pedido</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

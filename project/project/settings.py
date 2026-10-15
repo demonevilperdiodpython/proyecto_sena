@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com', 'proyecto-sena-jbwi.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://proyecto-sena-jbwi.onrender.com']
+
 
 
 # Application definition
@@ -49,7 +51,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     'allauth.socialaccount.providers.github',
     'apps.users',
-    'apps.catalog',  
+    'apps.catalog',
+    'apps.orders',
     'rest_framework',
 ]
 SOCIALACCOUNT_PROVIDERS = {
@@ -99,6 +102,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Alimenta la columna lateral "Hot Topic" en todas las vistas
+                'apps.catalog.context_processors.hot_topic',
             ],
         },
     },

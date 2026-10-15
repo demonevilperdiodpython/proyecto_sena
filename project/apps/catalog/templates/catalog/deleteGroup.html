@@ -1,0 +1,43 @@
+{% extends 'plantilla.html' %}
+
+{% block title %}Eliminar {{ group.nombre }}{% endblock %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="addgroup">
+    <div class="groupz">
+        <h2 style="color:#e35555;">Eliminar Grupo</h2>
+
+        <p style="font-size:0.95rem; text-align:center;">
+            ¿Seguro que quieres eliminar <strong>{{ group.nombre }}</strong>?
+        </p>
+
+        <div style="background: color-mix(in srgb, #e35555 15%, transparent); border:1px solid #e35555; border-radius:12px; padding:1rem; font-size:0.9rem;">
+            <strong>Esto no se puede deshacer.</strong> Se borrarán también todas las
+            publicaciones, comentarios, secciones y fotos del grupo.
+        </div>
+
+        {% if group.post.count %}
+            <p style="font-size:0.9rem; text-align:center; color:var(--font-primary-black-light);">
+                Este grupo tiene {{ group.post.count }} publicación(es).
+            </p>
+        {% endif %}
+
+        <form method="POST" action="{% url 'catalog:eliminate_group' group.id %}">
+            {% csrf_token %}
+            <button type="submit" class="boton-registrar" style="background:#e35555; color:white;">
+                Sí, eliminar el grupo
+            </button>
+        </form>
+
+        <a href="{% url 'catalog:topic_group' group.id %}" class="btn-publish" style="display:block; text-align:center; background:transparent; border:1px solid var(--primary-color); margin-top:0.5rem;">
+            Cancelar
+        </a>
+    </div>
+</div>
+{% endblock %}

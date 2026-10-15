@@ -1,32 +1,27 @@
-{%extends 'plantilla.html'%}
+{% extends 'plantilla.html' %}
 
-{%block css%}
-{% load static %}    
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/styles.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
+{% block title %}Crear Grupo{% endblock %}
 
-
-
+{% block css %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css' %}">
 {% endblock %}
 
-
 {% block content %}
-
 <div class="addgroup">
     <div class="groupz">
-        <form method = "POST" enctype="multipart/form-data">
+        <h2>Crear Nuevo Grupo</h2>
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in form %}
-                <div>
-                    {{ field.label_tag }}
+                <div class="field-container">
+                    <label>{{ field.label }}</label>
                     {{ field }}
                     {{ field.errors }}
                 </div>
             {% endfor %}
-            <button type="submit" class="boton-registrar">Registrar</button>
+            <button type="submit" class="boton-registrar">Registrar Grupo</button>
         </form>
     </div>
-<div>
+</div>
 {% endblock %}

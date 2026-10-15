@@ -1,0 +1,22 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+
+{% block title %}Quitar producto del pedido{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'orders/css/orders.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="addgroup">
+    <div class="groupz pedido-box">
+        <h2>Quitar del pedido</h2>
+        <p class="pedido-texto">¿Quitar {{ detalle.cantidad }} x {{ detalle.producto.nombre }} del pedido {{ detalle.orderlist.pk }}?</p>
+        <form method="POST" class="pedido-form">
+            {% csrf_token %}
+            <button type="submit" class="boton-registrar">Sí, quitar</button>
+            <a href="{% url 'orders:agregar_producto_pedido' detalle.orderlist.pk %}" class="boton-cancelar">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
