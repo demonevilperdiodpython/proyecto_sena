@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- this templante is the base for the other templantes, -->
 <html>
     <head>
         <title>{% block title %}Plantilla Base{% endblock %}</title>
@@ -10,7 +9,7 @@
         <script src="{% static 'js/plantilla.js'%}"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="{%static 'css/styles.css'%}">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
         <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
         {%block css%}
         {% endblock %}
@@ -21,50 +20,54 @@
     
         <div class="navbar">
             <section class="left-navbar">
+                <section class="nav_extensable-button">
+                    <button class="toggle-btn" aria-label="Menu">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </button>
+                </section>
                 <a href="{% url 'catalog:home' %}">
                     <div class="nav-logo">
                         <p>SM</p>
                     </div>
                 </a>
 
-            <div class="nav-links">
-                <a>more</a>
-                <a href="{%url 'catalog:home'%}"></a>
-            </div>
-            </section>
-            {% include 'catalog/includes/_search_view_post.html' %}
-            <section>
-                <div class="nav_extensable-button">
-                    <button class="toggle-btn">
-                        <div class="line"></div>
-                        <div class="line"></div>
-                        <div class="line"></div>
-                        
-                    </button>
-
-                    <ul class="menu">
-                        {%if user.is_authenticated%}
-                            
-                
-                        {%else%}
-                            <li><button onclick="window.location.href='{% url 'users:login' %}'">login</button></li>
-                            <li><button onclick="window.location.href='{% url 'users:singup' %}'">sing up </button></li>
-                        {%endif%}
-                        <li><button onclick="window.location.href='{% url 'users:acounts' %}'">profiles</button></li>
-                        <div class="boton-tema">
-                            <p>Tema: </p>
-                            <button id="modo">🌙</button>
-                                
-                            <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
-                        </div> 
-                    </ul>
+                <div class="nav-links">
+                    <a href="{% url 'catalog:home' %}">Inicio</a>
+                    <a href="{% url 'catalog:search_view' %}">Explorar</a>
+                    <a href="{% url 'orders:crear_pedido' %}">Pedidos</a>
                 </div>
             </section>
+            {% include 'catalog/includes/_search_view_post.html' %}
+            <section class="nav-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'users:Perfil' user.id %}" class="nav-action-link">Mi Perfil</a>
+                    <a href="{% url 'catalog:add_group' %}" class="nav-action-link">Crear Grupo</a>
+                    <a href="{% url 'users:logout' %}" class="nav-action-link">Cerrar Sesión</a>
+                {% else %}
+                    <a href="{% url 'users:login' %}" class="nav-action-link">Iniciar Sesión</a>
+                    <a href="{% url 'users:singup' %}" class="nav-action-link">Registrarse</a>
+                {% endif %}
+                <a href="{% url 'users:acounts' %}" class="nav-action-link">Perfiles</a>
+                <div class="boton-tema-inline">
+                    <button id="modo">🌙</button>
+                </div>
+            </section>
+
         </div>
 
         <div class="cccontainer">
 
-                
+            {# Sin esto los messages.success() de las vistas nunca se ven #}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for message in messages %}
+                        <div class="flash flash-{{ message.tags|default:'info' }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {%block extraContent1%}
             
             {%endblock%}
@@ -84,5 +87,9 @@
             {%endblock%}
         
         </div>
+
+        {# Va al final del body a proposito: si se carga en el <head> el boton
+           de tema todavia no existe en el DOM y el listener nunca se conecta. #}
+        <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
     </body>
 </html>

@@ -1,98 +1,170 @@
-.per1{background: var(--primary-color-darker);
-color: var(--font-primary-black);
-display: flex;
-position: relative;
-flex-direction: row;
-padding: 35px;
-width:90%;
-
-height: auto;
-gap: 15px;
-font-size: 400%;
-font-size: 115%;
-align-items: center;
-gap: 20px;
-
-}
-.userImagen{height: 300px;
-width: 300px;
-
-border: 3px solid white;
-border-radius: 50%;
-object-fit: cover;
-}
-
-.foto-perfil{
-height: 90px;
-width: 90px;
-border-radius: 50%;
-object-fit:cover ;
-
-}
-.cabeza{display: flex;
-justify-content: flex-start;
-flex-direction: column;
-text-align: left;
-}
-.post{
+.contenedor {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     width: 90%;
-    border-bottom: 1px solid black;
-    padding:1rem;
-    border-radius: 10px;
-    margin-right:1rem;
-    box-sizing: border-box;
-    transition:all 0.5S ease-in-out;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-    position:relative;
-    
-}
-.los-post {margin-left: 3rem;
-margin-right: 11rem;
-
-}
-.post p{
-    text-decoration:none;
-    font-size: 3rem;
-    color: var(--font-primary-black);
-    
-    text-align: left;
-}
-.post:hover{
-    background: var(--click-touch);
-    transition:all 0.5S ease-in-out;
-}
-.post-text {padding-top: 15px;}
-.username-post{
-    font-size: 13px;
-    margin-block-start: 0.2rem;
-    margin-block-end: 1rem;
-    color: var(--font-primary-black);
+    max-width: 900px;
+    /* El navbar es fixed, asi que el espacio se reserva aqui.
+       Si cambias el alto del navbar, cambia --navbar-height. */
+    margin: 0 auto;
+    padding: calc(var(--navbar-height) + 1rem) 0 2rem;
+    gap: 2rem;
 }
 
-.posts-container{
+/* MOVIL: un perfil con muchas publicaciones es mas alto que la pantalla.
+   El html ya scrollea (ver styles.css), asi que solo hace falta que el
+   contenido no se centre: con align-items:center la mitad superior queda
+   fuera de la pantalla y no hay forma de llegar al final. */
+@media (max-width: 1200px) {
+    .contenedor {
+        align-items: stretch;
+    }
+}
+
+.per1 {
+    background: var(--containers-primary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    border-radius: 24px;
+    padding: 2rem;
     width: 100%;
-    
-    overflow-x:hidden;
-    
-    padding:2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
-.contenedor {display: flex;
-justify-content: center;
-padding: 20px;
-margin: auto;
+@media (max-width: 600px) {
+    .contenedor {
+        /* 90% + padding de las cajas se sale en pantallas de 360px */
+        width: 100%;
+        padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+        gap: 1.25rem;
+    }
 
-height: auto;
-width: 90%;
-flex-direction: column;
+    .per1 {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.1rem;
+        gap: 1rem;
+        border-radius: 18px;
+    }
+
+    .userImagen {
+        width: 100px;
+        height: 100px;
+        border-width: 3px;
+    }
+
+    .los-post {
+        padding: 0 0.3rem;
+    }
+
+    .paginacion {
+        gap: 0.75rem;
+    }
 }
-.ccontainer {background: var(--primary-color-darker);}
 
+.userImagen {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--primary-color) 40%, transparent);
+    flex-shrink: 0;
+}
 
-.paginacion {color: var(--font-primary-black);
-font-size: 25px;
-text-align: center;
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-info p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--font-primary-black);
+    margin: 0;
+}
+
+.user-info p:first-child {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.los-post {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.post {
+    background: color-mix(in srgb, var(--primary-color-dark) 40%, var(--primary-color-darker));
+    border: 1px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.post:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-color);
+}
+
+.foto-perfil {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.cabeza {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.username-post {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--font-primary-black);
+    margin: 0;
+}
+
+.post-text p {
+    font-size: 0.95rem;
+    color: var(--font-primary-black);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--font-primary-black);
+}
+
+.paginacion a {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    background: var(--boton-sito);
+    color: var(--primary-color-darker);
+    font-weight: 700;
+    transition: transform 0.2s ease;
+}
+
+.paginacion a:hover {
+    transform: scale(1.06);
 }

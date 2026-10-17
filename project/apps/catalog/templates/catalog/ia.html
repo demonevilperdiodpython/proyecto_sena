@@ -1,21 +1,37 @@
 {% extends "plantilla.html" %}
 
-{%load static%}
+{% load static %}
 
-<!-- this block is used to  load the display-->
+{% block title %}Asistente IA{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/productlist.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/ia.css' %}">
 {% endblock %}
 
 {% block content %}
-<form method="post" hx-post="{% url 'catalog:ia_response' %}" hx-target="#response" hx-swap="innerHTML">
-  {% csrf_token %}
-  <input name="input_text" />
-  <button type="submit">Ask</button>
-</form>
+<div class="ia-wrap">
 
-<div id="response">
+    <div class="ia-card">
+        <h1 class="ia-titulo">🤖 Asistente IA</h1>
+        <p class="ia-desc">
+            Pregunta lo que necesites sobre el tema de estudio. La respuesta se genera
+            con el modelo local <strong>tinyllama</strong>.
+        </p>
+
+        <!-- hx-post pega solo el div #response, sin recargar la pagina -->
+        <form class="ia-form"
+              hx-post="{% url 'catalog:ia_response' %}"
+              hx-target="#response"
+              hx-swap="innerHTML">
+            {% csrf_token %}
+            <input type="text" name="input_text" placeholder="Escribe tu pregunta..." class="ia-input" required>
+            <button type="submit" class="ia-btn">Preguntar</button>
+        </form>
+
+        <div id="response" class="ia-respuesta">
+            <p class="ia-vacio">Aquí aparecerá la respuesta.</p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

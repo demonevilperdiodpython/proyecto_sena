@@ -1,0 +1,34 @@
+{% extends 'plantilla.html' %}
+
+{% block title %}Nueva Sección{% endblock %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="addgroup">
+    <div class="groupz">
+        <h2>Nueva Sección</h2>
+
+        <p style="font-size:0.9rem; text-align:center; color:var(--font-primary-black-light);">
+            En el grupo <strong>{{ group.nombre }}</strong>
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="field-container">
+                <label>Nombre de la sección</label>
+                <input type="text" name="name" value="{{ nombre }}" placeholder="Ej: Tareas, Exámenes, Apuntes..." maxlength="100" required>
+            </div>
+            <button type="submit" class="boton-registrar">Crear Sección</button>
+        </form>
+
+        <a href="{% url 'catalog:topic_group' group.id %}" class="btn-publish" style="display:block; text-align:center; background:transparent; border:1px solid var(--primary-color); margin-top:0.5rem;">
+            Cancelar
+        </a>
+    </div>
+</div>
+{% endblock %}

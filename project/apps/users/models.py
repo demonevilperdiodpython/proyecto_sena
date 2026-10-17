@@ -28,7 +28,7 @@ class UserSession(models.Model):
 
 class customuser(AbstractUser):
     email = models.EmailField(unique=True)
-    imagen = models.ImageField(upload_to='imagenes/', default='/users/imagenes/user.jpg')
+    imagen = models.ImageField(upload_to='users/avatares', default='/users/imagenes/user.jpg')
     score = models.IntegerField(default=0)
     is_banned = models.BooleanField(default=False)
     def clean(self):

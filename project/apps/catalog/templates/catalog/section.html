@@ -1,0 +1,54 @@
+{% extends 'catalog/home.html' %}
+{% load static %}
+
+{% block title %}{{ section.name }} · {{ group.nombre }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/section.css' %}">
+{% endblock %}
+
+{% block post %}
+<div class="sec-cabecera">
+    <a href="{% url 'catalog:topic_group' group.id %}" class="sec-volver">
+        ← Volver a {{ group.nombre }}
+    </a>
+
+    <h1 class="sec-titulo">{{ section.name }}</h1>
+    <p class="sec-sub">{{ posts.count }} publicación(es) en esta sección</p>
+
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'catalog:post_in_section' group.id section.id %}" class="btn-publish sec-publicar">
+        ✏️ Publicar en esta sección
+    </a>
+    {% endif %}
+
+    <!-- Selector de secciones del grupo -->
+    {% if sections %}
+    <nav class="sec-tabs">
+        {% for s in sections %}
+            {% if s.id == section.id %}
+                <span class="sec-tab sec-tab-activa">{{ s.name }}</span>
+            {% else %}
+                <a class="sec-tab" href="{% url 'catalog:topic_section' group.id s.id %}">{{ s.name }}</a>
+            {% endif %}
+            {% if puede_admin %}
+                <span class="sec-tab-tools">
+                    <a href="{% url 'catalog:edit_section' group.id s.id %}" title="Renombrar sección">✎</a>
+                    <a href="{% url 'catalog:eliminate_section' group.id s.id %}" title="Eliminar sección">✕</a>
+                </span>
+            {% endif %}
+        {% endfor %}
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block show_post %}
+<div class="sec-lista">
+    {% for i in posts %}
+        {% include 'catalog/includes/_post_card.html' with i=i %}
+    {% empty %}
+        <p class="sec-vacio">Esta sección todavía no tiene publicaciones.</p>
+    {% endfor %}
+</div>
+{% endblock %}

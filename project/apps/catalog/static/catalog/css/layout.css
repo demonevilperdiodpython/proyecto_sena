@@ -1,0 +1,196 @@
+.container-2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: var(--app-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: transparent;
+    z-index: 0;
+    box-sizing: border-box;
+}
+
+.container-2::-webkit-scrollbar { width: 6px; }
+.container-2::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--primary-color) 45%, transparent);
+    border-radius: 4px;
+}
+
+.ccontainer {
+    overflow: hidden;
+    background: var(--primary-color-darker);
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    transition: all 0.3s ease;
+    /* El navbar es fixed y no empuja: el grid baja aqui.
+       Sus hijos (sidebar, container-2, hot-topic) ya miden
+       calc(100vh - navbar), asi que con box-sizing:border-box este
+       padding cabe justo y no se recorta nada. */
+    padding-top: var(--navbar-height);
+    min-height: var(--vh);
+}
+
+.ccontainer.sidebar-closed {
+    grid-template-columns: 60px 1fr 300px;
+}
+
+
+
+.sidebar {
+    background: var(--primary-color-darker);
+    border-right: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
+    padding: 1.25rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: var(--app-height);
+    width: 100%;
+    overflow: visible;
+    z-index: 100;
+}
+
+.sidebar .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.sidebar .sidebar-footer .dropdown-menu { z-index: 9000; }
+
+.sidebar .nav-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--font-primary-black-light);
+    padding: 0.5rem 0.75rem;
+}
+
+.sidebar .nav-item .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    color: var(--font-primary-black);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.sidebar .nav-item .nav-link:hover,
+.sidebar .nav-item .nav-link.active {
+    background: color-mix(in srgb, var(--primary-color) 20%, transparent);
+    color: var(--primary-color);
+}
+
+.nav-img, .small-img img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1.5px solid var(--primary-color);
+    display: inline-block;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
+
+.nav-img-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color-dark);
+    color: var(--font-primary-black);
+    font-weight: bold;
+    font-size: 0.85rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--primary-color);
+}
+
+.sidebar,
+.sidebar.sidebar-fixed,
+.sidebar.sidebar-narrow,
+.sidebar.hide,
+.sidebar:not(.show) {
+    position: static !important;
+    transform: none !important;
+    visibility: visible !important;
+    display: flex !important;
+    margin-left: 0 !important;
+}
+
+.sidebar-backdrop { display: none !important; }
+
+/* Diseño responsivo */
+@media (max-width: 1200px) {
+    .ccontainer {
+        grid-template-columns: 1fr;
+    }
+    .sidebar,
+    .sidebar.sidebar-fixed,
+    .sidebar.sidebar-narrow,
+    .sidebar.hide,
+    .sidebar:not(.show) {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    .sidebar.sidebar-open {
+        display: flex !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: var(--navbar-height);
+        left: 0;
+        height: var(--app-height);
+        /* 260px fijos se comen mas de la mitad de un celular de 360px */
+        width: min(260px, 82vw);
+        transform: none !important;
+        z-index: 1000;
+        background: var(--primary-color-darker);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    }
+    .hot-topic {
+        display: none !important;
+    }
+
+    /* El contenido ocupa todo el ancho: sin sidebar ni hot-topic */
+    .container-2 {
+        width: 100%;
+    }
+}
+
+/* ===========================================================================
+   CELULARES
+   =========================================================================== */
+@media (max-width: 700px) {
+    /* Menos padding lateral: en 360px cada rem cuenta */
+    .ccontainer {
+        padding-top: var(--navbar-height);
+    }
+
+    .sidebar.sidebar-open {
+        width: 86vw;
+    }
+
+    /* Los items del menu, mas grandes para el dedo */
+    .sidebar .nav-item .nav-link {
+        padding: 0.85rem 0.9rem;
+        font-size: 1rem;
+    }
+
+    .nav-img,
+    .nav-img-placeholder {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+.wrapper,
+body.sidebar-show,
+body.sidebar-lg-show {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}

@@ -1,12 +1,34 @@
+import os
+import uuid
+
 from django.db import models
 from apps.users.models import customuser as user
 from django.core.validators import FileExtensionValidator
+from django.utils import timezone
+
+
+def ruta_con_fecha(carpeta):
+    """Genera 'carpeta/2026/10/12/nombre-aleatorio.jpg'.
+
+    Django no sobreescribe: si el archivo ya existe le pega un sufijo
+   ('_aB3xY9z'), y como el campo nunca se limpia, cada reintento dejaba
+    una copia nueva. Con un nombre aleatorio cada subida es un archivo
+    unico y las subdirectorios por fecha evitan meter miles de archivos
+    en una sola carpeta.
+    """
+    def subir(instance, filename):
+        extension = os.path.splitext(filename)[1].lower()
+        fecha = timezone.now().strftime("%Y/%m/%d")
+        return f"{carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
+    return subir
+
+
 class producto(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField()
-    imagen = models.ImageField(upload_to='catalog/imagenes/', null=True, blank=True)
+    imagen = models.ImageField(upload_to=ruta_con_fecha('catalog/productos'), null=True, blank=True)
     imagen_url = models.URLField(null=True, blank=True)
     categoria = models.CharField(max_length=100)
     
@@ -14,10 +36,15 @@ class producto(models.Model):
         return self.nombre
 class topics_group(models.Model):
     nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(blank=True, default="")
     categoria = models.CharField(max_length=100, default="unknown")
     users_joined = models.ManyToManyField(user,blank=True)
+
+    # Dueño del grupo. Si es None, el grupo es viejo (creado antes de
+    # este campo) y cualquiera con permiso puede administrarlo.
+    creator = models.ForeignKey(user, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_groups')
     
-    imagen = models.ImageField(upload_to='catalog/group/image', null=True, blank=True)
+    imagen = models.ImageField(upload_to=ruta_con_fecha('catalog/grupos'), null=True, blank=True)
     imagen_url = models.URLField(null=True, blank=True)
     score = models.IntegerField(default=0)
     likes = models.ManyToManyField(user, related_name='liked_groups', blank=True)
@@ -25,6 +52,27 @@ class topics_group(models.Model):
     subscriptions = models.ManyToManyField(user, related_name='subscribed_groups', blank=True)
     def __str__(self):
         return self.nombre
+
+    def recalcular_score(self):
+        # Cada like suma 1, cada dislike resta 1, y unirse al grupo suma 2.
+        # Asi el score siempre refleja el estado real sin desajustarse.
+        self.score = self.likes.count() - self.dislikes.count() + (self.subscriptions.count() * 2)
+        self.save()
+        return self.score
+
+    # Si lo pones en False, solo el dueño (o un superusuario) puede
+    # editar y borrar grupos. En True, cualquier usuario logueado puede.
+    CUALQUIERA_PUEDE_BORRAR = True
+
+    def puede_administrar(self, usuario):
+        if not usuario.is_authenticated:
+            return False
+        if usuario.is_superuser:
+            return True
+        if self.CUALQUIERA_PUEDE_BORRAR:
+            return True
+        # Grupo sin dueño (creado antes de este campo): se permite.
+        return self.creator_id is None or self.creator_id == usuario.id
 
 class topic_section(models.Model):
     name = models.CharField(max_length=100)
@@ -46,7 +94,7 @@ class post(models.Model):
     
 class postimagen(models.Model):
     post = models.ForeignKey(post, on_delete=models.CASCADE, related_name='imagenes', default=None)
-    imagen = models.ImageField(upload_to='catalog/post/imagenes/', null=True, blank=True)
+    imagen = models.ImageField(upload_to=ruta_con_fecha('catalog/post/imagenes'), null=True, blank=True)
     tittle = models.CharField(max_length=200, blank=True, help_text="Optional title for the image")
     
     def __str__(self):
@@ -54,7 +102,7 @@ class postimagen(models.Model):
 
 class postvideo(models.Model):
     post = models.ForeignKey(post, on_delete=models.CASCADE, related_name='videos', default=None)
-    video = models.FileField(upload_to='catalog/post/videos', validators=[FileExtensionValidator(allowed_extensions=['mp4', 'avi', 'mov'])], null=True, blank=True)
+    video = models.FileField(upload_to=ruta_con_fecha('catalog/post/videos'), validators=[FileExtensionValidator(allowed_extensions=['mp4', 'avi', 'mov'])], null=True, blank=True)
     tittle = models.CharField(max_length=200, blank=True, help_text="Optional title for the video")
 
     def __str__(self):

@@ -1,0 +1,43 @@
+{% extends 'plantilla.html' %}
+
+{% block title %}Editar {{ group.nombre }}{% endblock %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/add_group.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="addgroup">
+    <div class="groupz">
+        <h2>Editar Grupo</h2>
+
+        {% if group.creator %}
+            <p style="text-align:center; font-size:0.85rem; color: var(--font-primary-black-light);">
+                Creado por <strong>{{ group.creator.username }}</strong>
+            </p>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="field-container">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="boton-registrar">Guardar Cambios</button>
+        </form>
+
+        <div style="display:flex; justify-content:space-between; gap:0.75rem; margin-top:1rem;">
+            <a href="{% url 'catalog:topic_group' group.id %}" class="btn-publish" style="background: transparent; border: 1px solid var(--primary-color);">
+                Volver
+            </a>
+            <a href="{% url 'catalog:eliminate_group' group.id %}" class="btn-publish" style="background:#e35555; color:white;">
+                Eliminar grupo
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

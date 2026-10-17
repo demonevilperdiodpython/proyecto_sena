@@ -27,7 +27,18 @@ SECRET_KEY = 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# El dominio de render va primero. Se agregan localhost/127.0.0.1 para poder
+# probar en local: sin ellos Django responde DisallowedHost (400) al entrar
+# desde la IP del equipo o desde el movil en la misma red.
+ALLOWED_HOSTS = [
+    '.onrender.com',
+    'proyecto-sena-jbwi.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+]
+CSRF_TRUSTED_ORIGINS = ['https://proyecto-sena-jbwi.onrender.com']
+
 
 
 # Application definition
@@ -49,7 +60,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     'allauth.socialaccount.providers.github',
     'apps.users',
-    'apps.catalog',  
+    'apps.catalog',
+    'apps.orders',
     'rest_framework',
 ]
 SOCIALACCOUNT_PROVIDERS = {
@@ -99,6 +111,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Alimenta la columna lateral "Hot Topic" en todas las vistas
+                'apps.catalog.context_processors.hot_topic',
             ],
         },
     },

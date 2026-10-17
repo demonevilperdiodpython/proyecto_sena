@@ -1,70 +1,62 @@
 {% extends "plantilla.html" %}
 
-{% block title %}register{% endblock %}
-{%load  static%}
+{% block title %}Registrarse{% endblock %}
+{% load static %}
+
 {% block css %}
-
-
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'users/css/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/home.css'%}">
-
-
-
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/auth.css' %}">
 {% endblock %}
 
 {% block content %}
 <form method="post" enctype="multipart/form-data" class="register">
-    <div class="container-2 animated-input">
-    {% csrf_token %}
+    <div class="container-2">
+        <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; font-weight: 800;">Crear Cuenta</h2>
+        {% csrf_token %}
         <div class="input-group">
-            {{form.username}}
             {{form.username.label_tag}}
-            {%for i in form.username.errors%}
+            {{form.username}}
+            {% for i in form.username.errors %}
                 <p class="error">{{i}}</p>
             {% endfor %}   
-            
         </div>
             
-            <div class="input-group">
-            {{form.email}}
+        <div class="input-group">
             {{form.email.label_tag}}
-            {%for i in form.email.errors%}
-                <p class="error">{{i}}</p>
-            {% endfor %}
-            </div>
-
-            <div class="input-group">
-            {{form.password1}}
-            {{form.password1.label_tag}}
-            {%for i in form.password1.errors%}
-                <p class="error">{{i}}</p>
-            {% endfor %}
-            </div>
-            
-            <div class="input-group">
-            {{form.password2}}
-            {{form.password2.label_tag}}
-            {%for i in form.password2.errors%}
+            {{form.email}}
+            {% for i in form.email.errors %}
                 <p class="error">{{i}}</p>
             {% endfor %}
         </div>
 
-        <button type="submit"> register</button>
+        <div class="input-group">
+            {{form.password1.label_tag}}
+            {{form.password1}}
+            {% for i in form.password1.errors %}
+                <p class="error">{{i}}</p>
+            {% endfor %}
+        </div>
+        
+        <div class="input-group">
+            {{form.password2.label_tag}}
+            {{form.password2}}
+            {% for i in form.password2.errors %}
+                <p class="error">{{i}}</p>
+            {% endfor %}
+        </div>
+
+        <button type="submit">Registrarse</button>
     </div>
     
     <div class="container-2"> 
-        
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Foto de Perfil</h3>
         <div class="imagen-selecter">
-
             <div class="img-show">
-                <img id="preview"src="static/img/yokse.png">
+                <img id="preview" src="{% static 'img/yokse.png' %}" alt="Vista previa">
             </div>
 
-            <div>
-                {%for i in imagen%}
-
+            <div style="text-align: center;">
+                <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Elige una imagen predeterminada:</p>
+                {% for i in imagen %}
                 <label for="{{i.id}}" class="image-option">
                     <input type="radio" id="{{i.id}}" name="default_image" value="{{i.imagen.name}}" class="image-radio">
                     {% if i.imagen %}
@@ -72,14 +64,16 @@
                     {% elif i.imagen_url %}
                     <img src="{{i.imagen_url}}" alt="Default Image {{i.id}}" class="default-image">
                     {% else %}
-                    IMAGEN NO ENCONTRADA
+                    <span style="font-size:0.8rem;">[Imagen]</span>
                     {% endif %}
                 </label>
-                {%endfor%}
-                {{form.imagen}}
+                {% endfor %}
+                <div style="margin-top: 1rem;">
+                    {{form.imagen}}
+                </div>
             </div>  
         </div>
     </div>
-    <script src="{%static 'users/js/imagen.js'%}"></script>
+    <script src="{% static 'users/js/imagen.js' %}"></script>
 </form>
 {% endblock %}

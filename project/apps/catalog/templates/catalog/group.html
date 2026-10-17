@@ -1,4 +1,10 @@
 {% extends 'catalog/home.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/section.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/group_actions.css' %}">
+{% endblock %}
 
 {% block post %}
 {% include 'catalog/includes/_post_form_card.html'%}
@@ -6,6 +12,42 @@
 {% endblock %}
 
 {% block show_post %}
+    {% comment %}
+        Botones de administracion. group.puede_administrar() ya aplica la
+        regla del interruptor CUALQUIERA_PUEDE_BORRAR del modelo.
+    {% endcomment %}
+    {% if group.creator %}
+    <div class="ga-creador">
+        Creado por
+        <a href="{% url 'users:Perfil' group.creator.id %}">{{ group.creator.username }}</a>
+    </div>
+    {% endif %}
+
+    {% if puede_admin %}
+    <div class="ga-bar">
+        <span class="ga-label">Administrar</span>
+        <a href="{% url 'catalog:add_section' group.id %}" class="ga-btn">+ Sección</a>
+        <a href="{% url 'catalog:edit_group' group.id %}" class="ga-btn">Editar grupo</a>
+        <a href="{% url 'catalog:eliminate_group' group.id %}" class="ga-btn ga-btn-peligro">Eliminar grupo</a>
+    </div>
+    {% endif %}
+
+    {% if sections %}
+    <nav class="sec-tabs" style="padding: 1rem 1.5rem 0;">
+        <span class="sec-sub" style="align-self: center;">Secciones:</span>
+        {% for s in sections %}
+            <div class="sec-tab-wrap">
+                <a class="sec-tab" href="{% url 'catalog:topic_section' group.id s.id %}">{{ s.name }}</a>
+                {% if puede_admin %}
+                    <span class="sec-tab-tools">
+                        <a href="{% url 'catalog:edit_section' group.id s.id %}" title="Renombrar sección">✎</a>
+                        <a href="{% url 'catalog:eliminate_section' group.id s.id %}" title="Eliminar sección">✕</a>
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </nav>
+    {% endif %}
     <div>
         {% for i in posts %}
             {% include 'catalog/includes/_post_card.html' with i=i %}

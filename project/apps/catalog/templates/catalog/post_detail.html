@@ -1,0 +1,74 @@
+{% extends 'catalog/home.html' %}
+{% load static %}
+
+{% block title %}Publicación{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'catalog/css/post_detail.css' %}">
+{% endblock %}
+
+{% block post %}
+<div class="pd-cabecera">
+    {% if group %}
+        <a href="{% url 'catalog:topic_group' group.id %}" class="pd-grupo">
+            {% if group.imagen %}
+                <img src="{{ group.imagen.url }}" alt="{{ group.nombre }}" class="pd-grupo-img">
+            {% endif %}
+            <span>{{ group.nombre }}</span>
+        </a>
+    {% endif %}
+
+    <!-- Enlace permanente para compartir este post -->
+    <div class="pd-compartir">
+        <span>Enlace para compartir:</span>
+        <input type="text" readonly value="{{ request.build_absolute_uri }}" onclick="this.select()" class="pd-url">
+        <button type="button" class="pd-copiar" onclick="copiarEnlace(this)">Copiar</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block show_post %}
+<div class="pd-contenido">
+    {# El post principal: sin desplegable de comentarios, porque las respuestas
+       ya se listan abajo. Sus hijos sí los traen para poder responderles. #}
+    <div class="pd-post-principal">
+        {% include 'catalog/includes/_post_card.html' with i=post ocultar_respuestas=True %}
+    </div>
+
+    <div class="pd-respuestas">
+        <h3 class="pd-subtitulo">Respuestas</h3>
+
+        {% for hijo in post.children.all %}
+            {% include 'catalog/includes/_post_card.html' with i=hijo %}
+        {% empty %}
+            <p class="pd-vacio">Sin respuestas todavía. ¡Sé el primero en responder!</p>
+        {% endfor %}
+
+        {% if request.user.is_authenticated %}
+            <div class="pd-form-respuesta">
+                {# Se pasa i=post para que parent_id quede informado: sin esto el
+                   comentario se guardaba sin padre. #}
+                {% include 'catalog/includes/_post_form_card.html' with i=post %}
+            </div>
+        {% else %}
+            <p class="pd-vacio">
+                <a href="{% url 'users:login' %}">Inicia sesión</a> para responder.
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extraContent2 %}
+{{ block.super }}
+<script>
+function copiarEnlace(boton) {
+    const input = boton.parentElement.querySelector(".pd-url");
+    input.select();
+    navigator.clipboard.writeText(input.value).then(function() {
+        boton.textContent = "¡Copiado!";
+        setTimeout(function() { boton.textContent = "Copiar"; }, 1500);
+    });
+}
+</script>
+{% endblock %}

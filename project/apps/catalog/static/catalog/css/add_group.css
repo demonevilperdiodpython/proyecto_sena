@@ -1,34 +1,97 @@
-.addgroup{
-    margin-top: 7rem;
+.addgroup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100%;
-    z-index: 3;
+    min-height: var(--vh);
+    padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+    background: var(--primary-color-darker);
 }
 
-.ccontainer{background: var(--primary-color-darker);
-color: var( --font-primary-black);
-
+.groupz {
+    background: var(--containers-primary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    border-radius: 24px;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.addgroup{display: flex;
-
-justify-content: center;
-width: 100%;
-height: 100%;
-margin-bottom: 53rem;
-
+.groupz h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 1rem 0;
+    text-align: center;
 }
 
-.groupz{
-display: flex;
+.groupz form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
 
+.field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
 
-flex-direction: column;
-padding: 35px;
-align-items: center;
-width:90%;
-height: 90%;
-gap: 15px;
-font-size: 35px;
+.field-container label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--font-primary-black);
+}
 
+.field-container input,
+.field-container select,
+.field-container textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: color-mix(in srgb, var(--primary-color-darker) 70%, transparent);
+    color: var(--font-primary-black);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.field-container input:focus,
+.field-container select:focus,
+.field-container textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
+.boton-registrar {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    background: var(--boton-sito);
+    color: var(--primary-color-darker);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.25s ease;
+}
+
+.boton-registrar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+/* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center
+   el centrado empuja la parte de arriba fuera de vista y no hay forma de
+   llegar al boton. Aqui se alinea arriba y la pagina scrollea normal. */
+@media (max-width: 1200px) {
+    .addgroup {
+        align-items: flex-start;
+    }
 }

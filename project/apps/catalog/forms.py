@@ -15,6 +15,8 @@ class productoForm(forms.ModelForm):
         
 
 class topic_groupForm(forms.ModelForm):
+    descripcion = forms.CharField(required=False, widget=forms.Textarea)
+
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["nombre"].widget.attrs.update({
@@ -22,6 +24,14 @@ class topic_groupForm(forms.ModelForm):
             'placeholder': ' ',
             'label': 'name'
             })
+
+        # El campo descripcion se agrego al modelo: se pinta como textarea.
+        self.fields["descripcion"].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': ' ',
+            'label': 'descripcion',
+            'rows': 3,
+        })
         
         self.fields["imagen"].widget.attrs.update({
             'class': 'form-control',
@@ -38,7 +48,7 @@ class topic_groupForm(forms.ModelForm):
     imagen_url = forms.URLField(required=False)
     class Meta:
         model = topics_group
-        fields = ('nombre', 'categoria', 'imagen','imagen_url')
+        fields = ('nombre', 'descripcion', 'categoria', 'imagen','imagen_url')
 class postForm(forms.ModelForm):
     content = forms.CharField(widget=forms.Textarea, required=True)
     def __init__(self,*args, **kwargs):
