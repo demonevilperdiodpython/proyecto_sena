@@ -44,19 +44,33 @@ body.dark, .dark {
   padding: 0;
 }
 
+/* El feed de escritorio scrollea dentro de .container-2, asi que html/body
+  overflow:hidden. Pero las vistas con formularios largos (crear grupo,
+   registro) tienen contenido MAS ALTO que la pantalla: con overflow:hidden
+   ese contenido quedaba inalcanzable, sin forma de bajar.
+   Por eso en movil html se queda con el alto del viewport (height:100%, no
+   min-height) y deja overflow-y:auto para que la pagina scrollee normal.
+   Si se usa min-height, html crece con el contenido y nunca aparece scroll. */
 html {
-  overflow: hidden;
-  height: 100%;
   overflow-x: hidden;
+  height: 100%;
+  overflow-y: auto;
   scroll-behavior: smooth;
 }
 
 body {  background: var(--primary-color-darker);
   color: var(--font-primary-black);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Escritorio: el feed maneja su propio scroll, la pagina no scrollea */
+@media (min-width: 1201px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -287,13 +301,28 @@ a, a:link, a:visited, a:hover, a:active {
    --navbar-height se usa para los calculos de alto, no para empujar. */
 :root {
   --navbar-height: 80px;
+
+  /* En movil 100vh incluye la barra del navegador (direcciones, barra
+     inferior de herramientas) y eso deja scroll de sobra al final de
+     cada pagina. dvh mide solo la parte REAL visible.
+     Se declara vh primero y dvh despues: el navegador usa el ultimo
+     que soporta. */
+  --vh: 100vh;
+  --app-height: calc(100vh - var(--navbar-height));
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --vh: 100dvh;
+    --app-height: calc(100dvh - var(--navbar-height));
+  }
 }
 
 .cccontainer, .ccontainer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: calc(100vh - var(--navbar-height));
+  min-height: var(--app-height);
 }
 
 .userImagen {
@@ -384,14 +413,69 @@ a, a:link, a:visited, a:hover, a:active {
 
 @media (max-width: 700px) {
   :root {
-    --navbar-height: 140px;
+    /* En celular el navbar ocupa 3 filas (logo+menu / busqueda / acciones),
+       asi que crece. Si no, el contenido queda tapado. */
+    --navbar-height: 168px;
+  }
+
+  .navbar {
+    padding: 0.5rem 0.7rem;
+    gap: 0.4rem;
   }
 
   .nav-action-link {
-    padding: 0.25rem 0.45rem;
-    font-size: 0.78rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
-  .navbar { padding: 0.4rem 0.6rem; }
+
+  /* Los enlaces de accion pasan a ocupar su propia fila y se reparten */
+  .nav-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.3rem;
+  }
+
+  .nav-actions .nav-action-link {
+    flex: 0 1 auto;
+    text-align: center;
+  }
+
+  /* La busqueda toma todo el ancho de su fila */
+  .nav-actions .search-options,
+  .cccontainer .search-options {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Boton de tema mas grande para el dedo */
+  .boton-tema-inline #modo,
+  #modo {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+
+  /* El boton hamburguesa tambien */
+  .toggle-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --navbar-height: 190px;
+  }
+
+  .nav-action-link {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.74rem;
+  }
+
+  .nav-logo {
+    width: 42px;
+    height: 42px;
+  }
 }
 
 .boton-tema-inline #modo:hover {

@@ -26,6 +26,76 @@
     box-shadow: 0 6px 24px color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 
+/* ===========================================================================
+   MOVIL
+   En pantallas angostas el post se apila: la foto de perfil sube arriba y el
+   texto ocupa el ancho completo, que es como se lee bien en un celular.
+   =========================================================================== */
+@media (max-width: 700px) {
+    .posts-container {
+        padding: 0.7rem;
+        gap: 0.9rem;
+    }
+
+    .post {
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 1rem;
+    }
+
+    /* La foto sigue arriba del texto, no al lado */
+    .post > .foto-perfil {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-post-buttons {
+        gap: 0.5rem;
+    }
+
+    /* 44px es el minimo recomendado para tocar sin fallar */
+    .user-post-buttons > div,
+    .voto-caja {
+        width: 44px;
+        height: 44px;
+    }
+
+    .post-form-card {
+        margin: 1rem 0.7rem 0.5rem;
+        padding: 1rem;
+    }
+
+    .form-input-container-2 {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    /* Botones grandes y en fila completa */
+    .btn-publish,
+    .btn-custom {
+        min-height: 44px;
+    }
+
+    .form-input-container-2 .btn-publish {
+        flex: 1 1 100%;
+    }
+
+    /* Los comentarios anidados se separan menos en pantalla chica */
+    .comentarios {
+        padding-left: 0.6rem;
+    }
+
+    .botoness button {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    /* El enlace al detalle no depende del hover (no existe en movil) */
+    .ver-post {
+        opacity: 1;
+    }
+}
+
 .foto-perfil {
     width: 44px;
     height: 44px;

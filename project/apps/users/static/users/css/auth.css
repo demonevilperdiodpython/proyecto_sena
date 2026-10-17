@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: 100vh;
+    min-height: var(--vh);
     padding: calc(var(--navbar-height) + 1rem) 1rem 2rem;
     background: var(--primary-color-darker);
 }
@@ -185,4 +185,69 @@
     color: #e35555;
     font-size: 0.85rem;
     margin-top: 0.25rem;
+}
+
+/* ===========================================================================
+   CELULARES: login, registro y cuentas
+   =========================================================================== */
+@media (max-width: 700px) {
+    .login, .register {
+        /* Menos padding: en 360px cada rem se nota */
+        padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+    }
+
+    .register {
+        gap: 1.25rem;
+    }
+
+    .contenedor-2,
+    .register > div {
+        padding: 1.5rem 1.1rem;
+    }
+
+    /* Campos mas altos: 44px es el minimo para escribir sin error */
+    .contenedor-2 input,
+    .contenedor-2 button {
+        min-height: 48px;
+        font-size: 1rem; /* 16px evita el zoom automatico de iOS */
+    }
+
+    .contenedor-2 button {
+        width: 100%;
+    }
+
+    /* Los botones de redes en columna, no en fila apretada */
+    .conatiner-container-acount {
+        flex-direction: column !important;
+    }
+
+    .container-acount {
+        width: 100%;
+    }
+
+    /* Selector de avatar: menos opciones por fila */
+    .image-option {
+        margin: 0.2rem;
+    }
+
+    .default-image {
+        width: 52px;
+        height: 52px;
+    }
+
+    .img-show,
+    .img-show img {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center
+   el centrado empuja la parte de arriba fuera de vista y no hay forma de
+   llegar al boton. Aqui se alinea arriba y la pagina scrollea normal. */
+@media (max-width: 1200px) {
+    .login,
+    .register {
+        align-items: flex-start;
+    }
 }

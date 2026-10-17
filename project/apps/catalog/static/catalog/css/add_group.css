@@ -3,8 +3,8 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: 100vh;
-    padding: calc(var(--navbar-height) + 1rem) 1rem 2rem;
+    min-height: var(--vh);
+    padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
     background: var(--primary-color-darker);
 }
 
@@ -12,7 +12,7 @@
     background: var(--containers-primary);
     border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
     border-radius: 24px;
-    padding: 2.5rem;
+    padding: 1.75rem;
     width: 100%;
     max-width: 520px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
@@ -85,4 +85,13 @@
 .boton-registrar:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+/* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center
+   el centrado empuja la parte de arriba fuera de vista y no hay forma de
+   llegar al boton. Aqui se alinea arriba y la pagina scrollea normal. */
+@media (max-width: 1200px) {
+    .addgroup {
+        align-items: flex-start;
+    }
 }

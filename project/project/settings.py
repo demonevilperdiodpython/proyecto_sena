@@ -27,7 +27,16 @@ SECRET_KEY = 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com', 'proyecto-sena-jbwi.onrender.com']
+# El dominio de render va primero. Se agregan localhost/127.0.0.1 para poder
+# probar en local: sin ellos Django responde DisallowedHost (400) al entrar
+# desde la IP del equipo o desde el movil en la misma red.
+ALLOWED_HOSTS = [
+    '.onrender.com',
+    'proyecto-sena-jbwi.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+]
 CSRF_TRUSTED_ORIGINS = ['https://proyecto-sena-jbwi.onrender.com']
 
 

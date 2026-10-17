@@ -133,7 +133,8 @@
 
 .mainmain {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* min() evita scroll horizontal en pantallas mas angostas que 300px */
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 2rem;
     padding: 3rem 5%;
     max-width: 1300px;
@@ -284,7 +285,7 @@
     background: var(--pie-color);
     padding: 3rem 5%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
     gap: 2rem;
     border-top: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
 }

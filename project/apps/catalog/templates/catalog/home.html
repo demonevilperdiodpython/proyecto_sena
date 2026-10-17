@@ -63,16 +63,16 @@
 		</li>
 		<li class="nav-item nav-group show">
 		<a class="nav-link nav-group-toggle" href="#">
-			<i class="nav-icon cil-puzzle"></i> subscriptions
+			<i class="nav-icon cil-puzzle"></i> mis grupos
 			<span class="nav-group-toggle-indicator">
 			<i class="icon icon-sm cil-paperclip show"></i>
 			<i class="icon icon-sm cil-plus hide"></i>
 			</span>
 		</a>
 		<ul class="nav-group-items compact">
-			{% for i in request.user.subscribed_groups.all %} 
+			{% for i in request.user.created_groups.all %}
 			<li class="nav-item">
-				<a class="nav-link d-flex align-items-center gap-2" href="{% url 'catalog:topic_group' i.id %}"> 
+				<a class="nav-link d-flex align-items-center gap-2" href="{% url 'catalog:topic_group' i.id %}">
 					{% if i.imagen %}
 						<img src="{{ i.imagen.url }}" class="nav-img" alt="{{ i.nombre }}">
 					{% elif i.imagen_url %}
@@ -83,12 +83,24 @@
 					<span>{{ i.nombre }}</span>
 				</a>
 			</li>
-			{% empty %}
+			{% endfor %}
+
+			{% for i in request.user.subscribed_groups.all %}
 			<li class="nav-item">
-				<span class="nav-link" style="opacity: 0.6; font-size: 0.85rem;">Todavía no te has unido a ningún grupo.</span>
+				<a class="nav-link d-flex align-items-center gap-2" href="{% url 'catalog:topic_group' i.id %}">
+					{% if i.imagen %}
+						<img src="{{ i.imagen.url }}" class="nav-img" alt="{{ i.nombre }}">
+					{% elif i.imagen_url %}
+						<img src="{{ i.imagen_url }}" class="nav-img" alt="{{ i.nombre }}">
+					{% else %}
+						<div class="nav-img nav-img-placeholder">SM</div>
+					{% endif %}
+					<span>{{ i.nombre }}</span>
+				</a>
 			</li>
 			{% endfor %}
-			</ul>
+		</ul>
+		</li>
 		</li>
 	</ul>
 		<div class="sidebar-footer">
@@ -418,7 +430,7 @@
 
 {% block extraContent2 %}
 
-<script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+{# sidemenu.js ya lo carga plantilla.html al final del body #}
 <script src="{% static 'catalog/js/edit_post.js' %}"></script>
 <script src="{% static 'catalog/js/file_chooser.js'%}"></script>
 <script src="{% static 'catalog/js/sidebar.js'%}"></script>

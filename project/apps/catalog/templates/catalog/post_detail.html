@@ -29,24 +29,26 @@
 
 {% block show_post %}
 <div class="pd-contenido">
-    {% include 'catalog/includes/_post_card.html' with i=post %}
+    {# El post principal: sin desplegable de comentarios, porque las respuestas
+       ya se listan abajo. Sus hijos sí los traen para poder responderles. #}
+    <div class="pd-post-principal">
+        {% include 'catalog/includes/_post_card.html' with i=post ocultar_respuestas=True %}
+    </div>
 
     <div class="pd-respuestas">
         <h3 class="pd-subtitulo">Respuestas</h3>
 
-        {% if post.children.exists %}
-            {% for hijo in post.children.all %}
-                {% include 'catalog/includes/_post_card.html' with i=hijo %}
-            {% empty %}
-                <p class="pd-vacio">Sin respuestas todavía.</p>
-            {% endfor %}
-        {% else %}
+        {% for hijo in post.children.all %}
+            {% include 'catalog/includes/_post_card.html' with i=hijo %}
+        {% empty %}
             <p class="pd-vacio">Sin respuestas todavía. ¡Sé el primero en responder!</p>
-        {% endif %}
+        {% endfor %}
 
         {% if request.user.is_authenticated %}
             <div class="pd-form-respuesta">
-                {% include 'catalog/includes/_post_form_card.html' %}
+                {# Se pasa i=post para que parent_id quede informado: sin esto el
+                   comentario se guardaba sin padre. #}
+                {% include 'catalog/includes/_post_form_card.html' with i=post %}
             </div>
         {% else %}
             <p class="pd-vacio">

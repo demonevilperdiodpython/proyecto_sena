@@ -68,3 +68,11 @@
     </div>
 </div>    
 {% endblock %}
+
+{% block extraContent2 %}
+{# Sin estos JS los botones de comentarios y de editar no hacen nada:
+   openchat() y respondbox() viven en open-coment.js y edit_post.js #}
+<script src="{% static 'catalog/js/open-coment.js' %}"></script>
+<script src="{% static 'catalog/js/edit_post.js' %}"></script>
+<script src="{% static 'catalog/js/file_chooser.js' %}"></script>
+{% endblock %}

@@ -4,7 +4,7 @@
     flex-direction: column;
     background: var(--containers-primary);
     border-left: 1px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
-    height: calc(100vh - var(--navbar-height));
+    height: var(--app-height);
     overflow: hidden;
 }
 

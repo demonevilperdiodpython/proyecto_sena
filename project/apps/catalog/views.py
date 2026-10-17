@@ -114,20 +114,18 @@ def topic_group(request, id):
                 video = videoform.save(commit=False)
                 video.post = post
                 video.save()
-            else:
-                print ('videoform errors:', videoform.errors)
 
             if imagenform.is_valid() and imagenform.cleaned_data.get('imagen'):
                 imagen = imagenform.save(commit=False)
                 imagen.post = post
                 imagen.save()
-            else:
-                print('imagenform errors:', imagenform.errors)
-                return redirect('catalog:topic_group', id=id)
-            
-            print(request.method == 'POST' and request.POST.get("ia") == "True")
-        
 
+            # Redirect SIEMPRE despues de guardar. Antes solo redirigia cuando
+            # NO habia imagen: al subir una se quedaba en el POST y el
+            # navegador volvia a enviar el formulario al recargar.
+            return redirect('catalog:topic_group', id=id)
+
+        # Si el form no es valido se vuelve a pintar con los errores.
     return render(request, "catalog/group.html", {"group": group, 
                                                 "sections": sections,
                                                 "posts": group_post,

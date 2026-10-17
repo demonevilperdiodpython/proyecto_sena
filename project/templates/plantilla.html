@@ -7,7 +7,6 @@
 
         <script src="https://unpkg.com/htmx.org@1.9.4"></script>
         <script src="{% static 'js/plantilla.js'%}"></script>
-        <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -88,5 +87,9 @@
             {%endblock%}
         
         </div>
+
+        {# Va al final del body a proposito: si se carga en el <head> el boton
+           de tema todavia no existe en el DOM y el listener nunca se conecta. #}
+        <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
     </body>
 </html>

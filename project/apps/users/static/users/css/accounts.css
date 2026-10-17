@@ -13,8 +13,12 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
+    gap: 1rem;
     padding: 1rem 0 2rem;
-    width: 40%;
+    /* 40% en un movil de 360px son 144px: las tarjetas quedan ilegibles.
+       Se usa un ancho maximo que se adapta. */
+    width: 100%;
+    max-width: 1100px;
 }
 
 .user-card {
