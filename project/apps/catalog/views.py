@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q
 from functools import wraps
+from urllib.parse import urlparse
 
 
 # Modelo que se le pide a Ollama. Para usar otro, se cambia aqui y ya.
@@ -339,6 +340,8 @@ def search_view(request):
             "page1": obj.next_page_number() if obj.has_next() else obj.number,
             "page2": obj.previous_page_number() if obj.has_previous() else obj.number,
             "query": query,
+            # Sin esto el formulario de responder sale sin caja de texto.
+            "form": postForm(),
         },
     )
 
@@ -370,6 +373,8 @@ def search_view_post(request):
             "page1": obj.next_page_number() if obj.has_next() else obj.number,
             "page2": obj.previous_page_number() if obj.has_previous() else obj.number,
             "query": query,
+            # Sin esto el formulario de responder sale sin caja de texto.
+            "form": postForm(),
         },
     )
 @sin_cuenta_no_se_puede_actuar
@@ -444,6 +449,9 @@ def popular(request):
         "ranking_grupos": top_groups,
         "ranking_usuarios": top_users,
         "top_posts": top_posts,
+        # Igual que en la seccion: sin "form" el formulario de responder sale
+        # sin caja de texto y no se puede escribir.
+        "form": postForm(),
     })
 
 
@@ -466,7 +474,11 @@ def post_detail(request, id):
 
             guardar_archivos(respuesta, archivos_del_request(request))
 
-            return redirect("catalog:post_detail", id=id)
+            # El formulario de responder se envia aqui desde cualquier pagina
+            # (grupo, seccion, popular, explorar). Antes de esto se guardaba y
+            # te mandaba a la pagina del post; ahora se vuelve a la pagina de
+            # la que venias, que es donde estabas escribiendo.
+            return redirect(a_volver(request, "catalog:post_detail", id=id))
 
     return render(request, "catalog/post_detail.html", {
         "post": post_obj,
@@ -481,6 +493,32 @@ def ia_view(request):
     return render(request, "catalog/ia.html")
 
 
+def a_volver(request, nombre_url, **kwargs):
+    """A donde volver despues de guardar.
+
+    Si el navegador manda Referer y esa pagina es del propio proyecto, se
+    vuelve ahi: asi el que responde desde una seccion o desde popular se
+    queda donde estaba, en vez de que lo boten a la pagina del post.
+
+    El Referer se revisa antes de usarlo: si alguien fabricara uno que
+    apunte a otro sitio, redirigir alli seria un.redirect abierto. Solo se
+    acepta si es una ruta interna que empieza por "/".
+    """
+    anterior = request.META.get("HTTP_REFERER", "")
+
+    if anterior:
+        partes = urlparse(anterior)
+        # misma pagina: con path vacio, todo es la raiz
+        es_del_proyecto = partes.netloc in ("", request.get_host())
+        # se rechazan "//sitio.com" (protocolo relativo), que es el truco
+        # clasico del redirect abierto
+        no_relativo = not partes.path.startswith("//")
+        if es_del_proyecto and no_relativo:
+            return partes.path + (("?" + partes.query) if partes.query else "")
+
+    return reverse(nombre_url, kwargs=kwargs)
+
+
 def topic_section_view(request, group_id, section_id):
     # Las secciones quedaron a medias: el modelo existe pero faltaba la
     # plantilla catalog/section.html y la ruta.
@@ -493,6 +531,10 @@ def topic_section_view(request, group_id, section_id):
         "section": section,
         "sections": group.sections.all(),
         "posts": sections_posts,
+        # Sin esto el formulario de responder salia sin caja de texto: la
+        # plantilla la pinta con {% for field in form %}, y si la vista no
+        # manda "form" no hay nada que iterate y no se podia escribir nada.
+        "form": postForm(),
         "puede_admin": group.puede_administrar(request.user),
     })
 

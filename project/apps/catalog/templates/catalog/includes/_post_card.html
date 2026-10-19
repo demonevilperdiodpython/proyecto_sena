@@ -155,7 +155,9 @@
 
         {% if not ocultar_respuestas %}
         <div class="comentary-form" data-id="{{ i.id }}" style="display: none; margin-top: 1rem;">
-            {% include 'catalog/includes/_post_form_card.html' with i=i %}
+            {# El formulario de responder se manda a la pagina del post (post_detail), que si guarda la respuesta. Antes se enviaba a la pagina donde estas, y en la de una seccion, en popular o en search se perdia. #}
+            {% url 'catalog:post_detail' i.id as url_responder %}
+            {% include 'catalog/includes/_post_form_card.html' with i=i action_url=url_responder %}
         </div>
 
         <div class="comentarios" data-id="{{ i.id }}" style="display: none;">

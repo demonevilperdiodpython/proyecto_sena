@@ -1,6 +1,18 @@
 {% load adjuntos %}
+{% comment %}
+    action_url es opcional.
+
+    Sin el, el formulario se envia a la pagina donde estas, y eso solo funciona
+    en las vistas que saben guardar un post. En la pagina de una seccion, en
+    /popular/ o en /search/ se perdia el comentario sin avisar: la vista solo
+    maneja GET, recargaba la pagina y el texto no se guardaba.
+
+    Quien responde a un post le pasa la URL de ese post, que si guarda la
+    respuesta. Quien publica en el grupo o en la seccion no la pasa, porque
+    esas paginas ya saben guardarlo.
+{% endcomment %}
 <div class="post-form-card">
-    <form method="post" class="post-form" enctype="multipart/form-data">
+    <form method="post" class="post-form" enctype="multipart/form-data"{% if action_url %} action="{{ action_url }}"{% endif %}>
         <div class="form-input-container-1">
             {% for field in form %}
                 {{ field }}
