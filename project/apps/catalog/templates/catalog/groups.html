@@ -31,7 +31,7 @@
                             <a href="{% url 'catalog:topic_group' i.id %}">{{ i.nombre }}</a>
                         </h5>
                         {% if i.categoria %}
-                            <span style="font-size: 0.75rem; font-weight: bold; background: color-mix(in srgb, var(--primary-color) 20%, transparent); color: var(--primary-color); padding: 2px 8px; border-radius: 10px; align-self: flex-start;">{{ i.categoria }}</span>
+                            <span style="font-size: 0.75rem; font-weight: bold; background: color-mix(in srgb, var(--primary-color) 20%, transparent); color: var(--accent-text); padding: 2px 8px; border-radius: 10px; align-self: flex-start;">{{ i.categoria }}</span>
                         {% endif %}
                         <p>{{ i.descripcion|truncatechars:90 }}</p>
 

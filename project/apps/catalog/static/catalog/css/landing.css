@@ -1,21 +1,24 @@
-/* Modo oscuro */
+/* Este bloque ANTES redefinia toda la paleta en modo oscuro con los colores
+   viejos (morado/rosa) y pisaba los degradados de styles.css, por eso el
+   landing se veía de otro color. Ahora solo ajusta los degradados para que
+   destaquen un poco mas sobre el fondo oscuro, dejando los colores base
+   iguales que en el resto de la pagina. */
 .dark {
-    --primary-color-lighter: #a78bfa;
-    --primary-color: #7c3aed;
-    --primary-color-dark: #8b5cf6;
-    --primary-color-darker: #c4b5fd;
-    --tertiary-color: #bfdbfe;
-    --pie-color: #93c5fd;
-    --secondary-color: #6366f1;
-    --secondary-color-dark: #0ea5e9;
-    --secondary-color-lighter: #bae6fd;
-    --font-primary-black: #2e1065;
-    --font-primary-black-light: #4c1d95;
-    --containers-primary: linear-gradient(135deg, rgba(167,139,250,.65), rgba(147,197,253,.65));
-    --boton-sito: #7c3aed;
-    --menu-despl: #ddd6fe;
-    --click-touch: linear-gradient(135deg, rgba(147,197,253,.75), rgba(167,139,250,.75));
-    --rank-box: linear-gradient(135deg, rgba(167,139,250,.6), rgba(147,197,253,.6));
+    --containers-primary: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--primary-color) 22%, transparent),
+        color-mix(in srgb, var(--primary-color-dark) 45%, transparent)
+    );
+    --click-touch: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--primary-color) 30%, transparent),
+        color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+    );
+    --rank-box: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--primary-color) 25%, transparent),
+        color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+    );
 }
 
 .carousel-repeat {
@@ -138,6 +141,12 @@
     gap: 2rem;
     padding: 3rem 5%;
     max-width: 1300px;
+    /* El width explicito es necesario: .main es flex column y este bloque
+       lleva margin: 0 auto, y en flexbox los margenes automaticos anulan
+       el estiramiento. Sin width el ancho queda indefinido, el 100% del
+       minmax se resuelve contra si mismo y el grid se aplana en una sola
+       pista de 68px en vez de 2 columnas. */
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -146,7 +155,9 @@
     overflow: hidden;
     position: relative;
     box-shadow: 0 8px 24px rgba(0,0,0,.3);
-    min-height: 480px;
+    /* El alto sale de --alto-portada, que se mide con la pantalla: en
+       vertical la portada se estira para aprovechar el alto del celular. */
+    min-height: var(--alto-portada);
     border: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 

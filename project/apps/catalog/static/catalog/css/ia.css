@@ -48,8 +48,8 @@
     min-width: 0;
     padding: 0.75rem 1rem;
     border-radius: 24px;
-    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
-    background: color-mix(in srgb, var(--primary-color-darker) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
+    background: var(--campo-fondo);
     color: var(--font-primary-black);
     font-size: 0.95rem;
     font-family: inherit;
@@ -57,8 +57,14 @@
     transition: all 0.25s ease;
 }
 
+.ia-input:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+    background: var(--campo-hover);
+}
+
 .ia-input:focus {
     border-color: var(--primary-color);
+    background: var(--campo-foco);
     box-shadow: 0 0 12px color-mix(in srgb, var(--primary-color) 40%, transparent);
 }
 
@@ -68,7 +74,7 @@
     border: none;
     border-radius: 24px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-weight: 700;
     font-size: 0.95rem;
     cursor: pointer;
@@ -104,4 +110,10 @@
     .ia-card { padding: 1.1rem; }
     .ia-titulo { font-size: 1.4rem; }
     .ia-form { flex-direction: column; }
+
+    /* El boton de preguntar ocupa la fila y llega a 44px de alto */
+    .ia-btn {
+        width: 100%;
+        min-height: 44px;
+    }
 }

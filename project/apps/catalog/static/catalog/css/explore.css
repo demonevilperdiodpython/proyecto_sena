@@ -23,18 +23,23 @@
     align-items: center;
     width: 100%;
     position: relative;
-    background: color-mix(in srgb, var(--primary-color-dark) 70%, transparent);
-    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: var(--campo-fondo);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
     border-radius: 30px;
     padding: 4px 6px 4px 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,.2);
     transition: all 0.3s ease;
 }
 
+.search-options form:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+    background: var(--campo-hover);
+}
+
 .search-options form:focus-within {
     border-color: var(--primary-color);
     box-shadow: 0 0 16px color-mix(in srgb, var(--primary-color) 40%, transparent);
-    background: var(--primary-color-dark);
+    background: var(--campo-foco);
 }
 
 .search-options input[type="text"] {
@@ -66,7 +71,7 @@
     border: none;
     border-radius: 20px !important;
     background: var(--boton-sito) !important;
-    color: var(--primary-color-darker) !important;
+    color: var(--boton-texto) !important;
     font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
@@ -83,20 +88,40 @@
 /* Diseño responsivo */
 @media (max-width: 1200px) {
     .search-options { max-width: 340px; }
-    .search-options input[type="text"] { height: 34px; font-size: 0.9rem; }
-    .search-options button[type="submit"] { height: 32px; padding: 0 0.9rem !important; }
+    .search-options input[type="text"] { height: 40px; font-size: 0.95rem; }
+    .search-options button[type="submit"] { height: 40px; padding: 0 0.9rem !important; }
 }
 
 @media (max-width: 900px) {
     .search-options { max-width: 240px; }
-    .search-options input[type="text"] { height: 30px; font-size: 0.85rem; }
-    .search-options button[type="submit"] { height: 28px; padding: 0 0.7rem !important; font-size: 0.8rem; }
+    .search-options input[type="text"] { height: 44px; font-size: 1rem; }
+    .search-options button[type="submit"] { height: 44px; padding: 0 0.7rem !important; font-size: 0.85rem; }
 }
 
 @media (max-width: 600px) {
-    .search-options { max-width: 150px; }
-    .search-options input[type="text"] { height: 28px; font-size: 0.8rem; }
-    .search-options button[type="submit"] { height: 26px; padding: 0 0.5rem !important; font-size: 0.75rem; }
+    /* El buscador de la pagina se pone a todo el ancho de la pantalla y
+       sus campos miden 44px, el minimo para escribir sin fallar. */
+    .search-options { max-width: none; width: 100%; }
+    .search-options form { height: 52px; }
+    .search-options input[type="text"] { height: 44px; font-size: 1rem; }
+    .search-options button[type="submit"] { height: 44px; min-width: 44px; padding: 0 0.6rem !important; font-size: 0.8rem; }
+
+    .searched-group {
+        width: 100%;
+        gap: 1rem;
+    }
+
+    /* Los botones de las tarjetas se hacen mas altos para el dedo */
+    .group-text button[type="submit"] {
+        min-height: 44px;
+        padding: 0 1.2rem;
+    }
+
+    /* Los enlaces de perfil/grupo tambien necesitan alto tactil */
+    .perfil-enlace,
+    .perfil-item {
+        min-height: 44px;
+    }
 }
 
 .asidemain {
@@ -136,7 +161,15 @@
     box-shadow: 0 12px 30px color-mix(in srgb, var(--primary-color) 30%, transparent);
 }
 
-.group-img { width: 100%; height: 160px; overflow: hidden; }
+.group-img { width: 100%; height: var(--alto-miniatura); overflow: hidden; }
+
+/* El enlace de la imagen es inline: sin esto mide 22px de alto y es
+   casi imposible de tocar en el celular. */
+.group-img a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
 
 .group-img img {
     width: 100%;
@@ -157,13 +190,20 @@
 .group-text h5 { font-size: 1.1rem; color: var(--font-primary-black); margin: 0; }
 .group-text p  { font-size: 0.9rem; color: var(--font-primary-black-light); }
 
+/* El nombre del grupo tambien es un enlace: necesita alto tactil */
+.group-text a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+}
+
 .group-text button[type="submit"] {
     align-self: flex-start;
     padding: 0.4rem 1rem;
     border: none;
     border-radius: 20px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;

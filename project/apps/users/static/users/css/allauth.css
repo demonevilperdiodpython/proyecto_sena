@@ -1,0 +1,161 @@
+/* Estilos de las paginas de django-allauth (login, cambiar contrasena,
+   cuentas conectadas). Vienen con sus propias plantillas, asi que aqui se
+   les da el mismo aspecto que al login propio de la aplicacion.
+
+   Solo se carga desde templates/allauth/layouts/base.html, asi que no
+   afecta a los formularios del resto del proyecto.
+
+   La tarjeta es el <form> en vez de un div contenedor: las plantillas de
+   allauth ponen el titulo y el texto fuera del form y no hay forma de
+   envolverlos con un bloque de Django sin que el hijo lo pise. */
+
+/* El navbar es fixed y estas paginas no cargan layout.css (que es el que
+   le pone el espacio de arriba), asi que el contenido se metia debajo del
+   navbar y los primeros elementos quedaban tapados. */
+.ccontainer {
+    padding-top: calc(var(--navbar-height) + 1rem);
+}
+
+/* Los enlaces sueltos (el de "sign up", el de Google) tambien son zona
+   tactil: sin esto quedan con el alto del texto (22px). */
+a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* El checkbox de "recordarme" */
+input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--primary-color);
+}
+
+label:has(input[type="checkbox"]) {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+h1 {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto 1rem;
+    color: var(--accent-text);
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+form {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    border-radius: 24px;
+    background: var(--containers-primary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .35);
+    box-sizing: border-box;
+}
+
+form p {
+    margin: 0 0 1rem;
+}
+
+form label {
+    display: block;
+    color: var(--font-primary-black-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    height: 48px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
+    background: var(--campo-fondo);
+    color: var(--font-primary-black);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+form input[type="text"]:hover,
+form input[type="email"]:hover,
+form input[type="password"]:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+    background: var(--campo-hover);
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    border-color: var(--accent-text);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--primary-color) 40%, transparent);
+    background: var(--campo-foco);
+}
+
+form button[type="submit"],
+form .btn-primary {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    background: var(--boton-sito);
+    color: var(--boton-texto);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+form button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+form a {
+    color: var(--accent-text);
+    font-weight: 600;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+form .helptext,
+form .form-text {
+    color: var(--font-primary-black-light);
+    font-size: 0.85rem;
+}
+
+form .errorlist {
+    color: #e35555;
+    font-size: 0.85rem;
+    margin: 0 0 0.5rem;
+    padding-left: 1rem;
+}
+
+@media (max-width: 700px) {
+    form {
+        padding: 1.5rem 1.1rem;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="password"] {
+        min-height: 48px;
+        font-size: 1rem;
+    }
+}

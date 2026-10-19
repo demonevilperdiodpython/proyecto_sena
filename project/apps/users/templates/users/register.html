@@ -10,7 +10,7 @@
 {% block content %}
 <form method="post" enctype="multipart/form-data" class="register">
     <div class="container-2">
-        <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; font-weight: 800;">Crear Cuenta</h2>
+        <h2 style="color: var(--accent-text); margin-bottom: 1.5rem; font-weight: 800;">Crear Cuenta</h2>
         {% csrf_token %}
         <div class="input-group">
             {{form.username.label_tag}}
@@ -48,7 +48,7 @@
     </div>
     
     <div class="container-2"> 
-        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Foto de Perfil</h3>
+        <h3 style="color: var(--accent-text); margin-bottom: 1rem;">Foto de Perfil</h3>
         <div class="imagen-selecter">
             <div class="img-show">
                 <img id="preview" src="{% static 'img/yokse.png' %}" alt="Vista previa">

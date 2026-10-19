@@ -103,4 +103,12 @@
 @media (max-width: 700px) {
     .ga-bar { margin: 1rem 0.7rem 0.5rem; }
     .ga-btn { font-size: 0.78rem; padding: 0.3rem 0.7rem; }
+
+    /* Los botones de accion del grupo se hacen mas altos para el dedo */
+    .ga-btn {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

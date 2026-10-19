@@ -1,4 +1,12 @@
+/* ===========================================================================
+   VARIABLES DE COLOR
+   Despues de un merge quedaron dos juegos de valores superpuestos y el que
+   estaba al final (morado/rosa) pisaba al de arriba. Por eso se veian otros
+   colores. Ahora hay UN solo juego: el de arriba. El morado quedo guardado
+   abajo como "Paleta alternativa" por si se quiere volver a el.
+   =========================================================================== */
 :root {
+  /* Modo claro */
   --primary-color-lighter: #233b3d;
   --primary-color: #00d2dc;
   --primary-color-dark: #290466;
@@ -9,17 +17,92 @@
   --secondary-color-dark: #16bdf0;
   --secondary-color-lighter: hsl(133, 18%, 30%);
   --font-primary-black: hsl(0, 6%, 84%);
-  --font-primary-black-light: hsl(0 0% 60%);
-  --containers-primary: linear-gradient( rgba(141, 255, 244, 0.8), rgba(139, 0, 255, 0.6));
+  /* Era hsl(0 0% 60%) = #999. Sobre el fondo claro del buscador
+     (rgb(76,61,99)) daba 3.42:1, por debajo de 4.5. aclarado queda 4.74:1
+     y sigue sobrada sobre el fondo oscuro de la pagina. */
+  --font-primary-black-light: hsl(0, 6%, 72%);
+  /* Los degradados se arman con color-mix sobre --primary-color y
+     --primary-color-dark en vez de rgba()/rgb() fijos. Antes usaban colores
+     sueltos de la paleta anterior (morado/rosa) y con los colores nuevos
+     quedaban-descuadrados. Ahora cambian solos si cambias la paleta. */
+  --containers-primary: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 22%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 45%, transparent)
+  );
   --boton-sito: #67c6ff;
   --menu-despl: white;
-  --click-touch: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
-  --click-touch: linear-gradient( rgb(107, 194, 185), rgba(95, 0, 172, 0.6));
-  --rank-box:linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), color-mix(in srgb, var(--primary-color-dark) 60%, transparent));
-  --foot-pie :#8c6edd;
-} 
-.dark{
---primary-color-lighter: #7AAEB3;
+  --click-touch: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 30%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+  );
+  --rank-box: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 25%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+  );
+  --foot-pie: #8c6edd;
+
+  /* Color para texto de acento (titulos, etiquetas). Cyan sobre fondo oscuro. */
+  --accent-text: var(--primary-color);
+
+  /* Texto de los botones con fondo --boton-sito. El boton es claro en los dos
+     modos, asi que el texto va oscuro para que se lea. */
+  --boton-texto: var(--primary-color-darker);
+
+  /* Alturas de los contenedores que llevan una imagen o un area de texto.
+     Se miden con el alto de la pantalla (dvh) y no con pixeles fijos, para
+     que el contenido crezca con el dispositivo en vez de quedar corto. */
+  --alto-portada: clamp(420px, 62dvh, 860px);
+  --alto-miniatura: clamp(150px, 20dvh, 300px);
+  --alto-escritura: clamp(90px, 14dvh, 190px);
+  /* Tamano de las fotos de perfil y de avatar, relativo al ancho. */
+  --tam-avatar: min(140px, 38vw);
+  --tam-avatar-mini: min(64px, 15vw);
+  --tam-avatar-pequeno: min(44px, 11vw);
+  /* Colores de los campos de formulario (inputs, selects, textareas).
+
+     El campo tiene que verse como una CAJA encima de la tarjeta, asi que se
+     aclara bastante con blanco. Con solo 8% quedaba casi igual que la
+     tarjeta (rgb(38,20,66) contra rgb(21,24,80) = 1.01:1, no se notaba nada)
+     y con 24% ya se distingue bien.
+
+     De ahi se sube un poco mas al pasar el mouse y al hacer clic. El foco
+     cambia el tono hacia el color de acento en vez de aclararse mas, porque
+     aclararlo tanto dejaria el texto justo por debajo de 4.5:1.
+
+     Los tres son opacos a proposito: si se dejaran translucidos se veria el
+     degradado de la tarjeta a traves del campo y volverian a parecerse. */
+  --campo-fondo: color-mix(in srgb, #ffffff 24%, var(--primary-color-darker));
+  --campo-hover: color-mix(in srgb, #ffffff 30%, var(--primary-color-darker));
+  --campo-foco: color-mix(
+    in srgb,
+    var(--primary-color) 18%,
+    color-mix(in srgb, #ffffff 24%, var(--primary-color-darker))
+  );
+
+  /* Tarjetas: posts, grupos, tarjetas de la barra lateral.
+     Antes el post usaba 40% de --primary-color-dark sobre
+     --primary-color-darker, que daba rgb(28,2,71) contra un fondo rgb(19,0,50):
+     1.06:1, o sea invisible. Ahora se aclara con blanco para que la tarjeta
+     se lea como una caja. El borde tambien cambia por modo: un borde cyan
+     claro se pierde sobre el fondo claro del modo oscuro, asi que ahi se usa
+     el morado oscuro. */
+  --tarjeta-fondo: color-mix(in srgb, #ffffff 20%, var(--primary-color-darker));
+  --tarjeta-borde: color-mix(in srgb, var(--primary-color) 45%, transparent);
+}
+
+
+/* Modo oscuro.
+   OJO: despues del merge estas reglas quedaron ANTES que el layout :root de
+   mas abajo, y :root gana la cascada, asi que el tema oscuro no aplicaba
+   (bodyDark=true pero los colores seguian siendo los claros).
+   Se resuelve con :has() sobre <html>, que tiene mayor especificidad que
+   cualquier :root suelto. El body.dark/.dark se mantiene como respaldo. */
+html:has(body.dark),
+html:has(.dark) {
+  --primary-color-lighter: #7AAEB3;
   --primary-color: #9cf0f5;
   --primary-color-dark: #3d0b3f;
   --primary-color-darker: #b8bbd8;
@@ -29,50 +112,42 @@
   --secondary-color-dark: #990c5aaa;
   --secondary-color-lighter: hsl(187, 88%, 90%);
   --font-primary-black: hsl(0, 9.8%, 10%);
-  --font-primary-black-light: hsl(0 0% 60%);
-  --containers-primary: linear-gradient( rgba(255, 236, 160, 0.8), #3d98ad);
+  /* Era hsl(0 0% 60%) = #999. Sobre el fondo claro del modo oscuro daba
+     1.5:1, ilegible. Ahora es un gris oscuro que si contrasta. */
+  --font-primary-black-light: hsl(0, 12%, 24%);
+  /* El fondo del modo oscuro es claro (#b8bbd8), asi que la tarjeta se
+     oscurece un poco en vez de aclararse, y el borde va en morado oscuro:
+     un borde claro sobre un fondo claro no se ve. */
+  --tarjeta-fondo: color-mix(in srgb, var(--primary-color-dark) 18%, var(--primary-color-darker));
+  --tarjeta-borde: color-mix(in srgb, var(--primary-color-dark) 55%, transparent);
+  --containers-primary: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 20%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+  );
   --boton-sito: #ffff7b;
   --menu-despl: #990c5aaa;
-  --click-touch: linear-gradient( rgba(255, 161, 222, 0.8), #9a3348); 
-  --rank-box: linear-gradient( color-mix(in srgb, var(--primary-color) 80%, transparent), rgba(78, 15, 80, 0.6));
-  --foot-pie :#990c5aaa;
-  /* Modo claro */
-  --primary-color-lighter: #c084fc;
-  --primary-color: #7c3aed;
-  --primary-color-dark: #8b5cf6;
-  --primary-color-darker: #e9d5ff;
-  --tertiary-color: #bfdbfe;
-  --pie-color: #93c5fd;
-  --secondary-color: #6366f1;
-  --secondary-color-dark: #0ea5e9;
-  --secondary-color-lighter: #dbeafe;
-  --font-primary-black: #2e1065;
-  --font-primary-black-light: #5b21b6;
-  --containers-primary: linear-gradient(135deg, rgba(192, 132, 252, 0.45), rgba(147, 197, 253, 0.45));
-  --boton-sito: #7c3aed;
-  --menu-despl: #ede9fe;
-  --click-touch: linear-gradient(135deg, rgba(147, 197, 253, 0.65), rgba(192, 132, 252, 0.65));
-  --rank-box: linear-gradient(135deg, rgba(192, 132, 252, 0.45), rgba(147, 197, 253, 0.45));
-}
+  --click-touch: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 28%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 35%, transparent)
+  );
+  --rank-box: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 25%, transparent),
+    color-mix(in srgb, var(--primary-color-dark) 38%, transparent)
+  );
+  --foot-pie: #990c5aaa;
 
-body.dark, .dark {
-  /* Modo oscuro */
-  --primary-color-lighter: #a78bfa;
-  --primary-color: #a855f7;
-  --primary-color-dark: #c084fc;
-  --primary-color-darker: #0f0a1e;
-  --tertiary-color: #0c1a2e;
-  --pie-color: #1e1b4b;
-  --secondary-color: #818cf8;
-  --secondary-color-dark: #38bdf8;
-  --secondary-color-lighter: #1e1b4b;
-  --font-primary-black: #f3e8ff;
-  --font-primary-black-light: #c4b5fd;
-  --containers-primary: linear-gradient(135deg, rgba(109, 40, 217, 0.35), rgba(30, 58, 138, 0.35));
-  --boton-sito: #a855f7;
-  --menu-despl: #1e1b4b;
-  --click-touch: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
-  --rank-box: linear-gradient(135deg, rgba(109, 40, 217, 0.4), rgba(30, 58, 138, 0.4));
+  /* En modo oscuro el FONDO es claro (#b8bbd8), asi que un acento claro
+     se pierde. --accent-text usa el morado oscuro, que si contrasta (8:1).
+     Antes los titulos usaban --primary-color (cyan claro) sobre fondo claro:
+     ratio 1.45, ilegible. */
+  --accent-text: var(--primary-color-dark);
+
+  /* El boton es amarillo (#ffff7b) y el texto era gris claro (#b8bbd8):
+     1.78:1, ilegible. Con texto casi negro sube a 16:1. */
+  --boton-texto: #1a1a1a;
 }
 
 *, *::before, *::after {
@@ -81,13 +156,6 @@ body.dark, .dark {
   padding: 0;
 }
 
-/* El feed de escritorio scrollea dentro de .container-2, asi que html/body
-  overflow:hidden. Pero las vistas con formularios largos (crear grupo,
-   registro) tienen contenido MAS ALTO que la pantalla: con overflow:hidden
-   ese contenido quedaba inalcanzable, sin forma de bajar.
-   Por eso en movil html se queda con el alto del viewport (height:100%, no
-   min-height) y deja overflow-y:auto para que la pagina scrollee normal.
-   Si se usa min-height, html crece con el contenido y nunca aparece scroll. */
 html {
   overflow-x: hidden;
   height: 100%;
@@ -206,7 +274,9 @@ a, a:link, a:visited, a:hover, a:active {
 
 .nav-links a:hover {
   background: color-mix(in srgb, var(--primary-color) 20%, transparent);
-  color: var(--primary-color);
+  /* --accent-text y no --primary-color: en modo oscuro --primary-color es
+     cyan claro y sobre el fondo claro del navbar se perdia (1.35:1). */
+  color: var(--accent-text);
   transform: translateY(-1px);
 }
 
@@ -292,7 +362,10 @@ a, a:link, a:visited, a:hover, a:active {
 
 .menu li button:hover, .menu li a:hover {
   background: var(--primary-color);
-  color: var(--primary-color-darker);
+  /* --boton-texto y no --primary-color-darker: el fondo del hover es
+     --primary-color, que es claro en los dos modos, asi que el texto
+     necesita ir oscuro. Con gris claro daba 1.45:1 en modo oscuro. */
+  color: var(--boton-texto);
   transform: translateX(4px);
 }
 
@@ -355,6 +428,47 @@ a, a:link, a:visited, a:hover, a:active {
   }
 }
 
+/* Respaldo del tema oscuro para navegadores sin :has().
+   Va DESPUES del :root de arriba para ganar la cascada. */
+@supports not selector(html:has(*)) {
+  body.dark, .dark {
+    --primary-color-lighter: #7AAEB3;
+    --primary-color: #9cf0f5;
+    --primary-color-dark: #3d0b3f;
+    --primary-color-darker: #b8bbd8;
+    --tertiary-color: rgb(122, 138, 226);
+    --pie-color: rgb(150, 125, 191);
+    --secondary-color: hsl(78, 100, 59);
+    --secondary-color-dark: #990c5aaa;
+    --secondary-color-lighter: hsl(187, 88%, 90%);
+    --font-primary-black: hsl(0, 9.8%, 10%);
+    --font-primary-black-light: hsl(0, 12%, 24%);
+  /* El fondo del modo oscuro es claro (#b8bbd8), asi que la tarjeta se
+     oscurece un poco en vez de aclararse, y el borde va en morado oscuro:
+     un borde claro sobre un fondo claro no se ve. */
+  --tarjeta-fondo: color-mix(in srgb, var(--primary-color-dark) 18%, var(--primary-color-darker));
+  --tarjeta-borde: color-mix(in srgb, var(--primary-color-dark) 55%, transparent);
+    --containers-primary: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary-color) 20%, transparent),
+      color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
+    );
+    --boton-sito: #ffff7b;
+    --menu-despl: #990c5aaa;
+    --click-touch: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary-color) 28%, transparent),
+      color-mix(in srgb, var(--primary-color-dark) 35%, transparent)
+    );
+    --rank-box: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary-color) 25%, transparent),
+      color-mix(in srgb, var(--primary-color-dark) 38%, transparent)
+    );
+    --foot-pie: #990c5aaa;
+  }
+}
+
 .cccontainer, .ccontainer {
   display: flex;
   flex-direction: column;
@@ -399,7 +513,9 @@ a, a:link, a:visited, a:hover, a:active {
 
 .nav-action-link:hover {
   background: color-mix(in srgb, var(--primary-color) 20%, transparent);
-  color: var(--primary-color);
+  /* Mismo caso que .nav-links a:hover: en modo oscuro el cyan claro sobre
+     el fondo claro del navbar daba 1.35:1. */
+  color: var(--accent-text);
   transform: translateY(-1px);
 }
 
@@ -422,6 +538,75 @@ a, a:link, a:visited, a:hover, a:active {
   cursor: pointer;
   transition: all 0.3s ease;}
 
+/* ===========================================================================
+   BOTONES COMPARTIDOS
+   .btn-publish y .btn-custom se usan en varias paginas (settings, grupo,
+   seccion, post, perfil) pero posts.css solo se carga en algunas. Por eso
+   viven aqui, en la hoja que carga la plantilla base.
+   =========================================================================== */
+.btn-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+  background: color-mix(in srgb, var(--primary-color-dark) 50%, transparent);
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-custom:hover {
+  background: var(--primary-color);
+  color: var(--primary-color-darker);
+  transform: scale(1.08);
+}
+
+.btn-custom svg { width: 20px; height: 20px; }
+
+.btn-publish {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.4rem;
+  border: none;
+  border-radius: 20px;
+  background: var(--boton-sito);
+  color: var(--boton-texto);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-publish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+/* ===========================================================================
+   DISPOSITIVOS EN VERTICAL (celular y tablet en portrait)
+   En vertical la pantalla es alta, asi que los contenedores suben su altura
+   para aprovechar la pantalla y no quedar estirados en el medio. Con
+   horizontal (celular acostado, monitor) se quedan con los valores de
+   arriba, que estan calculados para una pantalla ancha.
+   =========================================================================== */
+@media (orientation: portrait) {
+  :root {
+    --alto-portada: clamp(470px, 68dvh, 900px);
+    --alto-miniatura: clamp(175px, 25dvh, 330px);
+    --alto-escritura: clamp(105px, 17dvh, 220px);
+    /* Las fotos se agrandan: en vertical hay mucho mas ancho disponible
+       que en horizontal y si no quedan chiquenitas. */
+    --tam-avatar: min(200px, 55vw);
+    --tam-avatar-mini: min(78px, 19vw);
+    --tam-avatar-pequeno: min(52px, 13vw);
+  }
+}
+
 /* Diseño responsivo */
 @media (max-width: 1200px) {
   :root {
@@ -443,16 +628,38 @@ a, a:link, a:visited, a:hover, a:active {
   .nav-action-link {
     padding: 0.3rem 0.6rem;
     font-size: 0.85rem;
+    /* Zona tactil de 44px: en tablet y celular se pulsa con el dedo */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .nav-actions { gap: 0.25rem; }
-  .nav-links { display: none; } 
+  .nav-links { display: none; }
+
+  /* El logo, el boton de menu y el de tema tambien llegan a 44px */
+  .nav-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .toggle-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .boton-tema-inline #modo,
+  #modo {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (max-width: 700px) {
   :root {
     /* En celular el navbar ocupa 3 filas (logo+menu / busqueda / acciones),
        asi que crece. Si no, el contenido queda tapado. */
-    --navbar-height: 168px;
+    --navbar-height: 170px;
   }
 
   .navbar {
@@ -460,9 +667,14 @@ a, a:link, a:visited, a:hover, a:active {
     gap: 0.4rem;
   }
 
+  /* Los enlaces de accion se vuelven botones altos para el dedo */
   .nav-action-link {
     padding: 0.4rem 0.6rem;
     font-size: 0.8rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Los enlaces de accion pasan a ocupar su propia fila y se reparten */
@@ -477,11 +689,31 @@ a, a:link, a:visited, a:hover, a:active {
     text-align: center;
   }
 
-  /* La busqueda toma todo el ancho de su fila */
-  .nav-actions .search-options,
-  .cccontainer .search-options {
+  /* El buscador es hijo DIRECTO del .navbar (no de .nav-actions ni del
+     .cccontainer), asi que la regla de abajo no le aplicaba nunca y se
+     quedaba apretado en 150px al lado del logo. Ahora ocupa su propia
+     fila y se le da el alto de un campo normal. */
+  .navbar > .search-options {
+    order: 3;
     width: 100%;
     max-width: none;
+  }
+
+  .navbar > .search-options form {
+    height: 52px;
+    padding: 4px 6px 4px 16px;
+  }
+
+  .navbar > .search-options input[type="text"] {
+    height: 44px;
+    font-size: 1rem; /* 16px evita el zoom automatico de iOS */
+  }
+
+  .navbar > .search-options button[type="submit"] {
+    height: 44px;
+    min-width: 44px;
+    padding: 0 1rem !important;
+    font-size: 0.85rem;
   }
 
   /* Boton de tema mas grande para el dedo */
@@ -497,11 +729,28 @@ a, a:link, a:visited, a:hover, a:active {
     width: 44px;
     height: 44px;
   }
+
+  /* El logo tambien llega a 44px */
+  .nav-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Los botones compartidos llegan a 44px de alto y de ancho */
+  .btn-publish,
+  .btn-custom {
+    min-height: 44px;
+  }
+
+  .btn-custom {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (max-width: 420px) {
   :root {
-    --navbar-height: 190px;
+    --navbar-height: 170px;
   }
 
   .nav-action-link {
@@ -509,9 +758,19 @@ a, a:link, a:visited, a:hover, a:active {
     font-size: 0.74rem;
   }
 
-  .nav-logo {
-    width: 42px;
-    height: 42px;
+  /* Con 4 enlaces de accion no caben en una fila de 320px: en vez de
+     envolverlos (y comerse otra fila de alto) la fila se desliza. */
+  .nav-actions {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-actions::-webkit-scrollbar { display: none; }
+
+  .nav-actions .nav-action-link {
+    flex: 0 0 auto;
   }
 }
 
@@ -589,18 +848,23 @@ a, a:link, a:visited, a:hover, a:active {
   align-items: center;
   width: 100%;
   position: relative;
-  background: color-mix(in srgb, var(--primary-color-dark) 70%, transparent);
-  border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+  background: var(--campo-fondo);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
   border-radius: 30px;
   padding: 4px 6px 4px 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
+.search-options form:hover {
+  border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+  background: var(--campo-hover);
+}
+
 .search-options form:focus-within {
   border-color: var(--primary-color);
   box-shadow: 0 0 16px color-mix(in srgb, var(--primary-color) 40%, transparent);
-  background: var(--primary-color-dark);
+  background: var(--campo-foco);
 }
 
 .search-options input[type="text"] {
@@ -632,7 +896,7 @@ a, a:link, a:visited, a:hover, a:active {
   border: none;
   border-radius: 20px !important;
   background: var(--boton-sito) !important;
-  color: var(--primary-color-darker) !important;
+  color: var(--boton-texto) !important;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -648,19 +912,23 @@ a, a:link, a:visited, a:hover, a:active {
 
 @media (max-width: 1200px) {
   .search-options { max-width: 340px; }
-  .search-options input[type="text"] { height: 34px; font-size: 0.9rem; }
-  .search-options button[type="submit"] { height: 32px; padding: 0 0.9rem !important; }
+  .search-options input[type="text"] { height: 44px; font-size: 1rem; }
+  .search-options button[type="submit"] { height: 44px; padding: 0 0.9rem !important; }
 }
 
 @media (max-width: 900px) {
   .search-options { max-width: 240px; }
-  .search-options input[type="text"] { height: 30px; font-size: 0.85rem; }
-  .search-options button[type="submit"] { height: 28px; padding: 0 0.7rem !important; font-size: 0.8rem; }
+  .search-options input[type="text"] { height: 44px; font-size: 1rem; }
+  .search-options button[type="submit"] { height: 44px; padding: 0 0.7rem !important; font-size: 0.85rem; }
 }
 
 @media (max-width: 600px) {
-  .search-options { max-width: 150px; }
-  .search-options input[type="text"] { height: 28px; font-size: 0.8rem; }
-  .search-options button[type="submit"] { height: 26px; padding: 0 0.5rem !important; font-size: 0.75rem; }
+  /* El buscador de la pagina se pone a todo el ancho y sus campos miden
+     44px, el minimo para escribir sin fallar. Antes se achicaba a 28px y
+     en el celular era imposible de usar. */
+  .search-options { max-width: none; width: 100%; }
+  .search-options form { height: 52px; }
+  .search-options input[type="text"] { height: 44px; font-size: 1rem; }
+  .search-options button[type="submit"] { height: 44px; min-width: 44px; padding: 0 0.6rem !important; font-size: 0.8rem; }
 }
 

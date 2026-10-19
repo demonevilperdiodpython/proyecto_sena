@@ -27,8 +27,8 @@
 }
 
 .pd-grupo-img {
-    width: 40px;
-    height: 40px;
+    width: var(--tam-avatar-pequeno);
+    height: var(--tam-avatar-pequeno);
     border-radius: 10px;
     object-fit: cover;
     border: 1.5px solid var(--primary-color);
@@ -60,7 +60,7 @@
     border: none;
     border-radius: 20px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-weight: 700;
     font-size: 0.85rem;
     cursor: pointer;
@@ -97,4 +97,18 @@
 @media (max-width: 700px) {
     .pd-contenido { padding: 1rem 0.7rem; }
     .pd-cabecera { padding: 1rem 0.7rem; }
+
+    /* El enlace al grupo y el campo de la URL se hacen mas altos */
+    .pd-grupo {
+        min-height: 44px;
+    }
+    .pd-url {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    .pd-copiar {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.5rem 1.1rem;
+    }
 }

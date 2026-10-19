@@ -10,7 +10,7 @@
 {% block content %}
 <form method="post" class="login">
 <div class="container-2">
-    <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; font-weight: 800;">Iniciar Sesión</h2>
+    <h2 style="color: var(--accent-text); margin-bottom: 1.5rem; font-weight: 800;">Iniciar Sesión</h2>
     {% csrf_token %}
     {% for field in form %}
     <div class="input-group">

@@ -43,18 +43,26 @@
     height: 48px;
     padding: 0.75rem 1rem;
     border-radius: 12px;
-    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
-    background: color-mix(in srgb, var(--primary-color-darker) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
+    background: var(--campo-fondo);
     color: var(--font-primary-black);
     font-size: 1rem;
     outline: none;
     transition: all 0.3s ease;
 }
 
+/* Al pasar el mouse el campo se aclara un poco. Antes no tenia hover y
+   el :focus usaba --primary-color-dark (#290466), que se veía como un
+   bloque oscuro. */
+.input-group input:hover, .Form-control:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+    background: var(--campo-hover);
+}
+
 .input-group input:focus, .Form-control:focus {
-    border-color: var(--primary-color);
+    border-color: var(--accent-text);
     box-shadow: 0 0 14px color-mix(in srgb, var(--primary-color) 40%, transparent);
-    background: var(--primary-color-dark);
+    background: var(--campo-foco);
 }
 
 .input-group label {
@@ -70,7 +78,7 @@
     border: none;
     border-radius: 24px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -99,11 +107,13 @@
     width: 100%;
     height: 44px;
     border-radius: 22px;
-    background: #4285F4 !important;
+    /* El azul de Google (#4285F4) con texto blanco daba 3.56:1, por debajo
+       del 4.5 que pide WCAG. Este azul es mas oscuro: 5.2:1. */
+    background: #1a5fb4 !important;
     color: white !important;
     font-weight: 600;
     font-size: 0.95rem;
-    box-shadow: 0 4px 12px rgba(66,133,244,.3);
+    box-shadow: 0 4px 12px rgba(26,95,180,.3);
     transition: transform 0.2s ease;
 }
 
@@ -124,6 +134,18 @@
     cursor: pointer;
 }
 
+/* El enlace de Discord/GitHub va dentro del recuadro. Sin esto el <a> es
+   inline y queda con el alto del texto (19px): imposible de tocar con el
+   dedo. Con esto el enlace ocupa toda la caja y llega a 44px. */
+.container-acount a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    color: inherit;
+}
+
 .container-acount:hover {
     background: var(--primary-color);
     color: var(--primary-color-darker);
@@ -138,9 +160,13 @@
     gap: 1rem;
 }
 
+/* La foto del formulario se mide con el ANCHO de la pantalla y no con
+   pixeles fijos: asi se ve igual de bien en un celular, una tablet o un
+   monitor, y en vertical crece (--tam-avatar cambia segun la orientacion
+   en styles.css). */
 .img-show {
-    width: 140px;
-    height: 140px;
+    width: var(--tam-avatar);
+    height: var(--tam-avatar);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,8 +174,8 @@
 }
 
 .img-show img {
-    width: 140px;
-    height: 140px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border: 3px solid var(--primary-color);
     border-radius: 50%;
@@ -166,8 +192,8 @@
 .image-option:hover { transform: scale(1.1); }
 
 .default-image {
-    width: 64px;
-    height: 64px;
+    width: var(--tam-avatar-mini);
+    height: var(--tam-avatar-mini);
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
@@ -176,7 +202,7 @@
 .image-radio { display: none; }
 
 .image-radio:checked + .default-image {
-    border-color: var(--primary-color);
+    border-color: var(--accent-text);
     box-shadow: 0 0 12px var(--primary-color);
     transform: scale(1.1);
 }
@@ -230,16 +256,8 @@
         margin: 0.2rem;
     }
 
-    .default-image {
-        width: 52px;
-        height: 52px;
-    }
-
-    .img-show,
-    .img-show img {
-        width: 110px;
-        height: 110px;
-    }
+    /* La foto del formulario ya no lleva pixeles fijos: usa
+       --tam-avatar y --tam-avatar-mini, que en vertical crecen. */
 }
 
 /* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center

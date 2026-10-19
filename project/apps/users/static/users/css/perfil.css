@@ -63,11 +63,26 @@
     .paginacion {
         gap: 0.75rem;
     }
+
+    /* Los botones de pagina llegan a 44px de alto */
+    .paginacion a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Los campos llegan a 44px, el minimo para escribir sin error */
+    .contenedor input,
+    .contenedor textarea,
+    .contenedor select {
+        min-height: 44px;
+        font-size: 1rem;
+    }
 }
 
 .userImagen {
-    width: 130px;
-    height: 130px;
+    width: min(130px, 34vw);
+    height: min(130px, 34vw);
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--primary-color);
@@ -91,7 +106,7 @@
 .user-info p:first-child {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--primary-color);
+    color: var(--accent-text);
 }
 
 .los-post {
@@ -102,8 +117,8 @@
 }
 
 .post {
-    background: color-mix(in srgb, var(--primary-color-dark) 40%, var(--primary-color-darker));
-    border: 1px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
+    background: var(--tarjeta-fondo);
+    border: 1px solid var(--tarjeta-borde);
     border-radius: 16px;
     padding: 1.25rem;
     display: flex;
@@ -114,7 +129,7 @@
 
 .post:hover {
     transform: translateY(-3px);
-    border-color: var(--primary-color);
+    border-color: var(--accent-text);
 }
 
 .foto-perfil {
@@ -160,7 +175,7 @@
     padding: 0.5rem 1.2rem;
     border-radius: 20px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-weight: 700;
     transition: transform 0.2s ease;
 }

@@ -23,7 +23,7 @@
 
 .groupz h2 {
     font-size: 1.8rem;
-    color: var(--primary-color);
+    color: var(--accent-text);
     margin: 0 0 1rem 0;
     text-align: center;
 }
@@ -53,18 +53,27 @@
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 12px;
-    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
-    background: color-mix(in srgb, var(--primary-color-darker) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
+    background: var(--campo-fondo);
     color: var(--font-primary-black);
     font-size: 0.95rem;
     outline: none;
     transition: all 0.25s ease;
 }
 
+/* Mismo hover que en login: el campo se aclara un poco al pasar el mouse. */
+.field-container input:hover,
+.field-container select:hover,
+.field-container textarea:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
+    background: var(--campo-hover);
+}
+
 .field-container input:focus,
 .field-container select:focus,
 .field-container textarea:focus {
-    border-color: var(--primary-color);
+    border-color: var(--accent-text);
+    background: var(--campo-foco);
     box-shadow: 0 0 12px color-mix(in srgb, var(--primary-color) 40%, transparent);
 }
 
@@ -74,7 +83,7 @@
     border: none;
     border-radius: 24px;
     background: var(--boton-sito);
-    color: var(--primary-color-darker);
+    color: var(--boton-texto);
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -93,5 +102,13 @@
 @media (max-width: 1200px) {
     .addgroup {
         align-items: flex-start;
+    }
+
+    /* Los campos llegan a 44px, el minimo para escribir sin error */
+    .field-container input,
+    .field-container select,
+    .field-container textarea {
+        min-height: 44px;
+        font-size: 1rem;
     }
 }

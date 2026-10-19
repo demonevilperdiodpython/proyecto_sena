@@ -85,8 +85,8 @@
 }
 
 .nav-img, .small-img img {
-    width: 40px;
-    height: 40px;
+    width: var(--tam-avatar-pequeno);
+    height: var(--tam-avatar-pequeno);
     border-radius: 10px;
     object-fit: cover;
     flex-shrink: 0;
