@@ -51,6 +51,14 @@
      modos, asi que el texto va oscuro para que se lea. */
   --boton-texto: var(--primary-color-darker);
 
+  /* Boton del menu lateral (hamburguesa). El navbar es oscuro en modo claro y
+     claro en modo oscuro, asi que el boton hace justo lo contrario para que
+     siempre destaque contra el fondo. */
+  --menu-btn-fondo: var(--primary-color);
+  --menu-btn-linea: var(--primary-color-darker);
+  --menu-btn-borde: color-mix(in srgb, var(--primary-color) 55%, #ffffff);
+  --menu-btn-sombra: color-mix(in srgb, var(--primary-color) 40%, transparent);
+
   /* Alturas de los contenedores que llevan una imagen o un area de texto.
      Se miden con el alto de la pantalla (dvh) y no con pixeles fijos, para
      que el contenido crezca con el dispositivo en vez de quedar corto. */
@@ -140,6 +148,12 @@ html:has(.dark) {
   );
   --boton-sito: #ffff7b;
   --menu-despl: #990c5aaa;
+
+  /* En modo oscuro el navbar se pone claro, asi que el boton del menu se invierte: fondo morado oscuro y rayas blancas. */
+  --menu-btn-fondo: var(--primary-color-dark);
+  --menu-btn-linea: #ffffff;
+  --menu-btn-borde: color-mix(in srgb, var(--primary-color-dark) 60%, #000000);
+  --menu-btn-sombra: color-mix(in srgb, var(--primary-color-dark) 45%, transparent);
   --click-touch: linear-gradient(
     135deg,
     color-mix(in srgb, var(--primary-color) 28%, transparent),
@@ -226,7 +240,11 @@ a, a:link, a:visited, a:hover, a:active {
   align-items: center;
   width: 100%;
   height: var(--navbar-height);
-  padding: 0 2rem;
+  /* !important por lo mismo que position: CoreUI se carga DESPUES desde el
+     CDN y trae .navbar { padding: 0 }, que se comia el margen de los
+     lados y dejaba el boton de hamburguesa pegado al borde de la
+     pantalla. Al cargar despues, gana por orden, no por especificidad. */
+  padding: 0 2rem !important;
   background: var(--primary-color-darker);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -299,7 +317,9 @@ a, a:link, a:visited, a:hover, a:active {
 
 .nav_extensable-button {
   position: relative;
-  display: none; }
+  /* El boton de hamburguesa sale SIEMPRE, no solo en movil: antes estaba
+     en display:none y solo aparecia con la regla de max-width: 1200px. */
+  display: block; }
 
 .toggle-btn {
   display: flex;
@@ -307,39 +327,72 @@ a, a:link, a:visited, a:hover, a:active {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 42px;
-  height: 42px;
-  padding: 8px;
-  background: var(--primary-color-dark);
-  border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
-  border-radius: 10px;
+  /* 44px en todos los tamanos: 42px se queda corto para el dedo. */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  /* Antes llevaba --primary-color-dark sobre un navbar del mismo tono y se perdia en el fondo. Ahora usa --menu-btn-*, que se invierte segun el modo para que siempre destaque contra el navbar. */
+  background: var(--menu-btn-fondo);
+  border: 1px solid var(--menu-btn-borde);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px var(--menu-btn-sombra);
+  transition: background .25s ease, transform .2s ease, box-shadow .25s ease;
 }
 
 .toggle-btn:hover {
-  background: color-mix(in srgb, var(--primary-color) 30%, var(--primary-color-dark));
-  box-shadow: 0 0 12px var(--primary-color);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--menu-btn-sombra);
+}
+
+.toggle-btn:active {
+  transform: translateY(0) scale(.94);
+}
+
+/* Foco con teclado: sin esto no se ve donde estas pulsando */
+.toggle-btn:focus-visible {
+  outline: 3px solid var(--accent-text);
+  outline-offset: 2px;
 }
 
 .toggle-btn .line {
-  width: 22px;
+  width: 20px;
   height: 2.5px;
-  background-color: var(--menu-despl);
+  background-color: var(--menu-btn-linea);
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: transform .25s ease, opacity .2s ease;
 }
 
 .toggle-btn .line:after {
   display: none;
 }
 
+/* Con el menu abierto las tres rayas se cruzan en una X: asi se ve de un vistazo que el boton esta pulsado y que volvera a cerrar. */
+body.menu-abierto .toggle-btn {
+  background: color-mix(in srgb, var(--menu-btn-fondo) 70%, #ffffff);
+}
+
+body.menu-abierto .toggle-btn .line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+body.menu-abierto .toggle-btn .line:nth-child(2) {
+  opacity: 0;
+}
+
+body.menu-abierto .toggle-btn .line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 .nav_extensable-button ul.menu {
   display: none;
   position: absolute;
-  top: 55px;
-  right: 0;
+  /* Se ancla a la IZQUIERDA del boton, no a la derecha: el contenedor es
+     un hijo flexible que se estira a lo ancho del navbar (unos 885px en
+     escritorio), asi que con right:0 el menu salia lejos del boton. */
+  left: 0;
+  top: 52px;
+  right: auto;
   width: 240px;
   padding: 1rem;
   background: var(--primary-color-dark);
@@ -365,6 +418,9 @@ a, a:link, a:visited, a:hover, a:active {
   display: flex;
   align-items: center;
   width: 100%;
+  /* 44px es el minimo para tocar con el dedo; con solo el padding
+     anterior quedaban en 42px y en el celular fallaba al pulsar. */
+  min-height: 44px;
   padding: 0.6rem 1rem;
   border: none;
   border-radius: 8px;
@@ -471,6 +527,12 @@ a, a:link, a:visited, a:hover, a:active {
       color-mix(in srgb, var(--primary-color-dark) 40%, transparent)
     );
     --boton-sito: #ffff7b;
+
+  /* En modo oscuro el navbar se pone claro, asi que el boton del menu se invierte: fondo morado oscuro y rayas blancas. */
+  --menu-btn-fondo: var(--primary-color-dark);
+  --menu-btn-linea: #ffffff;
+  --menu-btn-borde: color-mix(in srgb, var(--primary-color-dark) 60%, #000000);
+  --menu-btn-sombra: color-mix(in srgb, var(--primary-color-dark) 45%, transparent);
     --menu-despl: #990c5aaa;
     --click-touch: linear-gradient(
       135deg,
@@ -491,6 +553,14 @@ a, a:link, a:visited, a:hover, a:active {
   flex-direction: column;
   width: 100%;
   min-height: var(--app-height);
+}
+
+/* El navbar es fixed y no empuja el contenido, asi que hay que bajarlo aqui.
+   Este padding va SOLO en el contenedor de fuera: .cccontainer ENVUELVE a
+   .ccontainer, asi que si la regla fuera para los dos se sumarian
+   (170px + 170px) y el contenido bajaba el doble de lo debido. */
+.cccontainer {
+  padding-top: var(--navbar-height);
 }
 
 .userImagen {
@@ -645,7 +715,7 @@ a, a:link, a:visited, a:hover, a:active {
     flex-wrap: wrap;
     height: auto;
     min-height: var(--navbar-height);
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem !important;
     gap: 0.5rem;
   }
   .nav-action-link {
@@ -686,7 +756,7 @@ a, a:link, a:visited, a:hover, a:active {
   }
 
   .navbar {
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.7rem !important;
     gap: 0.4rem;
   }
 

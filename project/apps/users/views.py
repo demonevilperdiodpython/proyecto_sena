@@ -156,24 +156,29 @@ def logOut_view(request):
     return response
 
 def eliminate_user_session_view(request, user_id):
+    # Sin sesion no hay nada que cerrar: antes la consulta devolvia None y
+    # la linea siguiente reventaba con AttributeError (error 500).
+    if not request.user.is_authenticated:
+        return redirect('users:acounts')
+
     if request.method == 'POST':
         response = redirect('users:acounts')
         ip = get_client_ip(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         device_id = request.COOKIES.get("device_id")
-        
-        user = UserSession.objects.filter(user=request.user, user_id=user_id, is_active=True).first()
-        if user.user_id == request.user.id:
-            logout(request)
-            
-           
-            
-            user.is_active = False
-            user.save()
-        else:
+
+        user = UserSession.objects.filter(user_id=user_id, is_active=True).first()
+        # La sesion puede no existir (o ya estar cerrada): antes eso daba
+        # error 500 al usar None.
+        if user is not None:
+            # Si la sesion que se cierra es la de este mismo dispositivo,
+            # ademas se cierra la sesion de django.
+            if user.user_id == request.user.id:
+                logout(request)
             user.is_active = False
             user.save()
         return response
+    return redirect('users:acounts')
 def log_in_with_user_view(request):
     username = request.GET.get('user')
     if request.method == 'POST':
@@ -188,9 +193,15 @@ def log_in_with_user_view(request):
             user_agent = request.META.get('HTTP_USER_AGENT','')
             ip = get_client_ip(request)
             
-            UserSessionn = UserSession.objects.get(user=form.get_user(), ip_address=ip, user_agent=user_agent, device_id=device_id)
-            UserSessionn.is_active = True
-            UserSessionn.save()
+            # .get() lanzaba DoesNotExist (error 500) si esa combinacion de
+            # ip/navegador/dispositivo no estaba guardada. Con filter().first()
+            # simplemente se continua.
+            UserSessionn = UserSession.objects.filter(
+                user=form.get_user(), ip_address=ip,
+                user_agent=user_agent, device_id=device_id).first()
+            if UserSessionn is not None:
+                UserSessionn.is_active = True
+                UserSessionn.save()
             user = form.get_user()
             login(request, user)
             

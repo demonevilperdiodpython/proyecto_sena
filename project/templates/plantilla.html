@@ -20,19 +20,24 @@
         <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
         {%block css%}
         {% endblock %}
+        {# El menu lateral. Va aqui, en la plantilla base, para que exista en CUALQUIER pagina y no solo en el home. Lo abre el boton de hamburguesa de abajo (sidemenu.js). #}
+        <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/sidebar.css' %}">
+        {# Estilo de los adjuntos de los posts. #}
+        <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/adjuntos.css' %}">
     </head>
 
 
     <body>
-    
+
         <div class="navbar">
             <section class="left-navbar">
                 <section class="nav_extensable-button">
-                    <button class="toggle-btn" aria-label="Menu">
+                    <button class="toggle-btn" aria-label="Menu" aria-expanded="false">
                         <div class="line"></div>
                         <div class="line"></div>
                         <div class="line"></div>
                     </button>
+                   
                 </section>
                 <a href="{% url 'catalog:home' %}">
                     <div class="nav-logo">
@@ -43,7 +48,6 @@
                 <div class="nav-links">
                     <a href="{% url 'catalog:home' %}">Inicio</a>
                     <a href="{% url 'catalog:search_view' %}">Explorar</a>
-                    <a href="{% url 'orders:crear_pedido' %}">Pedidos</a>
                 </div>
             </section>
             {% include 'catalog/includes/_search_view_post.html' %}
@@ -79,13 +83,15 @@
             
             {%endblock%}
     
-        <div class="ccontainer"> 
-        
+        <div class="ccontainer">
+
+            {% include 'catalog/includes/_sidebar.html' %}
+
             {% block content %}
 
-            
+
             {% endblock %}
-        
+
         </div>
 
         
@@ -95,8 +101,9 @@
         
         </div>
 
-        {# Va al final del body a proposito: si se carga en el <head> el boton
-           de tema todavia no existe en el DOM y el listener nunca se conecta. #}
+        {# Va al final del body a proposito: si se carga en el <head> el boton de tema todavia no existe en el DOM y el listener nunca se conecta. #}
         <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
+        {# Boton de adjuntar archivos del post. No hace nada si la pagina no tiene ese boton, asi que se puede cargar en todas. #}
+        <script src="{% static 'catalog/js/adjuntos.js' %}"></script>
     </body>
 </html>

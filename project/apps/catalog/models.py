@@ -1,5 +1,6 @@
 import os
 import uuid
+import mimetypes
 
 from django.db import models
 from apps.users.models import customuser as user
@@ -107,3 +108,58 @@ class postvideo(models.Model):
 
     def __str__(self):
         return self.tittle or f"Video de post {self.post_id}"
+
+
+class postarchivo(models.Model):
+    """Un archivo adjunto a un post: el que sea, de cualquier tipo.
+
+    Antes habia dos modelos, postimagen (solo imagenes) y postvideo (mp4,
+    avi, mov) y dos botones. Ahora hay uno solo y se pueden subir varios a
+    la vez. Los dos modelos viejos se conservan para que los posts que ya
+    tienen imagen o video sigan mostrandolos."""
+
+    post = models.ForeignKey(post, on_delete=models.CASCADE, related_name='archivos')
+    # FileField y no ImageField: asi acepta cualquier tipo de archivo.
+    archivo = models.FileField(upload_to=ruta_con_fecha('catalog/post/archivos'))
+    # Nombre original, para que se vea al descargar y no el del servidor.
+    nombre_original = models.CharField(max_length=255, blank=True)
+    creado = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nombre_original or self.archivo.name.rsplit('/', 1)[-1]
+
+    @property
+    def nombre(self):
+        """Nombre con el que se muestra y se descarga."""
+        return self.nombre_original or self.archivo.name.rsplit('/', 1)[-1]
+
+    @property
+    def tipo(self):
+        """'imagen', 'video', 'audio' o 'otro'.
+
+        Lo deducimos de la extension, no del tipo MIME que mando el
+        navegador: el campo FileField guarda solo la ruta."""
+        extension = self.archivo.name.rsplit('.', 1)[-1].lower() if '.' in self.archivo.name else ''
+        tipo_mime = mimetypes.guess_type('x.' + extension)[0] or ''
+        if tipo_mime.startswith('image/'):
+            return 'imagen'
+        if tipo_mime.startswith('video/'):
+            return 'video'
+        if tipo_mime.startswith('audio/'):
+            return 'audio'
+        return 'otro'
+
+    @property
+    def peso_legible(self):
+        """'1,4 MB'. El archivo puede no estar en disco todavia."""
+        try:
+            peso = self.archivo.size
+        except (OSError, ValueError):
+            return ''
+        if peso < 1024:
+            return '{} B'.format(peso)
+        if peso < 1024 * 1024:
+            return '{:.0f} KB'.format(peso / 1024)
+        if peso < 1024 * 1024 * 1024:
+            return '{:.1f} MB'.format(peso / (1024 * 1024))
+        return '{:.1f} GB'.format(peso / (1024 * 1024 * 1024))

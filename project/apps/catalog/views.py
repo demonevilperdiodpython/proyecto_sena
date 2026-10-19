@@ -10,22 +10,155 @@ from .models import post as post_model
 from .forms import postForm
 from .forms import topic_groupForm
 from apps.users.models import customuser as CustomUser
-from .forms import postImagenForm
-from .forms import postVideoForm
 from .models import postvideo
+from .models import postarchivo
 from ollama import Client
+from ollama import ResponseError
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
+from django.db.models import Q
+from functools import wraps
 
+
+# Modelo que se le pide a Ollama. Para usar otro, se cambia aqui y ya.
+MODELO_IA = "tinyllama"
+
+
+def preguntar_a_la_ia(texto):
+    """Pregunta a Ollama y devuelve (respuesta, error).
+
+    Hay dos formas de que esto falle y son distintas:
+
+    - Ollama no esta corriendo: la libreria lanza ConnectionError.
+    - Ollama esta corriendo pero el modelo no esta descargado: lanza
+      ResponseError con un texto que dice "try pulling it first".
+
+    Antes cada vista llamaba a client.generate() por su cuenta y sin proteccion,
+    asi que publicar con la casilla de IA marcada reventaba con un 500 (el post
+    ya habia quedado guardado, pero el usuario veia una pagina de error). Con
+    este helper las dos cosas se reportan bien.
+    """
+    try:
+        salida = Client().generate(
+            model=MODELO_IA,
+            prompt="answer anything youre told: {}".format(texto),
+            stream=False,
+            options={
+                "num_predict": 100,
+                "temperature": 0.5,
+            }
+        )
+        return salida["response"], None
+
+    except ConnectionError:
+        return None, ("La IA no esta conectada: Ollama no esta corriendo. "
+                      "Abrir otra terminal y ejecutar 'ollama serve'.")
+
+    except ResponseError:
+        return None, ("La IA no tiene el modelo '{}' descargado. "
+                      "Ejecutar 'ollama pull {}' para bajarlo.".format(
+                          MODELO_IA, MODELO_IA))
+
+    except Exception as error:
+        # Cualquier otra cosa (modelo ocupado, sin memoria, timeout) tambien
+        # se avisa en vez de tumbar la pagina.
+        print("Ollama fallo:", error)
+        return None, "La IA no pudo responder en este momento."
+
+
+def para_registrarse(request):
+    """Manda al formulario de REGISTRO, no al de iniciar sesion.
+
+    Se usa en vez de login_required porque al visitante que no tiene
+    cuenta lo que le falta es crearla, no iniciar sesion."""
+    return redirect(reverse('users:singup') + '?next=' + request.get_full_path())
+
+
+def sin_cuenta_no_se_puede_actuar(view):
+    """Deja VER la pagina sin iniciar sesion, pero para hacer falta una cuenta.
+
+    Con GET (o HEAD) la vista se ejecuta siempre: cualquiera puede navegar
+    por toda la aplicacion sin registrarse. Lo que cambia algo (publicar,
+    crear grupo, editar, borrar, votar...) necesita sesion, y si no la hay
+    se manda al formulario de registro.
+
+    Antes estas vistas llevaban @sin_cuenta_no_se_puede_actuar, que mandaba al login incluso
+    para solo mirar la pagina."""
+    @wraps(view)
+    def envoltura(request, *args, **kwargs):
+        if request.method in ('GET', 'HEAD') or request.user.is_authenticated:
+            return view(request, *args, **kwargs)
+        messages.info(request, 'Registrate para poder publicar y crear grupos.')
+        return para_registrarse(request)
+    return envoltura
+
+
+def guardar_archivos(post_obj, archivos):
+    """Guarda los adjuntos del post y devuelve cuantos se guardaron.
+
+    Acepta cualquier tipo de archivo y todos los que se marquen a la vez.
+    Antes habia dos bloques, uno para video y otro para imagen, y cada uno
+    aceptaba un solo archivo."""
+    guardados = 0
+    for archivo in archivos:
+        # Los vacios (0 bytes) se saltan: no son un archivo util.
+        if not archivo or not getattr(archivo, 'size', 0):
+            continue
+        adjunto = postarchivo(post=post_obj)
+        adjunto.archivo = archivo
+        # Se guarda el nombre que subio el usuario para que al descargar
+        # no aparezca el nombre aleatorio del servidor.
+        adjunto.nombre_original = getattr(archivo, 'name', '')[:255]
+        adjunto.save()
+        guardados += 1
+    return guardados
+
+
+def archivos_del_request(request):
+    """Los adjuntos que(se subiieron en este POST.
+
+    Se leen de request.FILES y no de un forms.FileField porque ese campo
+    espera un archivo suelto y revienta con la lista de getlist."""
+    return request.FILES.getlist('archivos')
+
+
+
+def posts_del_feed(vista, usuario):
+    """Las publicaciones del feed segun la vista pedida.
+
+    Reddit ofrece Hot / New / Top, que es tres formas de ordenar por
+    popularidad. Aqui se ofrece otra cosa: lo que necesita ayuda ya. Un post
+    sin respuestas y mas viejo es justo lo que deberia verse primero, y en
+    una semana de parciales eso vale mas que el post mas reciente.
+    """
+    base = post_model.objects.filter(parent__isnull=True)
+
+    if vista == 'ayuda':
+        # children__isnull: nadie le ha respondido. De mas antiguo a mas
+        # nuevo, asi lo que mas lleva esperando queda arriba.
+        return base.filter(children__isnull=True).order_by('created_at')[:10]
+
+    if vista == 'mis_grupos' and usuario.is_authenticated:
+        # Los grupos donde soy dueno o estoy suscrito.
+        mios = topics_group.objects.filter(
+            Q(creator=usuario) | Q(subscriptions=usuario))
+        return base.filter(group__in=mios).order_by('-created_at')[:10]
+
+    # 'recientes' es la vista normal: lo ultimo publicado, como estaba.
+    return base.order_by('-created_at')[:10]
 
 
 def home(request):
     # top_comments y top_groups ya no se calculan aqui: los inyecta
     # apps.catalog.context_processors.hot_topic en todas las vistas.
-    posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
     grupos = topics_group.objects.all()
+
+    # Que se esta viendo. Se lee de la URL (?ver=ayuda) para que la vista
+    # se pueda compartir y para que el buscador del navegador funcione.
+    vista = request.GET.get("ver") or "recientes"
+    if vista not in ("recientes", "ayuda", "mis_grupos"):
+        vista = "recientes"
 
     if request.user.is_authenticated:
         query = request.GET.get("search_post") or request.POST.get("search_post") or ""
@@ -33,26 +166,35 @@ def home(request):
         if query:
             posts = post_model.objects.filter(content__icontains=query)
             posts = posts.filter(parent__isnull=True)
+        else:
+            posts = posts_del_feed(vista, request.user)
 
         return render(request, "catalog/home.html", {
             "grupos": grupos,
             "posts": posts,
+            "vista": vista,
+            # "Mis grupos" solo tiene sentido con sesion iniciada.
+            "puede_ver_mis_grupos": True,
         })
 
     else:
+        posts = posts_del_feed(vista, request.user)
         return render(request, "catalog/home.html", {
             "grupos": grupos,
             "posts": posts,
+            # Sin sesion no hay grupos propios, asi que se cae a "recientes".
+            "vista": vista if vista != "mis_grupos" else "recientes",
+            "puede_ver_mis_grupos": False,
         })
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def eliminate_product(request, product_id):
     product = get_object_or_404(producto, id=product_id)
     product.delete()
     # Antes redirigia a 'catalog:product_list', una URL que no existe.
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def add_group(request):
     if request.method == "POST":
         form = topic_groupForm(request.POST,request.FILES)
@@ -69,18 +211,22 @@ def add_group(request):
     return render(request, "catalog/addGroup.html", {"form": form})
 
 
-@login_required
 def topic_group(request, id):
+    # Se puede VER el grupo sin entrar. Para publicar (que es la parte POST)
+    # hay que iniciar sesion, y eso se comprueba mas abajo.
     print('--------------------DEBUG---------------------')
     form = postForm(request.POST or None)
     
     group = get_object_or_404(topics_group, id=id)
     sections = group.sections.all()
     group_post = group.post.filter(parent__isnull=True).order_by('-created_at')
-    videoform = postVideoForm(request.POST or None, request.FILES or None)
-    imagenform = postImagenForm(request.POST or None, request.FILES or None)
     
     if request.method == 'POST':
+        # Red de seguridad: el decorador ya manda al registro a quien no
+        # tiene cuenta, pero si se llegara aqui con un usuario anonimo
+        # fallaria la clave foranea al guardar el post.
+        if not request.user.is_authenticated:
+            return para_registrarse(request)
         print('--------------------POST REQUEST---------------------')
         if form.is_valid():
             print('--------------------FORM VALID---------------------')
@@ -97,30 +243,19 @@ def topic_group(request, id):
             
             if request.POST.get("ia") == "on":
                 print('--------------------IA REQUEST---------------------')
-                client = Client()
-                output = client.generate(
-                    model="tinyllama",
-                    prompt=f"answer anything youre told: {post.content}",
-                    stream=False,
-                    options={
-                        "num_predict": 100,
-                        "temperature": 0.5,
-                    }
-                )
-                print("output:", output["response"])
-                post.ia_response = output["response"]
-                post.save()
-            if videoform.is_valid() and videoform.cleaned_data.get('video'):
-                video = videoform.save(commit=False)
-                video.post = post
-                video.save()
+                respuesta_ia, error_ia = preguntar_a_la_ia(post.content)
+                if error_ia:
+                    # El post ya quedo guardado; solo faltó la respuesta de la
+                    # IA. Se avisa y se sigue como si nada.
+                    messages.warning(request, error_ia)
+                else:
+                    post.ia_response = respuesta_ia
+                    post.save()
+                    print("output:", respuesta_ia)
 
-            if imagenform.is_valid() and imagenform.cleaned_data.get('imagen'):
-                imagen = imagenform.save(commit=False)
-                imagen.post = post
-                imagen.save()
+            guardar_archivos(post, archivos_del_request(request))
 
-            # Redirect SIEMPRE despues de guardar. Antes solo redirigia cuando
+            # Redirect SIEMPRES despues de guardar. Antes solo redirigia cuando
             # NO habia imagen: al subir una se quedaba en el POST y el
             # navegador volvia a enviar el formulario al recargar.
             return redirect('catalog:topic_group', id=id)
@@ -130,21 +265,19 @@ def topic_group(request, id):
                                                 "sections": sections,
                                                 "posts": group_post,
                                                 "form": form,
-                                                "videoform": videoform,
-                                                "imagenform": imagenform,
                                                 # Un template no puede llamar a un
                                                 # metodo con argumentos, asi que el
                                                 # permiso se resuelve aqui.
                                                 "puede_admin": group.puede_administrar(request.user)
                                                 })
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def eliminate_post(request):
     post_id = request.POST.get("post_id")
     post = get_object_or_404(post_model, id=post_id)
     post.delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def edit_post(request):
     if request.method == "POST":
         post_id = request.POST.get("post_id")
@@ -156,28 +289,29 @@ def edit_post(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def ia_response(request):
-    if request.method == "POST" and request.POST.get("input_text"):
-        print("-------------------------    -------------------------")
-        description = request.POST.get("input_text")
-        print(description)
-        client = Client()
-        output = client.generate(
-            model="tinyllama",
-            prompt=f"answer anything youre told: {description}",
-            stream=False,
-            options={
-                "num_predict": 100,
-                "temperature": 0.5, 
-            }
-        )
-        context={
-            "response": output["response"],
-            "description": description}
-        return render(request, "catalog/ia_response.html", context=context)
+    # Antes, si se llegaba con GET (o sin "input_text") la vista se acababa
+    # sin return y Django respondia con un error 500. Ahora se vuelve a la
+    # pagina de la IA, que es lo que toca.
+    if request.method != "POST" or not request.POST.get("input_text"):
+        return redirect('catalog:ia')
+
+    print("-------------------------    -------------------------")
+    description = request.POST.get("input_text")
+    print(description)
+    response, error = preguntar_a_la_ia(description)
+
+    if error:
+        print("Ollama no respondio:", error)
+        return render(request, "catalog/ia_response.html", {"error": error})
+
+    return render(request, "catalog/ia_response.html", {
+        "response": response,
+        "description": description,
+    })
 
 
-@login_required
 def search_view(request):
+    # Buscar y ver los grupos es publico: no hace falta iniciar sesion.
     best_group = topics_group.objects.order_by('-score')[:5]
     best_user = CustomUser.objects.order_by('-score')[:5]
 
@@ -238,7 +372,7 @@ def search_view_post(request):
             "query": query,
         },
     )
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def rate_group(request):
     group_id = request.GET.get('group_id')
     rate = request.GET.get('rate')
@@ -262,7 +396,7 @@ def rate_group(request):
     redirect_url = request.META.get('HTTP_REFERER', '/')
     return redirect(redirect_url)
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def subscribe(request):
     group_id = request.POST.get('group_id')
     group = get_object_or_404(topics_group, id=group_id)
@@ -279,16 +413,19 @@ def subscribe(request):
     return redirect(f"{reverse('catalog:search_view')}?page={page}")
 
 def obtener_input_video(request):
-    if request.method == "GET":
-        videoform = postVideoForm()
-        return render(request, "catalog/includes/_video_form_input.html", {"videoform": videoform})
+    """Ya no hace falta: el boton de adjuntar es uno solo y no usa htmx.
+
+    Antes este endpoint existia solo para que el boton de video trajera su
+    input con hx-get. Se deja la vista para no romper enlaces viejos, pero
+    devuelve el formulario de archivos nuevo."""
+    return render(request, "catalog/includes/_post_form_card.html", {})
 
 
 # ---------------------------------------------------------------------------
 # Vistas agregadas
 # ---------------------------------------------------------------------------
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def settings_view(request):
     # La plantilla catalog/settings.html ya existia pero no tenia URL ni vista.
     return render(request, "catalog/settings.html")
@@ -310,15 +447,16 @@ def popular(request):
     })
 
 
-@login_required
 def post_detail(request, id):
+    # El post se puede LEER sin entrar. Para responder hace falta sesion.
     # Enlace propio para compartir un post: /post/12/
     post_obj = get_object_or_404(post_model, id=id)
     form = postForm(request.POST or None)
-    imagenform = postImagenForm(request.POST or None, request.FILES or None)
-    videoform = postVideoForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
+        # Red de seguridad, igual que en topic_group.
+        if not request.user.is_authenticated:
+            return para_registrarse(request)
         if form.is_valid():
             respuesta = form.save(commit=False)
             respuesta.user = request.user
@@ -326,15 +464,7 @@ def post_detail(request, id):
             respuesta.parent_id = request.POST.get("parent_id") or post_obj.id
             respuesta.save()
 
-            if imagenform.is_valid() and imagenform.cleaned_data.get('imagen'):
-                imagen = imagenform.save(commit=False)
-                imagen.post = respuesta
-                imagen.save()
-
-            if videoform.is_valid() and videoform.cleaned_data.get('video'):
-                video = videoform.save(commit=False)
-                video.post = respuesta
-                video.save()
+            guardar_archivos(respuesta, archivos_del_request(request))
 
             return redirect("catalog:post_detail", id=id)
 
@@ -342,8 +472,6 @@ def post_detail(request, id):
         "post": post_obj,
         "group": post_obj.group,
         "form": form,
-        "imagenform": imagenform,
-        "videoform": videoform,
     })
 
 
@@ -369,14 +497,12 @@ def topic_section_view(request, group_id, section_id):
     })
 
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def post_in_section(request, group_id, section_id):
     # Publicar directamente dentro de una seccion del grupo.
     group = get_object_or_404(topics_group, id=group_id)
     section = get_object_or_404(group.sections, id=section_id)
     form = postForm(request.POST or None)
-    videoform = postVideoForm(request.POST or None, request.FILES or None)
-    imagenform = postImagenForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
         if form.is_valid():
@@ -387,28 +513,14 @@ def post_in_section(request, group_id, section_id):
             section.posts.add(post_obj)
 
             if request.POST.get("ia") == "on":
-                client = Client()
-                output = client.generate(
-                    model="tinyllama",
-                    prompt=f"answer anything youre told: {post_obj.content}",
-                    stream=False,
-                    options={
-                        "num_predict": 100,
-                        "temperature": 0.5,
-                    }
-                )
-                post_obj.ia_response = output["response"]
-                post_obj.save()
+                respuesta_ia, error_ia = preguntar_a_la_ia(post_obj.content)
+                if error_ia:
+                    messages.warning(request, error_ia)
+                else:
+                    post_obj.ia_response = respuesta_ia
+                    post_obj.save()
 
-            if videoform.is_valid() and videoform.cleaned_data.get('video'):
-                video = videoform.save(commit=False)
-                video.post = post_obj
-                video.save()
-
-            if imagenform.is_valid() and imagenform.cleaned_data.get('imagen'):
-                imagen = imagenform.save(commit=False)
-                imagen.post = post_obj
-                imagen.save()
+            guardar_archivos(post_obj, archivos_del_request(request))
 
             messages.success(request, "Post creado exitosamente.")
             return redirect("catalog:topic_section", group_id=group_id, section_id=section_id)
@@ -417,8 +529,6 @@ def post_in_section(request, group_id, section_id):
         "group": group,
         "section": section,
         "form": form,
-        "videoform": videoform,
-        "imagenform": imagenform,
     })
 
 
@@ -426,7 +536,7 @@ def post_in_section(request, group_id, section_id):
 # CRUD de grupos: editar y eliminar
 # ---------------------------------------------------------------------------
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def edit_group(request, id):
     group = get_object_or_404(topics_group, id=id)
 
@@ -450,7 +560,7 @@ def edit_group(request, id):
     })
 
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def eliminate_group(request, id):
     group = get_object_or_404(topics_group, id=id)
 
@@ -473,7 +583,7 @@ def eliminate_group(request, id):
 # CRUD de secciones
 # ---------------------------------------------------------------------------
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def add_section(request, group_id):
     group = get_object_or_404(topics_group, id=group_id)
 
@@ -496,7 +606,7 @@ def add_section(request, group_id):
     })
 
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def edit_section(request, group_id, section_id):
     group = get_object_or_404(topics_group, id=group_id)
     section = get_object_or_404(group.sections, id=section_id)
@@ -522,7 +632,7 @@ def edit_section(request, group_id, section_id):
     })
 
 
-@login_required
+@sin_cuenta_no_se_puede_actuar
 def eliminate_section(request, group_id, section_id):
     group = get_object_or_404(topics_group, id=group_id)
     section = get_object_or_404(group.sections, id=section_id)

@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const sidebarbutton = document.getElementById('sidebar-btn');
+/* Sidebar del home (la columna lateral del grid) y arreglo de CoreUI.
+
+   El menu lateral que abre el boton de hamburguesa lo maneja sidemenu.js,
+   que se carga en la plantilla base. Este archivo solo se carga en el
+   home, donde el sidebar forma parte del grid. */
+
+function iniciarSidebar() {
     const sidebarElement = document.querySelector('.sidebar');
     if (!sidebarElement) return;
     const ccontainer = document.querySelector('.container-2')
@@ -22,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
        lo unico que hay que hacer es quitarle ese listener. */
     function quitarListenerClicFuera() {
         if (window.innerWidth > ANCHO_SIDEBAR) return;
+        if (typeof coreui === 'undefined') return;
         const inst = coreui.Sidebar.getInstance(sidebarElement);
         if (inst && typeof inst._removeClickOutListener === 'function') {
             inst._removeClickOutListener();
@@ -31,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* En pantallas anchas se crea la instancia de CoreUI, que ahi si hace
        falta para el comportamiento normal del sidebar. */
     function crearSidebarSiHaceFalta() {
-        if (window.innerWidth > ANCHO_SIDEBAR) {
+        if (window.innerWidth > ANCHO_SIDEBAR && typeof coreui !== 'undefined') {
             coreui.Sidebar.getOrCreateInstance(sidebarElement);
         }
     }
@@ -54,10 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
         quitarListenerClicFuera();
     });
 
-    if (sidebarbutton && ccontainer) {
-        sidebarbutton.addEventListener('click', function () {
+    /* El boton que va DENTRO del sidebar (esquina inferior) sigue
+       encogiendo la columna en pantallas anchas. El del navbar lo lleva
+       sidemenu.js. */
+    const botonInterno = document.getElementById('sidebar-btn');
+    if (botonInterno && ccontainer) {
+        botonInterno.addEventListener('click', function () {
             ccontainer.classList.toggle('sidebar-closed');
             sidebarElement.classList.toggle('sidebar-narrow');
         });
     }
-});
+}
+
+/* Igual que en sidemenu.js: si el DOM ya esta listo se arranca ya, para
+   que la hoja llegue tarde (cache) y no se quede sin listener. */
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarSidebar);
+} else {
+    iniciarSidebar();
+}

@@ -9,10 +9,8 @@
    allauth ponen el titulo y el texto fuera del form y no hay forma de
    envolverlos con un bloque de Django sin que el hijo lo pise. */
 
-/* El navbar es fixed y estas paginas no cargan layout.css (que es el que
-   le pone el espacio de arriba), asi que el contenido se metia debajo del
-   navbar y los primeros elementos quedaban tapados. */
-.ccontainer {
+/* El espacio del navbar ya lo pone styles.css en .cccontainer (el de fuera). Antes esta hoja lo repetia en .ccontainer, y como los dos estan anidados el padding se sumaba y el login quedaba con el doble de hueco arriba. Aqui solo se anade 1rem de aire. */
+.cccontainer {
     padding-top: calc(var(--navbar-height) + 1rem);
 }
 

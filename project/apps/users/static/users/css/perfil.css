@@ -51,8 +51,10 @@
     }
 
     .userImagen {
-        width: 100px;
-        height: 100px;
+        /* Antes 100px fijos. Con dvh la foto tambien crece en un
+           telefono mas alto y se achica en uno bajo. */
+        width: min(120px, 14dvh);
+        height: min(120px, 14dvh);
         border-width: 3px;
     }
 

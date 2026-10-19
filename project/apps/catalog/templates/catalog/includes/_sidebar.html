@@ -1,0 +1,156 @@
+{% comment %}
+Menu lateral de la aplicacion.
+
+Antes vivia dentro de home.html, asi que solo existia en el home y en las
+paginas que heredan de el, y solo si el visitante tenia sesion iniciada.
+Ahora lo incluye la plantilla base: es el MISMO menu, pero disponible en
+cualquier pagina y tambien sin iniciar sesion.
+
+Lo abre el boton de hamburguesa del navbar (sidemenu.js).
+{% endcomment %}
+
+<div class="sidebar-velo" data-cerrar-menu></div>
+
+<div class="sidebar border-end h-100">
+	<button id="sidebar-btn"></button>
+	<div class="sidebar-header position-relative"></div>
+
+	<ul class="sidebar-nav sidebar-nav-tree" data-coreui-navigation>
+		<li class="nav-title">descubre</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'catalog:home' %}">
+				<i class="nav-icon cil-speedometer"></i> home
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'catalog:popular' %}">
+				<i class="nav-icon cil-speedometer"></i> popular
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'catalog:add_group' %}">
+				<i class="nav-icon cil-speedometer"></i> start a group
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'catalog:search_view' %}">
+				<i class="nav-icon cil-speedometer"></i> explore
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'users:acounts' %}">
+				<i class="nav-icon cil-speedometer"></i> perfiles
+			</a>
+		</li>
+
+		{% if user.is_authenticated %}
+			{# Los grupos propios solo existen si hay sesion. #}
+			{% if user.created_groups.all or user.subscribed_groups.all %}
+				<li class="nav-item nav-group show">
+					<a class="nav-link nav-group-toggle" href="#">
+						<i class="nav-icon cil-puzzle"></i> mis grupos
+						<span class="nav-group-toggle-indicator">
+							<i class="icon icon-sm cil-paperclip show"></i>
+							<i class="icon icon-sm cil-plus hide"></i>
+						</span>
+					</a>
+					<ul class="nav-group-items compact">
+						{% for i in user.created_groups.all %}
+							<li class="nav-item">
+								<a class="nav-link d-flex align-items-center gap-2" href="{% url 'catalog:topic_group' i.id %}">
+									{% if i.imagen %}
+										<img src="{{ i.imagen.url }}" class="nav-img" alt="{{ i.nombre }}">
+									{% elif i.imagen_url %}
+										<img src="{{ i.imagen_url }}" class="nav-img" alt="{{ i.nombre }}">
+									{% else %}
+										<div class="nav-img nav-img-placeholder">SM</div>
+									{% endif %}
+									<span>{{ i.nombre }}</span>
+								</a>
+							</li>
+						{% endfor %}
+
+						{% for i in user.subscribed_groups.all %}
+							<li class="nav-item">
+								<a class="nav-link d-flex align-items-center gap-2" href="{% url 'catalog:topic_group' i.id %}">
+									{% if i.imagen %}
+										<img src="{{ i.imagen.url }}" class="nav-img" alt="{{ i.nombre }}">
+									{% elif i.imagen_url %}
+										<img src="{{ i.imagen_url }}" class="nav-img" alt="{{ i.nombre }}">
+									{% else %}
+										<div class="nav-img nav-img-placeholder">SM</div>
+									{% endif %}
+									<span>{{ i.nombre }}</span>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</li>
+			{% endif %}
+		{% endif %}
+	</ul>
+
+	<div class="sidebar-footer">
+		{% if user.is_authenticated %}
+			<div class="dropdown dropend w-100">
+				<a class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button"
+					data-coreui-toggle="dropdown" aria-expanded="false">
+					<div class="avatar avatar-md">
+						<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">
+					</div>
+					<div class="small text-start d-sidebar-narrow-none">
+						<div class="fw-semibold">{{ user.username }}</div>
+						<div>{{ user.email }}</div>
+					</div>
+					<i class="nav-icon cil-options ms-auto d-sidebar-narrow-none"></i>
+				</a>
+				<ul class="dropdown-menu w-100">
+					<li>
+						<div class="d-flex gap-2 px-2">
+							<div class="avatar avatar-md">
+								<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">
+							</div>
+							<div class="small text-start">
+								<div class="fw-semibold">{{ user.username }}</div>
+								<div>{{ user.email }}</div>
+							</div>
+						</div>
+					</li>
+					<li><hr class="dropdown-divider" /></li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'users:Perfil' user.id %}">
+							<i class="cil-user"></i>Account</a>
+					</li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'catalog:ia' %}">
+							<i class="cil-robot"></i>Asistente IA</a>
+					</li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'catalog:settings' %}">
+							<i class="cil-settings"></i>Settings</a>
+					</li>
+					<li><hr class="dropdown-divider" /></li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'users:logout' %}">
+							<i class="cil-account-logout"></i>Logout</a>
+					</li>
+				</ul>
+			</div>
+		{% else %}
+			{# Sin sesion se ofrecen las dos puertas de entrada, en vez de un menu de usuario que no se puede abrir. #}
+			<div class="d-flex flex-column gap-1">
+				<a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:login' %}">
+					<i class="cil-account-login"></i> Iniciar Sesión
+				</a>
+				<a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:singup' %}">
+					<i class="cil-user-follow"></i> Registrarse
+				</a>
+			</div>
+		{% endif %}
+	</div>
+</div>

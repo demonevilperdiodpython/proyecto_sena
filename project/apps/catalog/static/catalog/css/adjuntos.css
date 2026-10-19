@@ -1,0 +1,220 @@
+/* ===========================================================================
+   ADJUNTOS DE LOS POSTS
+
+   Un solo boton para imagen, video o lo que sea, y todos descargables.
+   =========================================================================== */
+
+/* El boton de adjuntar. Antes medía 38px, por debajo del minimo para el
+   dedo, asi que se sube a 44 igual que los demas controles. */
+.btn-adjuntar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.btn-adjuntar svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* La lista de archivos elegidos, antes de publicar */
+.lista-archivos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    width: 100%;
+    margin-top: .5rem;
+}
+
+.lista-archivos[hidden] {
+    display: none;
+}
+
+.archivo-lista-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .35rem .5rem;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--primary-color-dark) 45%, transparent);
+    font-size: .85rem;
+}
+
+.archivo-nombre {
+    flex: 1;
+    min-width: 0;
+    /* Los nombres largos se cortan con puntos suspensivos en vez de
+       romper la linea y descuadrar el boton de quitar. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--font-primary-black);
+}
+
+.archivo-peso {
+    flex-shrink: 0;
+    color: var(--font-primary-black-light);
+    font-size: .8rem;
+}
+
+/* Quitar un archivo de la lista. 44px es el minimo tactil del proyecto. */
+.archivo-quitar {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 45%, transparent);
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+    color: var(--font-primary-black);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .2s ease, transform .15s ease;
+}
+
+.archivo-quitar:hover {
+    background: #e35555;
+    border-color: #e35555;
+    color: #fff;
+}
+
+.archivo-quitar:active {
+    transform: scale(.92);
+}
+
+/* ===========================================================================
+   LOS ARCHIVOS YA PUBLICADOS
+   =========================================================================== */
+
+.archivo-post {
+    margin-top: .75rem;
+}
+
+.archivo-post .image-container-img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(500px, 62dvh);
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+/* Imagen suelta: el enlace descarga la imagen al pulsarla */
+.archivo-post a:has(> .image-container-img) {
+    display: block;
+}
+
+.archivo-descargar {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-top: .35rem;
+    min-height: 36px;
+    padding: .2rem .5rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+    color: var(--accent-text);
+    font-size: .82rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.archivo-descargar:hover {
+    background: color-mix(in srgb, var(--primary-color) 32%, transparent);
+}
+
+/* Caja de descarga para lo que no es imagen ni video (pdf, zip, docx...) */
+.archivo-caja {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    min-height: 56px;
+    padding: .6rem .75rem;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--primary-color-dark) 40%, transparent);
+    color: var(--font-primary-black);
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.archivo-caja:hover {
+    background: color-mix(in srgb, var(--primary-color) 20%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 60%, transparent);
+    transform: translateY(-2px);
+}
+
+.archivo-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--primary-color) 22%, transparent);
+    color: var(--primary-color);
+}
+
+.archivo-icono svg {
+    width: 18px;
+    height: 18px;
+}
+
+.archivo-datos {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.archivo-datos .archivo-nombre {
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+.archivo-datos .archivo-peso {
+    font-size: .78rem;
+}
+
+.archivo-boton {
+    flex-shrink: 0;
+    padding: .3rem .7rem;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: var(--primary-color-darker);
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+/* ===========================================================================
+   CELULAR
+   =========================================================================== */
+@media (max-width: 700px) {
+    .archivo-caja {
+        flex-wrap: wrap;
+    }
+
+    /* En angosto el boton "Descargar" baja a su propia linea en vez de
+       dejar el nombre en un espacio diminuto. */
+    .archivo-boton {
+        width: 100%;
+        text-align: center;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .archivo-lista-item {
+        font-size: .82rem;
+    }
+}

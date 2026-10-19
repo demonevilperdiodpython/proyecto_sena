@@ -81,24 +81,11 @@ class Migration(migrations.Migration):
                 ('post', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='imagenes', to='catalog.post')),
             ],
         ),
-        migrations.CreateModel(
-            name='postvideo',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('video', models.FileField(blank=True, null=True, upload_to='catalog/post/videos', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['mp4', 'avi', 'mov'])])),
-                ('tittle', models.CharField(blank=True, help_text='Optional title for the video', max_length=200)),
-                ('post', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='videos', to='catalog.post')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='postimagen',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('imagen', models.ImageField(blank=True, null=True, upload_to='catalog/post/imagenes/')),
-                ('tittle', models.CharField(blank=True, help_text='Optional title for the image', max_length=200)),
-                ('post', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='imagenes', to='catalog.post')),
-            ],
-        ),
+        # A partir de aqui se repetian los CreateModel de 'postvideo' y
+        # 'postimagen' una segunda vez. En la base vieja no se notaba porque
+        # estas migraciones ya estaban marcadas como aplicadas; pero en una
+        # base nueva fallaba con "table catalog_postvideo already exists" y
+        # no dejaba ni empezar. Se quitaron los duplicados.
         migrations.AddField(
             model_name='post',
             name='group',

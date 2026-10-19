@@ -37,6 +37,41 @@
             {% endif %}
 
             <div>
+                {# Archivos nuevos (cualquier tipo, los que se hayan subido). Los antiguos de abajo, imagen y video, se siguen mostrando para no perder lo ya publicado. #}
+                {% for adjunto in i.archivos.all %}
+                    <div class="archivo-post">
+                        {% if adjunto.tipo == 'imagen' %}
+                            <a href="{{ adjunto.archivo.url }}" download="{{ adjunto.nombre }}">
+                                <img class="image-container-img" src="{{ adjunto.archivo.url }}" alt="{{ adjunto.nombre }}" loading="lazy" />
+                            </a>
+                        {% elif adjunto.tipo == 'video' %}
+                            <div class="video-container">
+                                <video controls preload="metadata" style="max-width: 100%;">
+                                    <source src="{{ adjunto.archivo.url }}" />
+                                    Tu navegador no reproduce este video.
+                                </video>
+                            </div>
+                            <a class="archivo-descargar" href="{{ adjunto.archivo.url }}" download="{{ adjunto.nombre }}">
+                                Descargar video ({{ adjunto.peso_legible }})
+                            </a>
+                        {% else %}
+                            <a class="archivo-caja" href="{{ adjunto.archivo.url }}" download="{{ adjunto.nombre }}">
+                                <span class="archivo-icono" aria-hidden="true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 9.5z" />
+                                        <path d="M9.5 1.5V5a1 1 0 0 0 1 1h3.5z" fill="#fff" opacity=".55" />
+                                    </svg>
+                                </span>
+                                <span class="archivo-datos">
+                                    <span class="archivo-nombre">{{ adjunto.nombre }}</span>
+                                    <span class="archivo-peso">{{ adjunto.peso_legible }}</span>
+                                </span>
+                                <span class="archivo-boton">Descargar</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
                 {% for video in i.videos.all %}
                     {% if video.tittle %}<p style="font-weight: 600; margin-top: 0.5rem;">{{ video.tittle }}</p>{% endif %}
                     {% if video.video %}

@@ -29,8 +29,7 @@
 
 {% block show_post %}
 <div class="pd-contenido">
-    {# El post principal: sin desplegable de comentarios, porque las respuestas
-       ya se listan abajo. Sus hijos sí los traen para poder responderles. #}
+    {# El post principal: sin desplegable de comentarios, porque las respuestas ya se listan abajo. Sus hijos sí los traen para poder responderles. #}
     <div class="pd-post-principal">
         {% include 'catalog/includes/_post_card.html' with i=post ocultar_respuestas=True %}
     </div>
@@ -46,8 +45,7 @@
 
         {% if request.user.is_authenticated %}
             <div class="pd-form-respuesta">
-                {# Se pasa i=post para que parent_id quede informado: sin esto el
-                   comentario se guardaba sin padre. #}
+                {# Se pasa i=post para que parent_id quede informado: sin esto el comentario se guardaba sin padre. #}
                 {% include 'catalog/includes/_post_form_card.html' with i=post %}
             </div>
         {% else %}

@@ -29,7 +29,8 @@
     flex-direction: row;
     transition: 0.4s all ease-out;
     border-radius: 15px;
-    height: 200px;
+    /* Antes 200px fijos: la tarjeta crece con el alto de la pantalla. */
+    height: clamp(180px, 24dvh, 280px);
     width: 100%;
     box-sizing: border-box;
 }

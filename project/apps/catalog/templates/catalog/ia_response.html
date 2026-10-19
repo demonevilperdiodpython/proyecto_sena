@@ -1,7 +1,10 @@
 <div id="response">
-  
-
+   
+  {% if error %}
+  <p class="ia-error">{{ error }}<p>
+  {% else %}
   <p>response{{ response|linebreaks }}<p>
+  {% endif %}
 
 </div>
 

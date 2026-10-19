@@ -24,6 +24,22 @@
         <p class="error" style="margin-top: 0.5rem;">{{ error }}</p>
     {% endif %}
 
+    {% comment %}
+    Ingreso con Google, Discord y GitHub. OCULTO a pedido. Ademas de no
+    usarse, Discord y GitHub eran enlaces vacios (href="#"), y el de Google
+    apuntaba a /accounts/google/login/, que no tiene ningun proveedor
+    configurado en el proyecto: los tres dan error.
+
+    OJO 1: esto tiene que ser un bloque comment, no un {# ... #}. Django
+    tokeniza sin DOTALL, asi que un {# ... #} de varias lineas se imprime
+    tal cual en la pagina.
+
+    OJO 2: no escribir aqui dentro la palabra "endcomment" con llaves, porque
+    cierra el bloque antes de tiempo y la pagina se cae con un error 500.
+    Ese es justamente el error que hubo la primera vez.
+
+    Para volver a mostrarlos: borrar este bloque y su cierre, de abajo.
+
     <div class="conatiner-container-acount">
         <a id="google_login" href="/accounts/google/login/">Iniciar sesión con Google</a>
     </div>
@@ -36,6 +52,7 @@
             <a href="#">GitHub</a>
         </div>
     </div>
+{% endcomment %}
 </div>
 </form>
 {% endblock %}

@@ -1,0 +1,96 @@
+/* ===========================================================================
+   PESTANAS DEL FEED
+
+   En vez de Hot / New / Top (que en Reddit es solo ordenar por popularidad),
+   aqui se ofrece lo que le sirve a un grupo de estudio: lo que lleva tiempo
+   esperando respuesta y lo que pasa en tus propios grupos.
+   =========================================================================== */
+
+.feed-pestanas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--primary-color-dark) 30%, transparent);
+}
+
+.feed-pestana {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* Zona tactil de 44px, el minimo para no fallar el toque */
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--font-primary-black);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.feed-pestana:hover {
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+    color: var(--accent-text);
+}
+
+/* La pestana activa: recuadrada y con fondo, para saber de un vistazo que
+   vista se esta viendo sin depender solo del color. */
+.feed-pestana.activa {
+    background: color-mix(in srgb, var(--primary-color) 26%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 55%, transparent);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.feed-pestana.activa:hover {
+    background: color-mix(in srgb, var(--primary-color) 34%, transparent);
+}
+
+.feed-pestana:focus-visible {
+    outline: 3px solid var(--accent-text);
+    outline-offset: 2px;
+}
+
+/* El aviso "sin respuesta" de la segunda pestana. */
+.feed-pestana-ayuda {
+    padding: 0.1rem 0.45rem;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--primary-color) 22%, transparent);
+    color: var(--primary-color);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+/* ===========================================================================
+   CELULAR
+   Las pestanas caben en una fila a 390px, pero con tres y con textos largos
+   se van a dos. Se dejan igual de anchas para que se lean completas.
+   =========================================================================== */
+@media (max-width: 700px) {
+    .feed-pestanas {
+        gap: 0.3rem;
+        padding: 0.2rem;
+    }
+
+    .feed-pestana {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0.5rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    /* El chip "sin respuesta" es redundante con el propio titulo de la
+       pestana y en 375px empujaba la barra a dos filas. En la pantalla
+       grande si cabe y queda, porque ahi aporta info. */
+    .feed-pestana-ayuda {
+        display: none;
+    }
+}

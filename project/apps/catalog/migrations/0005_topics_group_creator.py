@@ -4,6 +4,15 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+    """Esta migracion no hace nada: queda solo como punto de la cadena.
+
+    El campo topics_group.creator ya lo anade la migracion 0003
+    (0003_post_dislikes_post_likes_topics_group_creator). Al repetirlo aqui,
+    una base de datos nueva fallaba con "duplicate column name: creator_id"
+    y no dejaba empezar. En la base vieja no se notaba porque 0005 ya
+    estaba marcada como aplicada.
+
+    No se borra el archivo porque 0006 depende de ella."""
 
     dependencies = [
         ('catalog', '0004_topics_group_descripcion'),
@@ -11,15 +20,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='topics_group',
-            name='creator',
-            field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name='created_groups',
-                to=settings.AUTH_USER_MODEL,
-            ),
-        ),
+        # El campo 'creator' ya lo agrega la migracion 0003 (ver el
+        # docstring de la clase). Aqui no se repite.
     ]

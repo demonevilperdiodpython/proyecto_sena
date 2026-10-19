@@ -87,7 +87,8 @@
 }
 
 .ia-respuesta {
-    min-height: 120px;
+    /* Antes 120px fijos: la caja de la respuesta crece con la pantalla. */
+    min-height: clamp(120px, 16dvh, 220px);
     padding: 1rem 1.25rem;
     border-radius: 16px;
     border: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
@@ -104,6 +105,13 @@
 
 .ia-vacio {
     opacity: 0.6;
+}
+
+/* Aviso de que la IA no respondio (Ollama apagado, por ejemplo). */
+.ia-error {
+    color: #ff9a9a;
+    border-left: 3px solid #ff6b6b;
+    padding-left: 0.75rem;
 }
 
 @media (max-width: 700px) {

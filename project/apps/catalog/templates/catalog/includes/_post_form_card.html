@@ -1,3 +1,4 @@
+{% load adjuntos %}
 <div class="post-form-card">
     <form method="post" class="post-form" enctype="multipart/form-data">
         <div class="form-input-container-1">
@@ -5,41 +6,46 @@
                 {{ field }}
                 {{ field.errors }}
             {% endfor %}
-            <label class="ia-checkbox-wrapper">
-                <input type="checkbox" name="ia" value="on"> 🤖 Consultar Asistente IA
-            </label>
+            {% comment %}
+        Boton de "Consultar Asistente IA". OCULTO a pedido: mientras no haya
+        un modelo descargado, marcar la casilla no hacia nada y ademas tiraba
+        un error 500 al publicar.
+
+        OJO 1: esto tiene que ser un bloque comment, no un {# ... #}. Django
+        tokeniza sin DOTALL, asi que un {# ... #} de varias lineas se imprime
+        tal cual en la pagina.
+
+        OJO 2: no escribir aqui dentro la palabra "endcomment" con llaves,
+        porque cierra el bloque antes de tiempo y la pagina se cae con un
+        error 500.
+
+        Para volver a mostrarlo: borrar este bloque y su cierre, de abajo.
+
+        <label class="ia-checkbox-wrapper">
+            <input type="checkbox" name="ia" value="on"> 🤖 Consultar Asistente IA
+        </label>
+    {% endcomment %}
             <input type="hidden" name="parent_id" value="{{ i.id }}">
         </div>
         <div class="form-input-container-2">
             {% csrf_token %}
+            {# Un solo boton para todos los archivos. Antes habia dos, uno de imagen y otro de video, y cada uno aceptaba un archivo. El input va oculto y con multiple, asi que el navegador deja marcar cuantos se quiera. Sin accept: se sube cualquier tipo. #}
             <div class="media-upload-btns">
-                <div>
-                    {{ imagenform }}
-                    <button
-                        type="button"
-                        class="btn-custom"
-                        title="Adjuntar Imagen"
-                        onclick="this.closest('form').querySelector('input[type=file]').click()"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="video-form-container">
-                    {{ videoform }}
-                    <button
-                        type="button"
-                        class="btn-custom"
-                        title="Adjuntar Video"
-                        onclick="this.closest('form').querySelector('.form-control-video, input[type=file]').click()"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M6 5.883a.5.5 0 0 1 .757-.429l3.528 2.117a.5.5 0 0 1 0 .858l-3.528 2.117a.5.5 0 0 1-.757-.43V5.884z" />
-                        </svg>
-                    </button>
-                </div>
+                {% input_archivos %}
+                <button
+                    type="button"
+                    class="btn-custom btn-adjuntar"
+                    title="Adjuntar archivos"
+                    aria-label="Adjuntar archivos"
+                    data-abrir-archivos
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z" />
+                    </svg>
+                </button>
+                {# Los archivoschosen se muestran aqui, antes de publicar. #}
+                <ul class="lista-archivos" data-lista-archivos hidden></ul>
             </div>
             <button type="submit" class="btn-publish">Publicar</button>
         </div>
