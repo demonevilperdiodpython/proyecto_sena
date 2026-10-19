@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
+from django.contrib import messages
 from .forms import CustomAuthenticationForm as AuthenticationForm
 from django.shortcuts import redirect
 from django.contrib.auth import login
@@ -95,13 +96,19 @@ def Register_view(request):
     return response
 
 def acounts_view(request):
-    if request.method == 'GET': 
-        device_id = request.COOKIES.get("device_id")
-        ip= get_client_ip(request)
-        user_agent= request.META.get('HTTP_USER_AGENT','')
-        userssessions = UserSession.objects.filter(ip_address = ip, user_agent= user_agent, device_id=device_id, is_active=True)
-        response = render(request, 'users/acounts.html', {"ingresed_users": userssessions})
-        return response
+    # DESHABILITADA a pedido. Esta pagina no la lista de usuarios: es la de
+    # las SESIONES ABIERTAS, y filtra por la misma IP + navegador + equipo, o
+    # sea que theoretically solo mostraba cuentas abiertas en este mismo
+    # dispositivo.
+    #
+    # No se borra ni la vista ni la plantilla (users/acounts.html): se deja
+    # el codigo ahi y solo se impide entrar. Para volver a habilitarla:
+    # 1) quitar el return de abajo,
+    # 2) devolver los enlaces del navbar y del menu lateral
+    #    (templates/plantilla.html y apps/catalog/templates/
+    #     catalog/includes/_sidebar.html).
+    messages.info(request, "La pagina de sesiones quedo deshabilitada.")
+    return redirect('catalog:home')
 
 def perfil_view(request, id):
     # Antes ignoraba el id y siempre mostraba el perfil de quien visita.
@@ -180,6 +187,34 @@ def eliminate_user_session_view(request, user_id):
         return response
     return redirect('users:acounts')
 def log_in_with_user_view(request):
+    # DESHABILITADA a pedido.
+    #
+    # Esta vista iniciaba sesion como la cuenta que se le pidiera, SIN
+    # preguntar la contrasena: armaba el AuthenticationForm solo con el
+    # nombre y, si era valido, hacia login. O sea que un POST a
+    # /acounts/loginwith con "user=laura" entraba como Laura. No es un
+    # forgot de una cuenta: es entrar a cualquier cuenta.
+    #
+    # Antes solo se llegaba desde la pagina de sesiones, que ademas exigia
+    # tener abierta la cuenta en ese mismo dispositivo; esa pagina ya quedo
+    # deshabilitada. Aqui se cierra tambien la ruta, que si no se quedaba
+    # viva con solo saber la direccion.
+    #
+    # No se borra la vista ni su URL, pero el codigo que hacia el login se
+    #Alejandro al final de este archivo, en log_in_with_user_view_original(),
+    # para poder recuperarlo. Si se rehabilita, hay que pedir ademas la
+    # contrasena del usuario.
+    messages.info(request, "La entrada con otra cuenta quedo deshabilitada.")
+    return redirect('catalog:home')
+
+
+def log_in_with_user_view_original(request):
+    """Codigo de la entrada con otra cuenta. NO SE USA.
+
+    Esta es la version que estaba antes de deshabilitarla. Se conserva aqui
+    como referencia. OJO: tal como esta, deja entrar sin contrasena, asi que
+    no volver a conectarla sin arreglarlo antes.
+    """
     username = request.GET.get('user')
     if request.method == 'POST':
         username = request.POST.get('user')

@@ -42,11 +42,16 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 			</a>
 		</li>
 
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'users:acounts' %}">
-				<i class="nav-icon cil-speedometer"></i> perfiles
-			</a>
-		</li>
+		{% comment %}
+    Enlace "perfiles" quitado: la vista acounts_view quedo deshabilitada
+    (ver apps/users/views.py). Para volver a ponerlo, descomentar el <li> de abajo.
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users:acounts' %}">
+            <i class="nav-icon cil-speedometer"></i> perfiles
+        </a>
+    </li>
+{% endcomment %}
 
 		{% if user.is_authenticated %}
 			{# Los grupos propios solo existen si hay sesion. #}

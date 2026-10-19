@@ -1,7 +1,8 @@
 {% extends "plantilla.html" %}
 
 {% block title %}Plantilla de Usuarios{% endblock %}
-{%load  static%}
+{# OJO: este comentario tiene que quedar en UNA sola linea. Django tokeniza sin DOTALL, asi que un {# ... #} de varias lineas se imprime en la pagina. #}
+{% load  static%}
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'users/css/accounts.css' %}">
 {% endblock %}

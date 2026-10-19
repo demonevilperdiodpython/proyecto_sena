@@ -60,7 +60,8 @@
                     <a href="{% url 'users:login' %}" class="nav-action-link">Iniciar Sesión</a>
                     <a href="{% url 'users:singup' %}" class="nav-action-link">Registrarse</a>
                 {% endif %}
-                <a href="{% url 'users:acounts' %}" class="nav-action-link">Perfiles</a>
+                {# Enlace "Perfiles" quitado: la vista acounts_view quedo deshabilitada (ver apps/users/views.py). Para volver a ponerlo, descomentar esta linea. #}
+                {# <a href="{% url 'users:acounts' %}" class="nav-action-link">Perfiles</a> #}
                 <div class="boton-tema-inline">
                     <button id="modo">🌙</button>
                 </div>
