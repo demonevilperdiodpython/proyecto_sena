@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <!-- IMPORTANTE: sin esta etiqueta el celular asume una pantalla de
+             980px de ancho y escala TODO hacia abajo (se ve chiquitito) y
+             ademas las media queries de movil (max-width: 700px, etc.)
+             nunca se activan, porque se miden contra 980px.
+             Con esto el ancho real es el del celular. -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Plantilla Base{% endblock %}</title>
         {% load static %}
 

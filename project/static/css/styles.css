@@ -57,10 +57,23 @@
   --alto-portada: clamp(420px, 62dvh, 860px);
   --alto-miniatura: clamp(150px, 20dvh, 300px);
   --alto-escritura: clamp(90px, 14dvh, 190px);
-  /* Tamano de las fotos de perfil y de avatar, relativo al ancho. */
-  --tam-avatar: min(140px, 38vw);
-  --tam-avatar-mini: min(64px, 15vw);
-  --tam-avatar-pequeno: min(44px, 11vw);
+  /* Alturas de las tarjetas del landing (antes fijas en 380px y 220px, que
+     en un telefono alto se veian chiquitas). */
+  --alto-tarjeta: clamp(320px, 46dvh, 520px);
+  --alto-media: clamp(190px, 28dvh, 320px);
+  --alto-mini-tarjeta: clamp(150px, 22dvh, 240px);
+  /* Tamano de las fotos de perfil y de avatar.
+
+     Cada uno se mide contra el ancho (vw) Y contra el alto (dvh) de la
+     pantalla, y se queda con el MAS PEQUEÑO de los dos. Medirlo solo
+     contra el ancho era el problema: en un telefono mas alto la foto
+     seguia igual de chica, porque el ancho no habia cambiado.
+
+     El min() contra el ancho evita que la foto se salga de la tarjeta, y
+     el min() contra el alto evita que se salga de la pantalla. */
+  --tam-avatar: min(140px, 38vw, 34dvh);
+  --tam-avatar-mini: min(64px, 15vw, 12dvh);
+  --tam-avatar-pequeno: min(44px, 11vw, 7dvh);
   /* Colores de los campos de formulario (inputs, selects, textareas).
 
      El campo tiene que verse como una CAJA encima de la tarjeta, asi que se
@@ -167,6 +180,10 @@ body {  background: var(--primary-color-darker);
   color: var(--font-primary-black);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   min-height: 100%;
+  /* Los telefonos con muesca (notch) o bordes curvos recortan una franja.
+     env() vale 0px en los que no la tienen, asi que no cambia nada alla. */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -599,11 +616,17 @@ a, a:link, a:visited, a:hover, a:active {
     --alto-portada: clamp(470px, 68dvh, 900px);
     --alto-miniatura: clamp(175px, 25dvh, 330px);
     --alto-escritura: clamp(105px, 17dvh, 220px);
-    /* Las fotos se agrandan: en vertical hay mucho mas ancho disponible
-       que en horizontal y si no quedan chiquenitas. */
-    --tam-avatar: min(200px, 55vw);
-    --tam-avatar-mini: min(78px, 19vw);
-    --tam-avatar-pequeno: min(52px, 13vw);
+    --alto-tarjeta: clamp(360px, 52dvh, 620px);
+    --alto-media: clamp(230px, 32dvh, 380px);
+    --alto-mini-tarjeta: clamp(175px, 25dvh, 290px);
+    /* Las fotos se agrandan: en vertical hay alto de sobra y si no quedan
+       chiquenitas. El min() contra el ancho las mantiene dentro de la
+       tarjeta, y el de arriba contra el alto las mantiene en pantalla.
+         - Telefono bajo y angosto (360x800): manda el ancho.
+         - Telefono alto y angosto (430x932): mandan las dos, y crecen. */
+    --tam-avatar: min(260px, 62vw, 30dvh);
+    --tam-avatar-mini: min(92px, 20vw, 11dvh);
+    --tam-avatar-pequeno: min(58px, 13vw, 7dvh);
   }
 }
 

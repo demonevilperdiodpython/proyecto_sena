@@ -269,3 +269,26 @@
         align-items: flex-start;
     }
 }
+
+/* ===========================================================================
+   DISPOSITIVOS EN VERTICAL (celular y tablet en portrait)
+   En vertical la pantalla es alta, asi que la tarjeta del formulario crece
+   con ella. Antes su alto era el justo que ocupaba el contenido (541px), y
+   en un telefono alto eso es menos de la mitad de la pantalla: la tarjeta
+   se veía perdida en el medio con mucho fondo vacio abajo.
+
+   El min() entre porcentaje y pixeles la limita en pantallas normales para
+   que no se vuelva enorme en una tablet.
+   =========================================================================== */
+@media (orientation: portrait) {
+    .container-2 {
+        min-height: min(72dvh, 680px);
+        justify-content: center;
+    }
+
+    /* La tarjeta de la foto (la segunda del registro) no necesita ser tan
+       alta: se le deja solo lo que ocupaba, para no dejar un hueco. */
+    .register .container-2:has(.imagen-selecter) {
+        min-height: min(58dvh, 560px);
+    }
+}
