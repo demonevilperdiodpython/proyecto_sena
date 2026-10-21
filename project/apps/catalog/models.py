@@ -1,3 +1,4 @@
+import functools
 import os
 import uuid
 
@@ -7,7 +8,7 @@ from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 
 
-def ruta_con_fecha(carpeta):
+def subir(instance, filename, carpeta):
     """Genera 'carpeta/2026/10/12/nombre-aleatorio.jpg'.
 
     Django no sobreescribe: si el archivo ya existe le pega un sufijo
@@ -15,12 +16,26 @@ def ruta_con_fecha(carpeta):
     una copia nueva. Con un nombre aleatorio cada subida es un archivo
     unico y las subdirectorios por fecha evitan meter miles de archivos
     en una sola carpeta.
+
+    Esta a nivel de modulo y no como closure dentro de otra funcion
+    porque Django solo sabe escribir en un archivo de migracion las
+    funciones cuyo __qualname__ NO lleva '<locals>'. Con la closure,
+    'makemigrations' reventaba con:
+        ValueError: Could not find function subir in apps.catalog.models
     """
-    def subir(instance, filename):
-        extension = os.path.splitext(filename)[1].lower()
-        fecha = timezone.now().strftime("%Y/%m/%d")
-        return f"{carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
-    return subir
+    extension = os.path.splitext(filename)[1].lower()
+    fecha = timezone.now().strftime("%Y/%m/%d")
+    return f"{carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
+
+
+def ruta_con_fecha(carpeta):
+    """Devuelve el upload_to que guarda en subcarpetas por fecha.
+
+    Se usa functools.partial porque Django si sabe serializarlo en las
+    migraciones (functools.partial + una funcion de modulo), y asi el
+    modelo y las migraciones siguen viendo exactamente el mismo valor.
+    """
+    return functools.partial(subir, carpeta=carpeta)
 
 
 class producto(models.Model):
@@ -88,7 +103,11 @@ class post(models.Model):
     updated_at = models.DateTimeField(auto_now_add= True)
     group = models.ForeignKey('topics_group', on_delete=models.CASCADE, related_name='post', blank = True, null=True)
     ia_response= models.TextField(blank=True, null=True)
-    
+    # related_name propio: 'liked_groups'/'disliked_groups' ya lo usan
+    # topics_group (revisar dos M2M al mismo modelo con el mismo
+    # related_name_revira fields.E304/E305).
+    likes = models.ManyToManyField('users.customuser', related_name='liked_posts', blank=True)
+    dislikes = models.ManyToManyField('users.customuser', related_name='disliked_posts', blank=True)
     parent = models.ForeignKey('self',null=True,on_delete=models.CASCADE, blank=True, related_name="children")
     
     

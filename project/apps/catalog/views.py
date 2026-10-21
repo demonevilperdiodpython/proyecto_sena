@@ -243,7 +243,7 @@ def rate_group(request):
     group_id = request.GET.get('group_id')
     rate = request.GET.get('rate')
     group = get_object_or_404(topics_group, id=group_id)
-
+    user_id = request.GET.get("user", id=id)
     # Dar like otra vez quita el like (toggle), en vez de sumar siempre.
     if rate == 'like':
         if request.user in group.likes.all():
