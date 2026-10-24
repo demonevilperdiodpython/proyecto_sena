@@ -916,6 +916,8 @@ body.menu-abierto .toggle-btn .line:nth-child(3) {
 
 .flash-success { border-left-color: #22c55e; }
 .flash-error { border-left-color: #e35555; }
+.flash-warning { border-left-color: #f59e0b; }
+.flash-info { border-left-color: #3b82f6; }
 
 @keyframes flashIn {
   from { opacity: 0; transform: translateX(30px); }
@@ -925,6 +927,61 @@ body.menu-abierto .toggle-btn .line:nth-child(3) {
 @media (max-width: 700px) {
   .flash-container { right: 0.6rem; left: 0.6rem; max-width: none; }
 }
+
+/* ===========================================================================
+   AVISOS DE ERROR EN FORMULARIOS
+   =========================================================================== */
+.form-error-box {
+  background: color-mix(in srgb, #e35555 12%, var(--containers-primary));
+  border: 1px solid color-mix(in srgb, #e35555 45%, transparent);
+  border-left: 4px solid #e35555;
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--font-primary-black);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  animation: flashIn 0.25s ease;
+}
+
+.form-error-box .error-msg-title {
+  font-weight: 700;
+  color: #e35555;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.form-error-box .error-msg {
+  margin: 0.25rem 0;
+  color: var(--font-primary-black);
+  line-height: 1.45;
+  font-size: 0.88rem;
+}
+
+/* Django errorlist */
+ul.errorlist {
+  list-style: none;
+  padding: 0.45rem 0.75rem;
+  margin: 0.35rem 0 0.5rem 0;
+  border-radius: 8px;
+  background: color-mix(in srgb, #e35555 10%, transparent);
+  border-left: 3px solid #e35555;
+  color: #e35555;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+ul.errorlist li {
+  margin: 0.15rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.post-error-box {
+  margin: 0.6rem 0;
+}
+
 
 .search-options {
   display: flex;

@@ -3,25 +3,25 @@ import uuid
 import mimetypes
 
 from django.db import models
+from django.conf import settings
 from apps.users.models import customuser as user
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 
 
-def ruta_con_fecha(carpeta):
-    """Genera 'carpeta/2026/10/12/nombre-aleatorio.jpg'.
+from django.utils.deconstruct import deconstructible
 
-    Django no sobreescribe: si el archivo ya existe le pega un sufijo
-   ('_aB3xY9z'), y como el campo nunca se limpia, cada reintento dejaba
-    una copia nueva. Con un nombre aleatorio cada subida es un archivo
-    unico y las subdirectorios por fecha evitan meter miles de archivos
-    en una sola carpeta.
-    """
-    def subir(instance, filename):
+
+@deconstructible
+class ruta_con_fecha:
+    def __init__(self, carpeta):
+        self.carpeta = carpeta
+
+    def __call__(self, instance, filename):
         extension = os.path.splitext(filename)[1].lower()
         fecha = timezone.now().strftime("%Y/%m/%d")
-        return f"{carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
-    return subir
+        return f"{self.carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
+
 
 
 class producto(models.Model):
@@ -59,6 +59,8 @@ class topics_group(models.Model):
         # Asi el score siempre refleja el estado real sin desajustarse.
         self.score = self.likes.count() - self.dislikes.count() + (self.subscriptions.count() * 2)
         self.save()
+        if self.creator and hasattr(self.creator, 'recalcular_score'):
+            self.creator.recalcular_score()
         return self.score
 
     # Si lo pones en False, solo el dueño (o un superusuario) puede
@@ -91,6 +93,16 @@ class post(models.Model):
     ia_response= models.TextField(blank=True, null=True)
     
     parent = models.ForeignKey('self',null=True,on_delete=models.CASCADE, blank=True, related_name="children")
+    score = models.IntegerField(default=0)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='disliked_posts', blank=True)
+
+    def recalcular_score(self):
+        self.score = self.likes.count() - self.dislikes.count()
+        self.save(update_fields=['score'])
+        if self.user and hasattr(self.user, 'recalcular_score'):
+            self.user.recalcular_score()
+        return self.score
     
     
 class postimagen(models.Model):

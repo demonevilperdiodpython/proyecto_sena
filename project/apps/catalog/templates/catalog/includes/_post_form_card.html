@@ -13,10 +13,22 @@
 {% endcomment %}
 <div class="post-form-card">
     <form method="post" class="post-form" enctype="multipart/form-data"{% if action_url %} action="{{ action_url }}"{% endif %}>
+        {% if form.errors %}
+            <div class="form-error-box post-error-box">
+                <p class="error-msg-title">⚠️ Error al publicar</p>
+                {% for field in form %}
+                    {% for err in field.errors %}
+                        <p class="error-msg">⚠️ {{ err }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for err in form.non_field_errors %}
+                    <p class="error-msg">⚠️ {{ err }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class="form-input-container-1">
             {% for field in form %}
                 {{ field }}
-                {{ field.errors }}
             {% endfor %}
             {% comment %}
         Boton de "Consultar Asistente IA". OCULTO a pedido: mientras no haya

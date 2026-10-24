@@ -12,11 +12,25 @@
     <div class="container-2">
         <h2 style="color: var(--accent-text); margin-bottom: 1.5rem; font-weight: 800;">Crear Cuenta</h2>
         {% csrf_token %}
+
+        {% if form.errors or error %}
+            <div class="form-error-box">
+                <p class="error-msg-title">⚠️ Error al crear la cuenta</p>
+                {% if error %}
+                    <p class="error-msg">{{ error }}</p>
+                {% endif %}
+                {% for err in form.non_field_errors %}
+                    <p class="error-msg">{{ err }}</p>
+                {% endfor %}
+                <p class="error-msg">Por favor revisa los campos señalados a continuación.</p>
+            </div>
+        {% endif %}
+
         <div class="input-group">
             {{form.username.label_tag}}
             {{form.username}}
             {% for i in form.username.errors %}
-                <p class="error">{{i}}</p>
+                <p class="error">⚠️ {{i}}</p>
             {% endfor %}   
         </div>
             
@@ -24,7 +38,7 @@
             {{form.email.label_tag}}
             {{form.email}}
             {% for i in form.email.errors %}
-                <p class="error">{{i}}</p>
+                <p class="error">⚠️ {{i}}</p>
             {% endfor %}
         </div>
 
@@ -32,7 +46,7 @@
             {{form.password1.label_tag}}
             {{form.password1}}
             {% for i in form.password1.errors %}
-                <p class="error">{{i}}</p>
+                <p class="error">⚠️ {{i}}</p>
             {% endfor %}
         </div>
         
@@ -40,7 +54,7 @@
             {{form.password2.label_tag}}
             {{form.password2}}
             {% for i in form.password2.errors %}
-                <p class="error">{{i}}</p>
+                <p class="error">⚠️ {{i}}</p>
             {% endfor %}
         </div>
 
@@ -70,6 +84,9 @@
                 {% endfor %}
                 <div style="margin-top: 1rem;">
                     {{form.imagen}}
+                    {% for i in form.imagen.errors %}
+                        <p class="error">⚠️ {{i}}</p>
+                    {% endfor %}
                 </div>
             </div>  
         </div>

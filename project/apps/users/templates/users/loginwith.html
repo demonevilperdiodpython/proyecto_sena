@@ -11,16 +11,24 @@
     <div class="container-2">
     <form method="post" class="animated-input">
             {% csrf_token %}
+            {% if form.errors or error %}
+                <div class="form-error-box">
+                    <p class="error-msg-title">⚠️ Error al iniciar sesión</p>
+                    {% if error %}<p class="error-msg">{{ error }}</p>{% endif %}
+                    {% for err in form.non_field_errors %}
+                        <p class="error-msg">{{ err }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {% for field in form %}
             <div class="input-group">
                 {{field.as_widget }} {{ field.label_tag }}
-                {{ field.errors }}
+                {% for err in field.errors %}
+                    <p class="error">⚠️ {{ err }}</p>
+                {% endfor %}
             </div>
             {% endfor %}
             <button type="submit">login</button>
-            {%if error%}
-                <p style="color:red;">{{error}}</p>
-            {%endif%}
     </form>
     </div>
 

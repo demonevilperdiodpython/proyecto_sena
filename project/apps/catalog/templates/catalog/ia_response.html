@@ -1,9 +1,11 @@
 <div id="response">
    
   {% if error %}
-  <p class="ia-error">{{ error }}<p>
+  <div class="form-error-box" style="margin-top: 0.5rem;">
+    <p class="error-msg">⚠️ {{ error }}</p>
+  </div>
   {% else %}
-  <p>response{{ response|linebreaks }}<p>
+  <p>{{ response|linebreaks }}</p>
   {% endif %}
 
 </div>

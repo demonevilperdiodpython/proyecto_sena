@@ -41,6 +41,13 @@ class customuser(AbstractUser):
             from django.core.exceptions import ValidationError
             raise ValidationError("El correo debe ser de Gmail (@gmail.com).")
 
+    def recalcular_score(self):
+        post_score = sum(p.score for p in self.post_set.all()) if hasattr(self, 'post_set') else 0
+        group_score = sum(g.score for g in self.created_groups.all()) if hasattr(self, 'created_groups') else 0
+        self.score = post_score + group_score
+        self.save(update_fields=['score'])
+        return self.score
+
 
 
 class imagen(models.Model):

@@ -25,6 +25,8 @@ def agregar_producto_pedido(request, pk):
             detalle.save()
             messages.success(request, 'Producto agregado al pedido correctamente.')
             return redirect('orders:agregar_producto_pedido', pk=pedido.pk)
+        else:
+            messages.error(request, 'No se pudo agregar el producto. Revisa los errores en el formulario.')
     else:
         form = orderlistdetalleForm()
     detalles = pedido.detalles.all()

@@ -12,17 +12,34 @@
 <div class="container-2">
     <h2 style="color: var(--accent-text); margin-bottom: 1.5rem; font-weight: 800;">Iniciar Sesión</h2>
     {% csrf_token %}
+    {% if form.errors %}
+        <div class="form-error-box">
+            <p class="error-msg-title">⚠️ Error al iniciar sesión</p>
+            {% for err in form.non_field_errors %}
+                <p class="error-msg">{{ err }}</p>
+            {% endfor %}
+            {% if not form.non_field_errors %}
+                <p class="error-msg">Por favor verifica los datos ingresados.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="form-error-box">
+            <p class="error-msg">⚠️ {{ error }}</p>
+        </div>
+    {% endif %}
+
     {% for field in form %}
     <div class="input-group">
         {{ field.label_tag }}
         {{ field.as_widget }}
-        {{ field.errors }}
+        {% for err in field.errors %}
+            <p class="error">⚠️ {{ err }}</p>
+        {% endfor %}
     </div>
     {% endfor %}
     <button type="submit">Entrar</button>
-    {% if error %}
-        <p class="error" style="margin-top: 0.5rem;">{{ error }}</p>
-    {% endif %}
 
     {% comment %}
     Ingreso con Google, Discord y GitHub. OCULTO a pedido. Ademas de no

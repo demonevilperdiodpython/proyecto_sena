@@ -2,7 +2,20 @@
 <div>
 <form method="post" class="post-form" enctype="multipart/form-data">
     <div class="form-input-container-1">
-      {% for field in form %} {{ field }} {{ field.errors }} {% endfor %}
+      {% if form.errors %}
+        <div class="form-error-box post-error-box">
+          <p class="error-msg-title">⚠️ Error al publicar</p>
+          {% for field in form %}
+            {% for err in field.errors %}
+              <p class="error-msg">⚠️ {{ err }}</p>
+            {% endfor %}
+          {% endfor %}
+          {% for err in form.non_field_errors %}
+            <p class="error-msg">⚠️ {{ err }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% for field in form %} {{ field }} {% endfor %}
 
       <button type="submit">publicar</button>
     </div>

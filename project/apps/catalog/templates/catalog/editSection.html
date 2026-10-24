@@ -17,6 +17,12 @@
             En el grupo <strong>{{ group.nombre }}</strong>
         </p>
 
+        {% if error %}
+            <div class="form-error-box">
+                <p class="error-msg">⚠️ {{ error }}</p>
+            </div>
+        {% endif %}
+
         <form method="POST">
             {% csrf_token %}
             <div class="field-container">

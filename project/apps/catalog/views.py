@@ -135,6 +135,9 @@ def posts_del_feed(vista, usuario):
     """
     base = post_model.objects.filter(parent__isnull=True)
 
+    if vista == 'populares':
+        return base.order_by('-score', '-created_at')[:15]
+
     if vista == 'ayuda':
         # children__isnull: nadie le ha respondido. De mas antiguo a mas
         # nuevo, asi lo que mas lleva esperando queda arriba.
@@ -206,6 +209,8 @@ def add_group(request):
             grupo.save()
             messages.success(request, "Grupo creado exitosamente.")
             return redirect('catalog:topic_group', id=grupo.id)
+        else:
+            messages.error(request, "Por favor corrige los errores del formulario para crear el grupo.")
     else:
         form = topic_groupForm()
 
@@ -260,6 +265,8 @@ def topic_group(request, id):
             # NO habia imagen: al subir una se quedaba en el POST y el
             # navegador volvia a enviar el formulario al recargar.
             return redirect('catalog:topic_group', id=id)
+        else:
+            messages.error(request, "No se pudo publicar. El contenido del post no puede estar vacío.")
 
         # Si el form no es valido se vuelve a pintar con los errores.
     return render(request, "catalog/group.html", {"group": group, 
@@ -282,18 +289,22 @@ def eliminate_post(request):
 def edit_post(request):
     if request.method == "POST":
         post_id = request.POST.get("post_id")
-        
         Post = get_object_or_404(post_model, id=post_id)
-        content = request.POST.get("content")
-        Post.content = content
-        Post.save()
+        content = request.POST.get("content", "").strip()
+        if content:
+            Post.content = content
+            Post.save()
+            messages.success(request, "Publicación actualizada.")
+        else:
+            messages.error(request, "El contenido de la publicación no puede estar vacío.")
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def ia_response(request):
     # Antes, si se llegaba con GET (o sin "input_text") la vista se acababa
     # sin return y Django respondia con un error 500. Ahora se vuelve a la
     # pagina de la IA, que es lo que toca.
-    if request.method != "POST" or not request.POST.get("input_text"):
+    if request.method != "POST" or not request.POST.get("input_text", "").strip():
+        messages.error(request, "Por favor escribe una pregunta para el asistente.")
         return redirect('catalog:ia')
 
     print("-------------------------    -------------------------")
@@ -398,6 +409,54 @@ def rate_group(request):
             group.likes.remove(request.user)
 
     group.recalcular_score()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('format') == 'json':
+        return JsonResponse({
+            'success': True,
+            'id': group.id,
+            'score': group.score,
+            'likes': group.likes.count(),
+            'dislikes': group.dislikes.count(),
+            'liked': request.user in group.likes.all(),
+            'disliked': request.user in group.dislikes.all(),
+        })
+
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(redirect_url)
+
+
+@sin_cuenta_no_se_puede_actuar
+def rate_post(request):
+    post_id = request.GET.get('post_id')
+    rate = request.GET.get('rate')
+    p = get_object_or_404(post_model, id=post_id)
+
+    if rate == 'like':
+        if request.user in p.likes.all():
+            p.likes.remove(request.user)
+        else:
+            p.likes.add(request.user)
+            p.dislikes.remove(request.user)
+    elif rate == 'dislike':
+        if request.user in p.dislikes.all():
+            p.dislikes.remove(request.user)
+        else:
+            p.dislikes.add(request.user)
+            p.likes.remove(request.user)
+
+    p.recalcular_score()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('format') == 'json':
+        return JsonResponse({
+            'success': True,
+            'id': p.id,
+            'score': p.score,
+            'likes': p.likes.count(),
+            'dislikes': p.dislikes.count(),
+            'liked': request.user in p.likes.all(),
+            'disliked': request.user in p.dislikes.all(),
+        })
+
     redirect_url = request.META.get('HTTP_REFERER', '/')
     return redirect(redirect_url)
 
@@ -413,6 +472,11 @@ def subscribe(request):
         group.subscriptions.add(request.user)
 
     group.recalcular_score()
+
+    # Si viene con referer y no con page, o si vino desde un grupo:
+    redirect_url = request.META.get('HTTP_REFERER')
+    if redirect_url and 'group' in redirect_url:
+        return redirect(redirect_url)
 
     # Antes pedia un kwarg 'page_number' que la URL no tiene -> NoReverseMatch.
     return redirect(f"{reverse('catalog:search_view')}?page={page}")
@@ -439,9 +503,9 @@ def settings_view(request):
 def popular(request):
     # Ranking por score. El score lo recalcula topics_group.recalcular_score()
     # cada vez que alguien da like, dislike o se une al grupo.
-    top_groups = topics_group.objects.order_by('-score')[:10]
-    top_users = CustomUser.objects.order_by('-score')[:10]
-    top_posts = post_model.objects.filter(parent__isnull=True).order_by('-created_at')[:10]
+    top_groups = topics_group.objects.order_by('-score', '-id')[:10]
+    top_users = CustomUser.objects.order_by('-score', '-id')[:10]
+    top_posts = post_model.objects.filter(parent__isnull=True).order_by('-score', '-created_at')[:10]
 
     return render(request, "catalog/popular.html", {
         # nombre propio: top_groups del processor son 6 y se usan en el
@@ -473,12 +537,15 @@ def post_detail(request, id):
             respuesta.save()
 
             guardar_archivos(respuesta, archivos_del_request(request))
+            messages.success(request, "Respuesta enviada exitosamente.")
 
             # El formulario de responder se envia aqui desde cualquier pagina
             # (grupo, seccion, popular, explorar). Antes de esto se guardaba y
             # te mandaba a la pagina del post; ahora se vuelve a la pagina de
             # la que venias, que es donde estabas escribiendo.
             return redirect(a_volver(request, "catalog:post_detail", id=id))
+        else:
+            messages.error(request, "No se pudo enviar la respuesta. El contenido no puede estar vacío.")
 
     return render(request, "catalog/post_detail.html", {
         "post": post_obj,
@@ -566,6 +633,8 @@ def post_in_section(request, group_id, section_id):
 
             messages.success(request, "Post creado exitosamente.")
             return redirect("catalog:topic_section", group_id=group_id, section_id=section_id)
+        else:
+            messages.error(request, "No se pudo crear la publicación. El contenido no puede estar vacío.")
 
     return render(request, "catalog/section_post.html", {
         "group": group,
@@ -593,6 +662,8 @@ def edit_group(request, id):
             form.save()
             messages.success(request, "Grupo actualizado.")
             return redirect('catalog:topic_group', id=id)
+        else:
+            messages.error(request, "Por favor corrige los errores del formulario.")
     else:
         form = topic_groupForm(instance=group)
 
@@ -633,18 +704,23 @@ def add_section(request, group_id):
         messages.error(request, "No tienes permiso para crear secciones en este grupo.")
         return redirect('catalog:topic_group', id=group_id)
 
+    error = None
     if request.method == "POST":
         nombre = request.POST.get("name", "").strip()
         if nombre:
             topic_section.objects.create(name=nombre, group=group)
-            messages.success(request, "Sección creada.")
+            messages.success(request, "Sección creada exitosamente.")
             return redirect('catalog:topic_group', id=group_id)
+        else:
+            error = "El nombre de la sección no puede estar vacío."
+            messages.error(request, error)
     else:
         nombre = ""
 
     return render(request, "catalog/addSection.html", {
         "group": group,
         "nombre": nombre,
+        "error": error,
     })
 
 
@@ -657,13 +733,17 @@ def edit_section(request, group_id, section_id):
         messages.error(request, "No tienes permiso para editar esta sección.")
         return redirect('catalog:topic_group', id=group_id)
 
+    error = None
     if request.method == "POST":
         nombre = request.POST.get("name", "").strip()
         if nombre:
             section.name = nombre
             section.save()
-            messages.success(request, "Sección actualizada.")
+            messages.success(request, "Sección actualizada exitosamente.")
             return redirect('catalog:topic_section', group_id=group_id, section_id=section_id)
+        else:
+            error = "El nombre de la sección no puede estar vacío."
+            messages.error(request, error)
     else:
         nombre = section.name
 
@@ -671,6 +751,7 @@ def edit_section(request, group_id, section_id):
         "group": group,
         "section": section,
         "nombre": nombre,
+        "error": error,
     })
 
 

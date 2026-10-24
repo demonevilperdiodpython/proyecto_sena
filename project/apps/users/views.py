@@ -15,16 +15,13 @@ from apps.catalog.models import post
 from apps.users.models import imagen as ImagenModel
 # Create your views here.cu
 def login_view(request):
-    form = AuthenticationForm(request)
-    response = render(request, 'users/login.html', {"form": form})
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
-       
         if form.is_valid():
             ip = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT','')
             user = form.get_user()
-            other_users = UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
+            UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
 
             response = redirect('catalog:home')
             device_id = get_device_id(request, response)
@@ -35,38 +32,28 @@ def login_view(request):
                 device_id=device_id)
             init_sesion.save()
             login(request, user)
+            messages.success(request, f"¡Bienvenido de nuevo, {user.username}!")
             return response
-            
-    return response
+        else:
+            messages.error(request, "Nombre de usuario o contraseña incorrectos. Por favor verifica tus datos.")
+    else:
+        form = AuthenticationForm(request)
+    return render(request, 'users/login.html', {"form": form})
 
 
 
 def Register_view(request):
-    form = UserCreationForm()
     imagen = ImagenModel.objects.all()
-    response = render(request, 'users/register.html', {"imagen":imagen,"form": form})
-    
-    print('register ----------------------------------------------------------------------------------------------------------------------')   
     if request.method == 'POST':
-        print('POST request received in Register_view')
         form = UserCreationForm(request.POST, request.FILES)
-        
-        print(form.data, form.is_valid())
         if form.is_valid():
-            print('----------form is valid-----------')
-            
-            if es_gmail_valido(form.cleaned_data['email']):
-                pass
-            else:
-                return render(request, 'users/register.html',  {"form" : form, "error" : "gmail no valido"})
-            
+            if not es_gmail_valido(form.cleaned_data['email']):
+                messages.error(request, "El correo electrónico debe ser una cuenta de Gmail válida (@gmail.com).")
+                return render(request, 'users/register.html', {"imagen": imagen, "form": form, "error": "El correo debe ser de Gmail (@gmail.com)."})
+
             ip = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT','')
-            device_id = get_device_id(request, response)
 
-            other_users = UserSession.objects.filter(ip_address=ip,
-                                            user_agent=user_agent,
-                                            device_id=device_id).update(is_active=False)
             user = form.save(commit=False)
             uploaded_image = form.cleaned_data.get('imagen')
             selected_default = request.POST.get('default_image')
@@ -81,19 +68,22 @@ def Register_view(request):
 
             response = redirect('catalog:home')
             device_id = get_device_id(request, response)
-            other_users = UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
+            UserSession.objects.filter(ip_address=ip, user_agent=user_agent, device_id=device_id).update(is_active=False)
+            UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
             init_sesion = UserSession.objects.create(
-                device_id = device_id,
+                device_id=device_id,
                 user=user,
                 ip_address=ip,
-                user_agent= user_agent)
+                user_agent=user_agent)
             init_sesion.save()
             login(request, user)
+            messages.success(request, f"¡Cuenta creada con éxito! Bienvenido, {user.username}.")
             return response
         else:
-            print('----------form is invalid-----------')
-            print(form.errors)
-    return response
+            messages.error(request, "Por favor corrige los errores señalados en el formulario de registro.")
+    else:
+        form = UserCreationForm()
+    return render(request, 'users/register.html', {"imagen": imagen, "form": form})
 
 def acounts_view(request):
     # DESHABILITADA a pedido. Esta pagina no la lista de usuarios: es la de
@@ -132,6 +122,9 @@ def perfil_view(request, id):
         if request.FILES.get("cambio_foto"):
             perfil.imagen = request.FILES["cambio_foto"]
             perfil.save()
+            messages.success(request, "Foto de perfil actualizada exitosamente.")
+        else:
+            messages.warning(request, "No seleccionaste ninguna imagen para cambiar.")
         return redirect("users:Perfil", id=perfil.id)
 
     return render(request, "users/perfil.html", contexto)

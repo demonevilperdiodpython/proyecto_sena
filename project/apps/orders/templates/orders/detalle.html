@@ -38,18 +38,29 @@
             </tbody>
         </table>
 
+        {% if form.errors %}
+            <div class="form-error-box">
+                <p class="error-msg-title">⚠️ Error al agregar producto al pedido</p>
+                {% for err in form.non_field_errors %}
+                    <p class="error-msg">{{ err }}</p>
+                {% endfor %}
+                {% if not form.non_field_errors %}
+                    <p class="error-msg">Por favor verifica los campos señalados a continuación.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
         <form method="POST" class="pedido-form">
             {% csrf_token %}
             {% for field in form %}
                 <div class="field-container">
                     <label>{{ field.label }}</label>
                     {{ field }}
-                    {{ field.errors }}
+                    {% for err in field.errors %}
+                        <p class="error" style="color: #e35555; font-size: 0.85rem; margin-top: 0.25rem;">⚠️ {{ err }}</p>
+                    {% endfor %}
                 </div>
             {% endfor %}
-            {% if form.non_field_errors %}
-                <span class="pedido-error">{{ form.non_field_errors }}</span>
-            {% endif %}
             <button type="submit" class="boton-registrar">Agregar al pedido</button>
         </form>
     </div>
