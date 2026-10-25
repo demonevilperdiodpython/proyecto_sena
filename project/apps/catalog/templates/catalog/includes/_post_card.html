@@ -3,6 +3,8 @@
         <img src="{{ i.user.imagen.url }}" class="foto-perfil" alt="{{ i.user.username }}" />
     {% elif i.group and i.group.imagen %}
         <img src="{{ i.group.imagen.url }}" class="foto-perfil" alt="{{ i.group.nombre }}" />
+    {% elif not i.user %}
+        <div class="foto-perfil" style="background: var(--primary-color); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">IA</div>
     {% else %}
         <div class="foto-perfil" style="background: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">SM</div>
     {% endif %}
@@ -11,8 +13,10 @@
         <h5 class="username-post">
             {% if i.user %}
                 {{ i.user.username }}
-            {% else %}
+            {% elif i.group %}
                 {{ i.group.nombre }}
+            {% else %}
+                🤖 Asistente IA
             {% endif %}
             {% if i.parent %}
                 <small style="font-size: 0.8em; opacity: 0.75; margin-left: 6px; color: var(--font-primary-black-light);">
@@ -29,12 +33,7 @@
 
             <a href="{% url 'catalog:post_detail' i.id %}" class="ver-post">Ver publicación</a>
             
-            {% if i.ia_response %}
-                <div class="ia-response-container">
-                    <small>🤖 Asistente IA</small>
-                    <p>{{ i.ia_response }}</p>
-                </div>
-            {% endif %}
+            {# La respuesta de la IA ya aparece como un comentario (post hijo sin usuario). #}
 
             <div>
                 {# Archivos nuevos (cualquier tipo, los que se hayan subido). Los antiguos de abajo, imagen y video, se siguen mostrando para no perder lo ya publicado. #}
@@ -114,8 +113,8 @@
 
         <div class="user-post-buttons">
             <a title="Me gusta"
-               class="voto {% if request.user in i.group.likes.all %}voto-activo{% endif %}"
-               href="{% if i.group and request.user.is_authenticated %}{% url 'catalog:rate_group' %}?group_id={{ i.group.id }}&rate=like{% else %}#{% endif %}">
+               class="voto {% if request.user in i.likes.all %}voto-activo{% endif %}"
+               href="{% if request.user.is_authenticated %}{% url 'catalog:rate_post' %}?post_id={{ i.id }}&rate=like{% else %}#{% endif %}">
             <div class="voto-caja">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z"/>
@@ -124,8 +123,8 @@
             </a>
 
             <a title="No me gusta"
-               class="voto {% if request.user in i.group.dislikes.all %}voto-activo{% endif %}"
-               href="{% if i.group and request.user.is_authenticated %}{% url 'catalog:rate_group' %}?group_id={{ i.group.id }}&rate=dislike{% else %}#{% endif %}">
+               class="voto {% if request.user in i.dislikes.all %}voto-activo{% endif %}"
+               href="{% if request.user.is_authenticated %}{% url 'catalog:rate_post' %}?post_id={{ i.id }}&rate=dislike{% else %}#{% endif %}">
             <div class="voto-caja">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
@@ -170,7 +169,7 @@
         {% endif %}
     </div>
 
-    {% if request.user == i.user or request.user.is_superuser %}
+    {% if request.user == i.user or request.user.is_superuser or i.es_ia and request.user.is_authenticated %}
         <div class="botoness">
             <form method="POST">
                 {% csrf_token %}

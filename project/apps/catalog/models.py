@@ -90,7 +90,8 @@ class post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add= True)
     group = models.ForeignKey('topics_group', on_delete=models.CASCADE, related_name='post', blank = True, null=True)
-    ia_response= models.TextField(blank=True, null=True)
+    ia_response = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='ai_responses')
+    es_ia = models.BooleanField(default=False)
     
     parent = models.ForeignKey('self',null=True,on_delete=models.CASCADE, blank=True, related_name="children")
     score = models.IntegerField(default=0)

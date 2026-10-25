@@ -6,7 +6,10 @@
     align-items: flex-start;
     width: 100%;
     min-height: var(--vh);
-    padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+    height: auto;
+    overflow: visible;
+    padding: calc(var(--navbar-height) + 0.25rem) 0.7rem 0.5rem;
+    box-sizing: border-box;
     background: var(--primary-color-darker);
 }
 
@@ -14,13 +17,16 @@
     background: var(--containers-primary);
     border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
     border-radius: 24px;
-    padding: 1.75rem;
+    padding: 1rem;
     width: 100%;
     max-width: 640px;
+    height: auto;
+    max-height: 90vh;
+    overflow: hidden;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.75rem;
 }
 
 .ia-titulo {
@@ -88,11 +94,14 @@
 
 .ia-respuesta {
     /* Antes 120px fijos: la caja de la respuesta crece con la pantalla. */
-    min-height: clamp(120px, 16dvh, 220px);
-    padding: 1rem 1.25rem;
-    border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
-    background: color-mix(in srgb, var(--primary-color-darker) 60%, transparent);
+    flex: none;
+    height: 180px;
+    max-height: 180px;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 0;
+    border: none;
+    background: transparent;
     font-size: 0.95rem;
     color: var(--font-primary-black);
 }
@@ -105,6 +114,17 @@
 
 .ia-vacio {
     opacity: 0.6;
+}
+
+/* Mensajes del chat de IA: reutilizan .post de posts.css y solo se diferencian por rol. */
+.ia-message {
+    margin-bottom: 0.75rem;
+}
+.ia-message-user .username-post {
+    color: var(--primary-color);
+}
+.ia-message-assistant .username-post {
+    color: var(--font-primary-black-light);
 }
 
 /* Aviso de que la IA no respondio (Ollama apagado, por ejemplo). */

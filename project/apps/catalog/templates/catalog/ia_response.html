@@ -1,12 +1,22 @@
 <div id="response">
-   
-  {% if error %}
-  <div class="form-error-box" style="margin-top: 0.5rem;">
-    <p class="error-msg">⚠️ {{ error }}</p>
-  </div>
-  {% else %}
-  <p>{{ response|linebreaks }}</p>
-  {% endif %}
+   {% if error %}
+   <div class="form-error-box" style="margin: 0 1.5rem 0.5rem 1.5rem;">
+     <p class="error-msg ia-error">⚠️ {{ error }}</p>
+   </div>
+   {% endif %}
 
+   {% if historial %}
+     {% for m in historial %}
+       <div class="post ia-message ia-message-{{ m.role }}">
+         <div class="post-text view">
+           <h5 class="username-post">
+             {% if m.role == 'user' %}Tú{% else %}Kaelen{% endif %}
+           </h5>
+           <p>{{ m.content|linebreaks }}</p>
+         </div>
+       </div>
+     {% endfor %}
+   {% else %}
+     <p class="ia-vacio" style="padding:1.5rem; opacity:0.6;">Aquí aparecerá la respuesta.</p>
+   {% endif %}
 </div>
-

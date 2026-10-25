@@ -30,25 +30,9 @@
             {% for field in form %}
                 {{ field }}
             {% endfor %}
-            {% comment %}
-        Boton de "Consultar Asistente IA". OCULTO a pedido: mientras no haya
-        un modelo descargado, marcar la casilla no hacia nada y ademas tiraba
-        un error 500 al publicar.
-
-        OJO 1: esto tiene que ser un bloque comment, no un {# ... #}. Django
-        tokeniza sin DOTALL, asi que un {# ... #} de varias lineas se imprime
-        tal cual en la pagina.
-
-        OJO 2: no escribir aqui dentro la palabra "endcomment" con llaves,
-        porque cierra el bloque antes de tiempo y la pagina se cae con un
-        error 500.
-
-        Para volver a mostrarlo: borrar este bloque y su cierre, de abajo.
-
         <label class="ia-checkbox-wrapper">
             <input type="checkbox" name="ia" value="on"> 🤖 Consultar Asistente IA
         </label>
-    {% endcomment %}
             <input type="hidden" name="parent_id" value="{{ i.id }}">
         </div>
         <div class="form-input-container-2">
