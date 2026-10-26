@@ -1,4 +1,4 @@
-{% load adjuntos %}
+
 {% comment %}
     action_url es opcional.
 
@@ -39,7 +39,6 @@
             {% csrf_token %}
             {# Un solo boton para todos los archivos. Antes habia dos, uno de imagen y otro de video, y cada uno aceptaba un archivo. El input va oculto y con multiple, asi que el navegador deja marcar cuantos se quiera. Sin accept: se sube cualquier tipo. #}
             <div class="media-upload-btns">
-                {% input_archivos %}
                 <button
                     type="button"
                     class="btn-custom btn-adjuntar"

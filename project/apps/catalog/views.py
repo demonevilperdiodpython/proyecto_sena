@@ -231,15 +231,6 @@ def para_registrarse(request):
 
 
 def sin_cuenta_no_se_puede_actuar(view):
-    """Deja VER la pagina sin iniciar sesion, pero para hacer falta una cuenta.
-
-    Con GET (o HEAD) la vista se ejecuta siempre: cualquiera puede navegar
-    por toda la aplicacion sin registrarse. Lo que cambia algo (publicar,
-    crear grupo, editar, borrar, votar...) necesita sesion, y si no la hay
-    se manda al formulario de registro.
-
-    Antes estas vistas llevaban @sin_cuenta_no_se_puede_actuar, que mandaba al login incluso
-    para solo mirar la pagina."""
     @wraps(view)
     def envoltura(request, *args, **kwargs):
         if request.method in ('GET', 'HEAD') or request.user.is_authenticated:
@@ -346,17 +337,19 @@ def eliminate_product(request, product_id):
     # Antes redirigia a 'catalog:product_list', una URL que no existe.
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+
 @sin_cuenta_no_se_puede_actuar
 def add_group(request):
     if request.method == "POST":
-        form = topic_groupForm(request.POST,request.FILES)gitctions,
-                                                "posts": group_post,
-                                                "form": form,
-                                                # Un template no puede llamar a un
-                                                # metodo con argumentos, asi que el
-                                                # permiso se resuelve aqui.
-                                                "puede_admin": group.puede_administrar(request.user)
-                                                })
+        form = topic_groupForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Grupo creado.")
+            return redirect('catalog:home')
+    else:
+        form = topic_groupForm()
+    return render(request, "catalog/addGroup.html", {"form": form})
+
 @sin_cuenta_no_se_puede_actuar
 def eliminate_post(request):
     post_id = request.POST.get("post_id")
@@ -450,7 +443,9 @@ def search_view_post(request):
 def rate_group(request):
     group_id = request.GET.get('group_id')
     rate = request.GET.get('rate')
-    group = get_object_or_404(topics_group, id=group_id)
+    
+    group = get_object_or_404(topics_group, id=group_id) 
+    
 
     # Dar like otra vez quita el like (toggle), en vez de sumar siempre.
     if rate == 'like':
@@ -538,19 +533,6 @@ def subscribe(request):
 
     # Antes pedia un kwarg 'page_number' que la URL no tiene -> NoReverseMatch.
     return redirect(f"{reverse('catalog:search_view')}?page={page}")
-
-def obtener_input_video(request):
-    """Ya no hace falta: el boton de adjuntar es uno solo y no usa htmx.
-
-    Antes este endpoint existia solo para que el boton de video trajera su
-    input con hx-get. Se deja la vista para no romper enlaces viejos, pero
-    devuelve el formulario de archivos nuevo."""
-    return render(request, "catalog/includes/_post_form_card.html", {})
-
-
-# ---------------------------------------------------------------------------
-# Vistas agregadas
-# ---------------------------------------------------------------------------
 
 @sin_cuenta_no_se_puede_actuar
 def settings_view(request):
@@ -660,7 +642,56 @@ def topic_section_view(request, group_id, section_id):
         "puede_admin": group.puede_administrar(request.user),
     })
 
+def topic_group(request, id):
+    print("inicia la pagina---------------------------------------------------------")
+    form = postForm(request.POST or None, request.FILES or None)
+    group = get_object_or_404(topics_group, id=id)
+    group_post = group.post.filter(parent__isnull=True).order_by('-created_at')
 
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return para_registrarse(request)
+            print('el usuario esta autenticadp-------------------------------------')
+        if form.is_valid():
+            print('el formulario es valido -----------------------------------')
+            post = form.save(commit=False)
+            post.user = request.user
+            post.group = group  
+
+            parent_id = request.POST.get("parent_id")
+            if parent_id:
+                try:
+                    print("tonoto")
+                    post.parent = group.post.get(id=parent_id, parent__isnull=True)
+                except group.post.model.DoesNotExist:
+                    messages.error(request, "Comentario padre inválido")
+                    return redirect('catalog:topic_group', id=id)
+
+            post.save()
+            print(post.id)
+            print('formulario valido------------------------------------------')
+
+            if request.POST.get("ia") == "on":
+                respuesta_ia, error_ia = preguntar_a_la_ia(
+                    request, post.content, guardar_historial=False)
+                if error_ia:
+                    messages.warning(request, error_ia)
+                else:
+                    post_ia = post_model(parent=None, user=None,
+                                         content=respuesta_ia, group=group, es_ia=True)
+                    post_ia.save()
+                    post.ia_response = post_ia
+                    post.save()
+                    print(post)
+
+            guardar_archivos(post, archivos_del_request(request))
+    posts = group.post.filter().order_by('created_at')
+    return render(request, "catalog/group.html", {
+        'posts': posts,
+        'form': form,
+        'group': group,
+        'group_post': group_post,
+    })
 @sin_cuenta_no_se_puede_actuar
 def post_in_section(request, group_id, section_id):
     # Publicar directamente dentro de una seccion del grupo.
@@ -690,6 +721,7 @@ def post_in_section(request, group_id, section_id):
 
             guardar_archivos(post_obj, archivos_del_request(request))
             messages.success(request, "Post creado exitosamente.")
+    posts =  group.posts
 
     return render(request, "catalog/section_post.html", {
         "group": group,
@@ -697,10 +729,6 @@ def post_in_section(request, group_id, section_id):
         "form": form,
     })
 
-
-# ---------------------------------------------------------------------------
-# CRUD de grupos: editar y eliminar
-# ---------------------------------------------------------------------------
 
 @sin_cuenta_no_se_puede_actuar
 def edit_group(request, id):
