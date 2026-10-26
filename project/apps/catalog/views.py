@@ -685,7 +685,7 @@ def topic_group(request, id):
                     print(post)
 
             guardar_archivos(post, archivos_del_request(request))
-    posts = group.post.filter().order_by('created_at')
+    posts = group.post.filter().order_by('-created_at')
     return render(request, "catalog/group.html", {
         'posts': posts,
         'form': form,
