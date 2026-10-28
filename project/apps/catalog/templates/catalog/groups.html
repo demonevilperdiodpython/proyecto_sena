@@ -6,94 +6,127 @@
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/explore.css' %}">
 {% endblock %}
-
+x
 {% block all %}
-    {% include 'catalog/includes/_search_view_.html' %}
-    
-    <div class="asidemain">
-        <div class="searched-group">
-            {% for i in grupos %}
-                <div class="group">
-                    <div class="group-img">
-                        <a href="{% url 'catalog:topic_group' i.id %}">
-                            {% if i.imagen %}
-                                <img src="{{ i.imagen.url }}" alt="{{ i.nombre }}">
-                            {% elif i.imagen_url %}
-                                <img src="{{ i.imagen_url }}" alt="{{ i.nombre }}">
-                            {% else %}
-                                <div style="width:100%; height:100%; background: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">{{ i.nombre }}</div>
+        {% include 'catalog/includes/_search_view_.html' %}
+        
+        <div class="asidemain">
+            <div class="searched-group">
+                {% for i in grupos %}
+                    <div class="group">
+                        <div class="group-img">
+                            <a href="{% url 'catalog:topic_group' i.id %}">
+                                {% if i.imagen %}
+                                    <img src="{{ i.imagen.url }}" alt="{{ i.nombre }}">
+                                {% elif i.imagen_url %}
+                                    <img src="{{ i.imagen_url }}" alt="{{ i.nombre }}">
+                                {% else %}
+                                    <div style="width:100%; height:100%; background: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">{{ i.nombre }}</div>
+                                {% endif %}
+                            </a>
+                        </div>
+
+                        <div class="group-text">
+                            <h5>
+                                <a href="{% url 'catalog:topic_group' i.id %}">{{ i.nombre }}</a>
+                            </h5>
+                            {% if i.categoria %}
+                                <span style="font-size: 0.75rem; font-weight: bold; background: color-mix(in srgb, var(--primary-color) 20%, transparent); color: var(--accent-text); padding: 2px 8px; border-radius: 10px; align-self: flex-start;">{{ i.categoria }}</span>
                             {% endif %}
-                        </a>
-                    </div>
+                            <p>{{ i.descripcion|truncatechars:90 }}</p>
 
-                    <div class="group-text">
-                        <h5>
-                            <a href="{% url 'catalog:topic_group' i.id %}">{{ i.nombre }}</a>
-                        </h5>
-                        {% if i.categoria %}
-                            <span style="font-size: 0.75rem; font-weight: bold; background: color-mix(in srgb, var(--primary-color) 20%, transparent); color: var(--accent-text); padding: 2px 8px; border-radius: 10px; align-self: flex-start;">{{ i.categoria }}</span>
-                        {% endif %}
-                        <p>{{ i.descripcion|truncatechars:90 }}</p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.5rem;">
+                                <form action="{% url 'catalog:subscribe' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="group_id" value="{{ i.id }}">
+                                    <input type="hidden" name="page" value="{{ page }}">
+                                    <button type="submit">Unirse</button>
+                                </form>
 
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.5rem;">
-                            <form action="{% url 'catalog:subscribe' %}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="group_id" value="{{ i.id }}">
-                                <input type="hidden" name="page" value="{{ page }}">
-                                <button type="submit">Unirse</button>
-                            </form>
-
-                            <div style="font-size: 0.8rem; color: var(--font-primary-black-light); display: flex; gap: 0.5rem;">
-                                <span>👍 {{ i.likes.count }}</span>
-                                <span>👥 {{ i.subscriptions.count }}</span>
+                                <div style="font-size: 0.8rem; color: var(--font-primary-black-light); display: flex; gap: 0.5rem;">
+                                    <span>👍 {{ i.likes.count }}</span>
+                                    <span>👥 {{ i.subscriptions.count }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% empty %}
-                <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem;">No se encontraron grupos.</p>
-            {% endfor %}
-        </div>
+                {% empty %}
+                    <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7; padding: 2rem;">No se encontraron grupos.</p>
+                {% endfor %}
+            </div>
 
-        <div class="change-page">
-            {% if page > 1 %}
+            <div class="change-page">
+                {% if page > 1 %}
+                    <form action="{% url 'catalog:search_view' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="search" value="{{ query }}">
+                        <input type="hidden" name="page" value="{{ page2 }}">
+                        <button type="submit" title="Página anterior">&lt;</button>
+                    </form>
+                {% endif %}
                 <form action="{% url 'catalog:search_view' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="search" value="{{ query }}">
-                    <input type="hidden" name="page" value="{{ page2 }}">
-                    <button type="submit" title="Página anterior">&lt;</button>
+                    <input type="hidden" name="page" value="{{ page1 }}">
+                    <button type="submit" title="Página siguiente">&gt;</button>
                 </form>
-            {% endif %}
-            <form action="{% url 'catalog:search_view' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="search" value="{{ query }}">
-                <input type="hidden" name="page" value="{{ page1 }}">
-                <button type="submit" title="Página siguiente">&gt;</button>
-            </form>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
 
-{% block hot_topic %}
-    <div class="ht-section-label">⭐ Mejores Usuarios</div>
-    <div class="ht-groups-row">
+    {% block hot_topic %}
+        <div class="ht-section-label">⭐ Mejores Usuarios</div>
+        <div class="ht-groups-row">
+            {% for x in best_users %}
+                <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}">
+                    {% if x.imagen %}
+                        <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
+                    {% else %}
+                        <div class="ht-chip-placeholder">SM</div>
+                    {% endif %}
+                    <span class="ht-chip-name">{{ x.username }}</span>
+                    <span class="ht-chip-score">{{ x.score }} pts</span>
+                </a>
+            {% empty %}
+                <p class="ht-empty">Todavía no hay usuarios.</p>
+            {% endfor %}
+        </div>
+
+        <div class="ht-section-label" style="margin-top: 1.25rem;">🏆 Mejores Grupos</div>
+        <div class="ht-groups-row">
+            {% for x in best_groups %}
+                <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
+                    {% if x.imagen %}
+                        <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
+                    {% elif x.imagen_url %}
+                        <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                    {% else %}
+                        <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
+                    {% endif %}
+                    <span class="ht-chip-name">{{ x.nombre|truncatechars:18 }}</span>
+                    <span class="ht-chip-score">{{ x.score }} pts</span>
+                </a>
+            {% empty %}
+                <p class="ht-empty">Todavía no hay grupos.</p>
+            {% endfor %}
+        </div>
+    {% endblock %}
+
         {% for x in best_users %}
-            <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}">
+            <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}" title="{{ x.username }}">
                 {% if x.imagen %}
                     <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
                 {% else %}
-                    <div class="ht-chip-placeholder">SM</div>
+                    <div class="ht-chip-placeholder">{{ x.username|slice:":2"|upper }}</div>
                 {% endif %}
                 <span class="ht-chip-name">{{ x.username }}</span>
-                <span class="ht-chip-score">{{ x.score }} pts</span>
             </a>
         {% empty %}
             <p class="ht-empty">Todavía no hay usuarios.</p>
         {% endfor %}
-    </div>
 
-    <div class="ht-section-label" style="margin-top: 1.25rem;">🏆 Mejores Grupos</div>
-    <div class="ht-groups-row">
+        <div class="ht-section-label" style="margin-top: 1rem;">🏆 Mejores grupos</div>
+
         {% for x in best_groups %}
             <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
                 {% if x.imagen %}
@@ -103,42 +136,9 @@
                 {% else %}
                     <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
                 {% endif %}
-                <span class="ht-chip-name">{{ x.nombre|truncatechars:18 }}</span>
-                <span class="ht-chip-score">{{ x.score }} pts</span>
+                <span class="ht-chip-name">{{ x.nombre }}</span>
             </a>
         {% empty %}
             <p class="ht-empty">Todavía no hay grupos.</p>
-        {% endfor %}
-    </div>
-{% endblock %}
-
-    {% for x in best_users %}
-        <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}" title="{{ x.username }}">
-            {% if x.imagen %}
-                <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
-            {% else %}
-                <div class="ht-chip-placeholder">{{ x.username|slice:":2"|upper }}</div>
-            {% endif %}
-            <span class="ht-chip-name">{{ x.username }}</span>
-        </a>
-    {% empty %}
-        <p class="ht-empty">Todavía no hay usuarios.</p>
     {% endfor %}
 
-    <div class="ht-section-label" style="margin-top: 1rem;">🏆 Mejores grupos</div>
-
-    {% for x in best_groups %}
-        <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
-            {% if x.imagen %}
-                <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
-            {% elif x.imagen_url %}
-                <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
-            {% else %}
-                <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
-            {% endif %}
-            <span class="ht-chip-name">{{ x.nombre }}</span>
-        </a>
-    {% empty %}
-        <p class="ht-empty">Todavía no hay grupos.</p>
-    {% endfor %}
-{% endblock %}

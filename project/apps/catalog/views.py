@@ -147,9 +147,9 @@ def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_his
             historial.append({"role": "assistant", "content": contenido})
             _guardar_historial(request, historial)
 
-        return contenido, None
+        return contenido, None, messages
     except Exception as e:
-        return None, str(e)
+        return None, str(e), messages
     
 def _contexto_ia(user):
     partes = []
@@ -159,13 +159,17 @@ def _contexto_ia(user):
             partes.append("Asistente: {}".format(p.ia_response.content))
             
     return "\n".join(partes)
+
 def group_contexto_ia(group):
     partes = []
-    for p in group.post.filter().order_by('created_at'):
+
+    for p in group.post.all().order_by('created_at'):
         partes.append("Usuario: {}".format(p.content))
+
         if p.ia_response:
             partes.append("Asistente: {}".format(p.ia_response.content))
-        
+    return "\n".join(partes)
+
 
 
 def ia_view(request):
@@ -175,14 +179,16 @@ def ia_view(request):
             contexto = None
             if request.user.is_authenticated:
                 contexto = _contexto_ia(request.user)
+                print("contexto funcionando")
 
             nuevo_post = form.save(commit=False)
             nuevo_post.user = request.user
             nuevo_post.group = None
             nuevo_post.save()
 
-            respuesta, error = preguntar_a_la_ia(
-                request, nuevo_post.content, contexto=contexto, guardar_historial=False)
+            respuesta, error, messages = preguntar_a_la_ia(
+                request, nuevo_post.content, contexto=contexto, guardar_historial=True)
+            print("messages:", messages)
             if error:
                 messages.warning(request, error)
             else:
@@ -216,7 +222,7 @@ def ia_view(request):
 def ia_response(request):
     if request.method == "POST":
         texto = request.POST.get("input_text", "").strip()
-        respuesta, error = preguntar_a_la_ia(request, texto)
+        respuesta, error, messages = preguntar_a_la_ia(request, texto)
         historial = _get_historial(request)
         return render(request, "catalog/ia_response.html", {
             "historial": historial, "error": error,
@@ -673,8 +679,11 @@ def topic_group(request, id):
             print('formulario valido------------------------------------------')
 
             if request.POST.get("ia") == "on":
-                respuesta_ia, error_ia = preguntar_a_la_ia(
-                    request, post.content, guardar_historial=False)
+                group = get_object_or_404(topics_group, id=id)
+
+                contexto = group_contexto_ia(group=group)
+                respuesta_ia, error_ia, messages = preguntar_a_la_ia(
+                    request, post.content,contexto=contexto, guardar_historial=False)
                 if error_ia:
                     messages.warning(request, error_ia)
                 else:
@@ -710,7 +719,7 @@ def post_in_section(request, group_id, section_id):
 
             if request.POST.get("ia") == "on":
                 contexto = _contexto_grupo(group)
-                respuesta_ia, error_ia = preguntar_a_la_ia(
+                respuesta_ia, error_ia, messages = preguntar_a_la_ia(
                     request, post_obj.content, contexto=contexto, guardar_historial=False)
                 if error_ia:
                     messages.warning(request, error_ia)
