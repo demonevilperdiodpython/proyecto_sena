@@ -93,64 +93,58 @@
 		</div>
 
 		<div class="ht-scroll">
-			{# El titulo va DENTRO del bloque para que las vistas que lo
-			   reutilizan (popular, groups) puedan cambiarlo junto con el
-			   contenido. #}
 			{% block hot_topic %}
 				<div class="ht-section-label">💬 Comentarios populares</div>
-
-			{% block hot_topic %}
-				{% for c in top_comments %}
-					<a class="ht-comment-card" href="{% url 'catalog:topic_group' c.group.id %}">
-						<div class="ht-group-avatar">
-							{% if c.group.imagen %}
-								<img src="{{ c.group.imagen.url }}" alt="{{ c.group.nombre }}">
-							{% elif c.group.imagen_url %}
-								<img src="{{ c.group.imagen_url }}" alt="{{ c.group.nombre }}">
-							{% else %}
-								<span>{{ c.group.nombre|slice:":2"|upper }}</span>
-							{% endif %}
-						</div>
-						<div class="ht-comment-body">
-							<div class="ht-group-name">{{ c.group.nombre }}</div>
-							<p class="ht-comment-text">{{ c.content|truncatechars:300 }}</p>
-							<div class="ht-meta">
-								{% if c.replies %}
-									<span class="ht-replies">💬 {{ c.replies }}</span>
+				<div class="ht-comments-col">
+					{% for c in top_comments %}
+						<a class="ht-comment-card" href="{% url 'catalog:topic_group' c.group.id %}">
+							<div class="ht-group-avatar">
+								{% if c.group.imagen %}
+									<img src="{{ c.group.imagen.url }}" alt="{{ c.group.nombre }}">
+								{% elif c.group.imagen_url %}
+									<img src="{{ c.group.imagen_url }}" alt="{{ c.group.nombre }}">
 								{% else %}
-									<span class="ht-replies" style="opacity: 0.5;">Sin respuestas</span>
+									<span>{{ c.group.nombre|slice:":2"|upper }}</span>
 								{% endif %}
 							</div>
-						</div>
-					</a>
-				{% empty %}
-					<p class="ht-empty">No hay comentarios populares aún.</p>
-				{% endfor %}
+							<div class="ht-comment-body">
+								<div class="ht-group-name">{{ c.group.nombre }}</div>
+								<p class="ht-comment-text">{{ c.content|truncatechars:140 }}</p>
+								<div class="ht-meta">
+									{% if c.replies %}
+										<span class="ht-replies">💬 {{ c.replies }}</span>
+									{% else %}
+										<span class="ht-replies" style="opacity: 0.5;">Sin respuestas</span>
+									{% endif %}
+								</div>
+							</div>
+						</a>
+					{% empty %}
+						<p class="ht-empty">No hay comentarios populares aún.</p>
+					{% endfor %}
+				</div>
+
+				<div class="ht-section-label" style="margin-top: 1rem;">⭐ Grupos populares</div>
+
+				<div class="ht-groups-row">
+					{% for g in top_groups %}
+						<a class="ht-group-chip" href="{% url 'catalog:topic_group' g.id %}" title="{{ g.nombre }}">
+							{% if g.imagen %}
+								<img src="{{ g.imagen.url }}" alt="{{ g.nombre }}">
+							{% elif g.imagen_url %}
+								<img src="{{ g.imagen_url }}" alt="{{ g.nombre }}">
+							{% else %}
+								<div class="ht-chip-placeholder">{{ g.nombre|slice:":2"|upper }}</div>
+							{% endif %}
+							<span class="ht-chip-name">{{ g.nombre|truncatechars:18 }}</span>
+						</a>
+					{% empty %}
+						<p class="ht-empty">No hay grupos aún.</p>
+					{% endfor %}
+				</div>
 			{% endblock %}
-
-			<div class="ht-section-label" style="margin-top: 1rem;">⭐ Grupos populares</div>
-
-			<div class="ht-groups-row">
-				{% for g in top_groups %}
-					<a class="ht-group-chip" href="{% url 'catalog:topic_group' g.id %}" title="{{ g.nombre }}">
-						{% if g.imagen %}
-							<img src="{{ g.imagen.url }}" alt="{{ g.nombre }}">
-						{% elif g.imagen_url %}
-							<img src="{{ g.imagen_url }}" alt="{{ g.nombre }}">
-						{% else %}
-							<div class="ht-chip-placeholder">{{ g.nombre|slice:":2"|upper }}</div>
-						{% endif %}
-						<span class="ht-chip-name">{{ g.nombre|truncatechars:14 }}</span>
-					</a>
-				{% empty %}
-					<p class="ht-empty">No hay grupos aún.</p>
-				{% endfor %}
-			</div>
 		</div>
 	</aside>
-	</div>
-
-
 	{% else %}
 		<style>
 			/* El landing es largo y scrollea: se anula el alto fijo.

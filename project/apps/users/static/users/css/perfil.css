@@ -4,17 +4,21 @@
     align-items: center;
     width: 90%;
     max-width: 900px;
-    /* El navbar es fixed, asi que el espacio se reserva aqui.
-       Si cambias el alto del navbar, cambia --navbar-height. */
     margin: 0 auto;
-    padding: calc(var(--navbar-height) + 1rem) 0 2rem;
+    padding: 1.5rem 1rem 2.5rem;
     gap: 2rem;
 }
 
-/* MOVIL: un perfil con muchas publicaciones es mas alto que la pantalla.
-   El html ya scrollea (ver styles.css), asi que solo hace falta que el
-   contenido no se centre: con align-items:center la mitad superior queda
-   fuera de la pantalla y no hay forma de llegar al final. */
+@media (min-width: 1201px) {
+    .ccontainer:has(.contenedor) {
+        height: var(--app-height);
+        max-height: var(--app-height);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+/* MOVIL: un perfil con muchas publicaciones es mas alto que la pantalla. */
 @media (max-width: 1200px) {
     .contenedor {
         align-items: stretch;
@@ -36,9 +40,8 @@
 
 @media (max-width: 600px) {
     .contenedor {
-        /* 90% + padding de las cajas se sale en pantallas de 360px */
         width: 100%;
-        padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+        padding: 1rem 0.75rem 2rem;
         gap: 1.25rem;
     }
 
@@ -51,8 +54,6 @@
     }
 
     .userImagen {
-        /* Antes 100px fijos. Con dvh la foto tambien crece en un
-           telefono mas alto y se achica en uno bajo. */
         width: min(120px, 14dvh);
         height: min(120px, 14dvh);
         border-width: 3px;

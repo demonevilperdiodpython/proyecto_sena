@@ -78,38 +78,39 @@
 {% endblock %}
 
 {% block hot_topic %}
-{% block hot_topic %}
-{# El home ya trae el contenedor con scroll (.ht-scroll), asi que aqui solo
-   van el titulo y las tarjetas. #}
-<div class="ht-section-label">⭐ Mejores usuarios</div>
+    <div class="ht-section-label">⭐ Usuarios destacados</div>
+    <div class="ht-groups-row">
+        {% for x in top_users %}
+            <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}">
+                {% if x.imagen %}
+                    <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
+                {% else %}
+                    <div class="ht-chip-placeholder">SM</div>
+                {% endif %}
+                <span class="ht-chip-name">{{ x.username }}</span>
+                <span class="ht-chip-score">{{ x.score }} pts</span>
+            </a>
+        {% empty %}
+            <p class="ht-empty">Todavía no hay usuarios destacados.</p>
+        {% endfor %}
+    </div>
 
-{% for x in top_users %}
-    <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}" title="{{ x.username }}">
-        {% if x.imagen %}
-            <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
-        {% else %}
-            <div class="ht-chip-placeholder">{{ x.username|slice:":2"|upper }}</div>
-        {% endif %}
-        <span class="ht-chip-name">{{ x.username }}</span>
-    </a>
-{% empty %}
-    <p class="ht-empty">Todavía no hay usuarios.</p>
-{% endfor %}
-
-<div class="ht-section-label" style="margin-top: 1rem;">🏆 Mejores grupos</div>
-
-{% for x in top_groups %}
-    <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
-        {% if x.imagen %}
-            <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
-        {% elif x.imagen_url %}
-            <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
-        {% else %}
-            <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
-        {% endif %}
-        <span class="ht-chip-name">{{ x.nombre }}</span>
-    </a>
-{% empty %}
-    <p class="ht-empty">Todavía no hay grupos.</p>
-{% endfor %}
+    <div class="ht-section-label" style="margin-top: 1.25rem;">🏆 Grupos con mejor score</div>
+    <div class="ht-groups-row">
+        {% for x in top_groups %}
+            <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
+                {% if x.imagen %}
+                    <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
+                {% elif x.imagen_url %}
+                    <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+                {% else %}
+                    <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
+                {% endif %}
+                <span class="ht-chip-name">{{ x.nombre|truncatechars:18 }}</span>
+                <span class="ht-chip-score">{{ x.score }} pts</span>
+            </a>
+        {% empty %}
+            <p class="ht-empty">Todavía no hay grupos con score.</p>
+        {% endfor %}
+    </div>
 {% endblock %}

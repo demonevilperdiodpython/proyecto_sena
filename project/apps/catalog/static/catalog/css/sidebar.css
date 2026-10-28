@@ -45,7 +45,8 @@ body.menu-abierto {
     height: 100dvh;
     /* 260px fijos se comen mas de la mitad de un celular de 360px */
     width: min(270px, 84vw);
-    padding: calc(var(--navbar-height) + 1rem) 0.75rem 1.25rem;
+    box-sizing: border-box;
+    padding: calc(var(--navbar-height) + 0.75rem) 0.75rem 1.25rem;
     background: var(--primary-color-darker);
     border-right: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45);
@@ -497,4 +498,46 @@ body.menu-abierto .sidebar {
         padding: 0.85rem 0.9rem;
         font-size: 1rem;
     }
+}
+/* Reset de listas y truncamiento para evitar desbordes en vistas sin CoreUI */
+.sidebar *,
+.sidebar *::before,
+.sidebar *::after {
+    box-sizing: border-box;
+}
+
+.sidebar ul,
+.sidebar li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar .nav-item .nav-link span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+}
+
+.sidebar .sidebar-footer .small {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.sidebar .sidebar-footer .fw-semibold {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--font-primary-black);
+}
+
+.sidebar .sidebar-footer .small div:last-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--font-primary-black-light);
+    font-size: 0.75rem;
 }

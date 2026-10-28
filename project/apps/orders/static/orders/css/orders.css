@@ -1,5 +1,70 @@
 /* Estilos para el app orders (pedidos), en el mismo estilo de add_group.css */
 
+.addgroup {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: var(--app-height);
+    max-height: var(--app-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem 1rem 2.5rem;
+    box-sizing: border-box;
+    background: var(--primary-color-darker);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--primary-color) 45%, transparent) transparent;
+}
+
+.addgroup::-webkit-scrollbar {
+    width: 6px;
+}
+
+.addgroup::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--primary-color) 45%, transparent);
+    border-radius: 4px;
+}
+
+.groupz {
+    background: var(--containers-primary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+    border-radius: 24px;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.groupz h2 {
+    font-size: 1.8rem;
+    color: var(--accent-text);
+    margin: 0 0 1rem 0;
+    text-align: center;
+}
+
+.boton-registrar {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    background: var(--boton-sito);
+    color: var(--boton-texto);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.25s ease;
+}
+
+.boton-registrar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
 .pedido-box {
     max-width: 720px;
 }
@@ -84,4 +149,11 @@
 
 .boton-cancelar:hover {
     background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+}
+
+@media (max-width: 1200px) {
+    .addgroup {
+        align-items: flex-start;
+        padding: 1rem 0.75rem 2rem;
+    }
 }

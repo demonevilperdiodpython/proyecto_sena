@@ -1,11 +1,27 @@
 .cont-settings {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
-    min-height: var(--vh);
-    padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+    height: var(--app-height);
+    max-height: var(--app-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem 1rem 2.5rem;
+    box-sizing: border-box;
     background: var(--primary-color-darker);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--primary-color) 45%, transparent) transparent;
+}
+
+.cont-settings::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cont-settings::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--primary-color) 45%, transparent);
+    border-radius: 4px;
 }
 
 .card-settings {
@@ -50,11 +66,10 @@
     color: var(--font-primary-black-light);
     margin: 0;
 }
-/* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center
-   el centrado empuja la parte de arriba fuera de vista y no hay forma de
-   llegar al boton. Aqui se alinea arriba y la pagina scrollea normal. */
+
 @media (max-width: 1200px) {
     .cont-settings {
         align-items: flex-start;
+        padding: 1rem 0.75rem 2rem;
     }
 }

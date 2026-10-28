@@ -20,25 +20,25 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'catalog:home' %}">
-				<i class="nav-icon cil-speedometer"></i> home
+				<i class="nav-icon cil-home"></i> Inicio
 			</a>
 		</li>
 
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'catalog:popular' %}">
-				<i class="nav-icon cil-speedometer"></i> popular
+				<i class="nav-icon cil-fire"></i> Popular
 			</a>
 		</li>
 
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'catalog:add_group' %}">
-				<i class="nav-icon cil-speedometer"></i> start a group
+				<i class="nav-icon cil-plus"></i> Crear grupo
 			</a>
 		</li>
 
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'catalog:search_view' %}">
-				<i class="nav-icon cil-speedometer"></i> explore
+				<i class="nav-icon cil-compass"></i> Explorar
 			</a>
 		</li>
 
@@ -58,7 +58,7 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 			{% if user.created_groups.all or user.subscribed_groups.all %}
 				<li class="nav-item nav-group show">
 					<a class="nav-link nav-group-toggle" href="#">
-						<i class="nav-icon cil-puzzle"></i> mis grupos
+						<i class="nav-icon cil-people"></i> Mis grupos
 						<span class="nav-group-toggle-indicator">
 							<i class="icon icon-sm cil-paperclip show"></i>
 							<i class="icon icon-sm cil-plus hide"></i>
@@ -103,7 +103,7 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 	<div class="sidebar-footer">
 		{% if user.is_authenticated %}
 			<div class="dropdown dropend w-100">
-				<a class="btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button"
+				<a class="sidebar-user-btn btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button"
 					data-coreui-toggle="dropdown" aria-expanded="false">
 					<div class="avatar avatar-md">
 						<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">

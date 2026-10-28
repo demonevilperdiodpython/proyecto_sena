@@ -1,11 +1,29 @@
 .login, .register {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
-    min-height: var(--vh);
-    padding: calc(var(--navbar-height) + 1rem) 1rem 2rem;
+    height: var(--app-height);
+    max-height: var(--app-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem 1rem 2.5rem;
+    box-sizing: border-box;
     background: var(--primary-color-darker);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--primary-color) 45%, transparent) transparent;
+}
+
+.login::-webkit-scrollbar,
+.register::-webkit-scrollbar {
+    width: 6px;
+}
+
+.login::-webkit-scrollbar-thumb,
+.register::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--primary-color) 45%, transparent);
+    border-radius: 4px;
 }
 
 .register {
@@ -51,9 +69,7 @@
     transition: all 0.3s ease;
 }
 
-/* Al pasar el mouse el campo se aclara un poco. Antes no tenia hover y
-   el :focus usaba --primary-color-dark (#290466), que se veía como un
-   bloque oscuro. */
+/* Al pasar el mouse el campo se aclara un poco. */
 .input-group input:hover, .Form-control:hover {
     border-color: color-mix(in srgb, var(--primary-color) 80%, transparent);
     background: var(--campo-hover);
@@ -107,8 +123,6 @@
     width: 100%;
     height: 44px;
     border-radius: 22px;
-    /* El azul de Google (#4285F4) con texto blanco daba 3.56:1, por debajo
-       del 4.5 que pide WCAG. Este azul es mas oscuro: 5.2:1. */
     background: #1a5fb4 !important;
     color: white !important;
     font-weight: 600;
@@ -134,9 +148,6 @@
     cursor: pointer;
 }
 
-/* El enlace de Discord/GitHub va dentro del recuadro. Sin esto el <a> es
-   inline y queda con el alto del texto (19px): imposible de tocar con el
-   dedo. Con esto el enlace ocupa toda la caja y llega a 44px. */
 .container-acount a {
     display: flex;
     align-items: center;
@@ -160,10 +171,6 @@
     gap: 1rem;
 }
 
-/* La foto del formulario se mide con el ANCHO de la pantalla y no con
-   pixeles fijos: asi se ve igual de bien en un celular, una tablet o un
-   monitor, y en vertical crece (--tam-avatar cambia segun la orientacion
-   en styles.css). */
 .img-show {
     width: var(--tam-avatar);
     height: var(--tam-avatar);
@@ -218,8 +225,7 @@
    =========================================================================== */
 @media (max-width: 700px) {
     .login, .register {
-        /* Menos padding: en 360px cada rem se nota */
-        padding: calc(var(--navbar-height) + 0.75rem) 0.7rem 2rem;
+        padding: 1rem 0.75rem 2rem;
     }
 
     .register {
@@ -235,14 +241,13 @@
     .contenedor-2 input,
     .contenedor-2 button {
         min-height: 48px;
-        font-size: 1rem; /* 16px evita el zoom automatico de iOS */
+        font-size: 1rem;
     }
 
     .contenedor-2 button {
         width: 100%;
     }
 
-    /* Los botones de redes en columna, no en fila apretada */
     .conatiner-container-acount {
         flex-direction: column !important;
     }
@@ -251,44 +256,14 @@
         width: 100%;
     }
 
-    /* Selector de avatar: menos opciones por fila */
     .image-option {
         margin: 0.2rem;
     }
-
-    /* La foto del formulario ya no lleva pixeles fijos: usa
-       --tam-avatar y --tam-avatar-mini, que en vertical crecen. */
 }
 
-/* MOVIL: el contenido es mas alto que la pantalla. Con align-items:center
-   el centrado empuja la parte de arriba fuera de vista y no hay forma de
-   llegar al boton. Aqui se alinea arriba y la pagina scrollea normal. */
 @media (max-width: 1200px) {
     .login,
     .register {
         align-items: flex-start;
-    }
-}
-
-/* ===========================================================================
-   DISPOSITIVOS EN VERTICAL (celular y tablet en portrait)
-   En vertical la pantalla es alta, asi que la tarjeta del formulario crece
-   con ella. Antes su alto era el justo que ocupaba el contenido (541px), y
-   en un telefono alto eso es menos de la mitad de la pantalla: la tarjeta
-   se veía perdida en el medio con mucho fondo vacio abajo.
-
-   El min() entre porcentaje y pixeles la limita en pantallas normales para
-   que no se vuelva enorme en una tablet.
-   =========================================================================== */
-@media (orientation: portrait) {
-    .container-2 {
-        min-height: min(72dvh, 680px);
-        justify-content: center;
-    }
-
-    /* La tarjeta de la foto (la segunda del registro) no necesita ser tan
-       alta: se le deja solo lo que ocupaba, para no dejar un hueco. */
-    .register .container-2:has(.imagen-selecter) {
-        min-height: min(58dvh, 560px);
     }
 }
