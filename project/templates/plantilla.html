@@ -20,6 +20,11 @@
         <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
         {%block css%}
         {% endblock %}
+        {# Iconos del menu (cil-*). Se cargan aqui, en la plantilla base, para
+           que el sidebar se vea igual en TODAS las vistas: antes solo los
+           cargaba home.html y en settings, add_group, login, etc. los iconos
+           salian vacios. #}
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
         {# El menu lateral. Va aqui, en la plantilla base, para que exista en CUALQUIER pagina y no solo en el home. Lo abre el boton de hamburguesa de abajo (sidemenu.js). #}
         <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/sidebar.css' %}">
         {# Estilo de los adjuntos de los posts. #}
@@ -108,4 +113,3 @@
         <script src="{% static 'catalog/js/adjuntos.js' %}"></script>
     </body>
 </html>
-+|a

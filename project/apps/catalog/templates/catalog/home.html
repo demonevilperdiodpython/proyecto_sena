@@ -9,7 +9,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/css/coreui.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5/dist/js/coreui.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 {% comment %}
@@ -94,7 +93,11 @@
 		</div>
 
 		<div class="ht-scroll">
-			<div class="ht-section-label">💬 Comentarios populares</div>
+			{# El titulo va DENTRO del bloque para que las vistas que lo
+			   reutilizan (popular, groups) puedan cambiarlo junto con el
+			   contenido. #}
+			{% block hot_topic %}
+				<div class="ht-section-label">💬 Comentarios populares</div>
 
 			{% block hot_topic %}
 				{% for c in top_comments %}

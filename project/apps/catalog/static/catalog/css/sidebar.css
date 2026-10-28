@@ -38,8 +38,7 @@ body.menu-abierto {
 .sidebar,
 .sidebar.sidebar-fixed,
 .sidebar.sidebar-narrow,
-.sidebar.hide,
-.sidebar:not(.show) {
+.sidebar.hide {
     position: fixed !important;
     top: 0;
     left: 0;
@@ -54,7 +53,6 @@ body.menu-abierto {
     display: flex !important;
     flex-direction: column;
     gap: 1rem;
-    visibility: visible !important;
     margin-left: 0 !important;
     /* Fuera de pantalla, pero sin display:none para que la animacion
        de entrada se vea. */
@@ -62,6 +60,10 @@ body.menu-abierto {
     visibility: hidden !important;
     transition: transform .25s ease, visibility .25s ease;
 }
+
+/* OJO: aqui NO se usa .sidebar:not(.show). Esa variante tiene mas
+   especificidad que "body.menu-abierto .sidebar" (el :not() tambien suma),
+   asi que ganaba incluso con el menu abierto y el cajon nunca entraba. */
 
 /* ---------------------------------------------------------------------------
    Estado abierto: lo pone sidemenu.js al pulsar el boton de hamburguesa.
@@ -87,14 +89,57 @@ body.menu-abierto .sidebar {
        su alto natural y es la sidebar entera la que scrollea. */
     flex: 0 0 auto;
     overflow: visible;
+    /* Estas cuatro lineas antes las ponia CoreUI (.nav). Las paginas que
+       no cargan CoreUI (settings, add_group, login...) dejaban la lista
+       con vinetas y los enlaces uno debajo de otro sin separacion. */
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Sin esto, en las vistas sin CoreUI los <li> mostraban la vineta del
+   navegador y el menu se veia como una lista de texto suelta. */
+.sidebar .sidebar-nav .nav-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* El desplegable del pie (Account / Ajustes / Logout). Antes dependia de
+   CoreUI: en las vistas que no lo cargan el <ul> salia abierto, con vinetas
+   y empujando el pie fuera de la pantalla. Ahora vive dentro del sidebar y
+   se abre hacia arriba, para que no se salga del cajon. */
+.sidebar .sidebar-footer .dropdown {
+    position: relative;
+    width: 100%;
 }
 
 .sidebar .sidebar-footer .dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: calc(100% + 0.5rem);
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0.4rem;
+    list-style: none;
+    background: var(--primary-color-darker);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     z-index: 9000;
 }
 
-.sidebar .sidebar-footer .dropdown-menu {
-    z-index: 9000;
+.sidebar .sidebar-footer .dropdown-menu.show {
+    display: block;
 }
 
 /* El estilo de .nav-title esta mas abajo, junto con el del resto del menu. */
@@ -182,7 +227,11 @@ body.menu-abierto .sidebar {
     justify-content: center;
     width: 26px;
     height: 26px;
-    flex-shrink: 0;
+    /* CoreUI trae .nav-icon con flex: 0 0 20px y margin-right: 12px. Sin
+       estos dos valores el icono se veia ovalado y con un hueco de mas
+       solo en las paginas que cargan CoreUI. */
+    flex: 0 0 26px;
+    margin: 0;
     border-radius: 8px;
     background: color-mix(in srgb, var(--primary-color) 22%, transparent);
     font-size: 0.95rem;
@@ -224,9 +273,19 @@ body.menu-abierto .sidebar {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    width: 100%;
     min-height: 44px;
+    padding: 0.5rem 0.6rem;
+    border-radius: 9px;
     color: var(--font-primary-black);
     font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.sidebar .sidebar-footer .dropdown-menu .dropdown-item > i {
+    flex: 0 0 18px;
+    text-align: center;
+    color: var(--accent-text);
 }
 
 .sidebar .sidebar-footer .dropdown-menu .dropdown-item:hover {
@@ -234,12 +293,23 @@ body.menu-abierto .sidebar {
     color: var(--primary-color);
 }
 
+.sidebar .dropdown-divider {
+    height: 1px;
+    margin: 0.35rem 0;
+    border: 0;
+    background: color-mix(in srgb, var(--primary-color) 35%, transparent);
+    opacity: 0.6;
+}
+
 .nav-img, .small-img img {
-    width: var(--tam-avatar-pequeno);
-    height: var(--tam-avatar-pequeno);
-    border-radius: 10px;
+    /* Tamano fijo: antes usaba --tam-avatar-pequeno, que crece en pantallas
+       verticales y hacia que la foto del grupo se comiera media sidebar y
+       desalineara los enlaces. */
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
     object-fit: cover;
-    flex-shrink: 0;
+    flex: 0 0 28px;
     border: 1.5px solid var(--primary-color);
     display: inline-block;
     vertical-align: middle;
@@ -253,13 +323,153 @@ body.menu-abierto .sidebar {
     background: var(--primary-color-dark);
     color: var(--font-primary-black);
     font-weight: bold;
-    font-size: 0.85rem;
-    width: var(--tam-avatar-pequeno);
-    height: var(--tam-avatar-pequeno);
-    border-radius: 10px;
-    flex-shrink: 0;
+    font-size: 0.7rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    flex: 0 0 28px;
     border: 1.5px solid var(--primary-color);
 }
+
+/* ===========================================================================
+   SUBMENU "MIS GRUPOS" Y PIE DEL MENU
+
+   Todo lo de aqui reemplaza lo que antes aportaba CoreUI. El sidebar se
+   dibuja en todas las paginas, pero CoreUI solo se carga en las que heredan
+   de home.html. Sin estas reglas, settings, add_group, login, perfil y las
+   demas vistas dejaban el submenu abierto, con vinetas y sin desplegable.
+   =========================================================================== */
+.sidebar .nav-group {
+    list-style: none;
+    width: 100%;
+}
+
+.sidebar .nav-group-toggle-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: auto;
+    flex: 0 0 24px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    color: var(--font-primary-black-light);
+}
+
+.sidebar .nav-group-toggle-indicator .icon {
+    display: none;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+/* Segun el estado del grupo se muestra el clip (abierto) o el mas (cerrado). */
+.sidebar .nav-group.show > .nav-link .nav-group-toggle-indicator .cil-paperclip,
+.sidebar .nav-group:not(.show) > .nav-link .nav-group-toggle-indicator .cil-plus {
+    display: inline-block;
+}
+
+.sidebar .nav-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+    margin: 0.35rem 0 0;
+    padding: 0 0 0 0.55rem;
+    list-style: none;
+    border-left: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+}
+
+.sidebar .nav-group:not(.show) > .nav-group-items {
+    display: none;
+}
+
+.sidebar .nav-group.show > .nav-group-items {
+    display: flex;
+}
+
+/* Los grupos van dentro del menu: mas bajos y sin el fondo de las pastillas
+   principales, para que se entienda que cuelgan de "mis grupos". */
+.sidebar .nav-group-items .nav-link {
+    min-height: 40px;
+    padding: 0.35rem 0.55rem;
+    background: transparent;
+    font-size: 0.9rem;
+}
+
+.sidebar .nav-group-items .nav-link:hover,
+.sidebar .nav-group-items .nav-link:focus-visible {
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+}
+
+.sidebar .sidebar-footer {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+}
+
+.sidebar .sidebar-footer .btn-ghost {
+    width: 100%;
+    padding: 0.45rem;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--font-primary-black);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.sidebar .sidebar-footer .btn-ghost:hover,
+.sidebar .sidebar-footer .btn-ghost:focus-visible {
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+}
+
+.sidebar .avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    overflow: hidden;
+    border-radius: 11px;
+}
+
+.sidebar .avatar-md {
+    width: 40px;
+    height: 40px;
+}
+
+.sidebar .avatar-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Utilidades sueltas que la plantilla del menu usa (w-100, d-flex, gap-2,
+   small, ms-auto...). Se limitan al sidebar para no tocar el resto de la
+   pagina y para que se comporten igual con o sin CoreUI. */
+.sidebar .w-100 { width: 100%; }
+.sidebar .d-flex { display: flex; }
+.sidebar .flex-column { flex-direction: column; }
+.sidebar .align-items-center { align-items: center; }
+.sidebar .justify-content-between { justify-content: space-between; }
+.sidebar .gap-1 { gap: 0.25rem; }
+.sidebar .gap-2 { gap: 0.5rem; }
+.sidebar .text-start { text-align: left; }
+.sidebar .small { font-size: 0.8rem; line-height: 1.35; }
+.sidebar .fw-semibold { font-weight: 600; }
+.sidebar .ms-auto { margin-left: auto; }
+.sidebar .p-1 { padding: 0.25rem; }
+.sidebar .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.sidebar .rounded { border-radius: 10px; }
+.sidebar .d-sidebar-narrow-none { display: initial; }
 
 /* El boton interno que encoge la columna ya no hace falta: el sidebar ya
    es un cajon. Se oculta para que no aparezca un boton sin funcion. */
@@ -273,8 +483,7 @@ body.menu-abierto .sidebar {
     .sidebar,
     .sidebar.sidebar-fixed,
     .sidebar.sidebar-narrow,
-    .sidebar.hide,
-    .sidebar:not(.show) {
+    .sidebar.hide {
         width: min(300px, 26vw);
     }
 }

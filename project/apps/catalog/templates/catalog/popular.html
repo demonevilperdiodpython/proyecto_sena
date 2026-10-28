@@ -78,32 +78,38 @@
 {% endblock %}
 
 {% block hot_topic %}
-<aside class="dual-conatiner">
-    <div>
-        <h1>⭐ Mejores Usuarios</h1>
-        {% for x in top_users %}
-            <a class="perfil-item perfil-enlace" href="{% url 'users:Perfil' x.id %}">
-                {% if x.imagen %}
-                    <img src="{{ x.imagen.url }}" alt="{{ x.username }}" class="foto-perfil">
-                {% else %}
-                    <div class="foto-perfil" style="background-color: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-size: 0.9rem; font-weight:bold;">SM</div>
-                {% endif %}
-                <p class="perfil-nombre">{{ x.username }}</p>
-            </a>
-        {% endfor %}
-    </div>
-    <div>
-        <h1>🏆 Mejores Grupos</h1>
-        {% for x in top_groups %}
-            <a class="perfil-item perfil-enlace" href="{% url 'catalog:topic_group' x.id %}">
-                {% if x.imagen %}
-                    <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}" class="foto-perfil">
-                {% else %}
-                    <div class="foto-perfil" style="background-color: var(--primary-color-dark); display:flex; align-items:center; justify-content:center; color:white; font-size: 0.9rem; font-weight:bold;">SM</div>
-                {% endif %}
-                <p class="perfil-nombre">{{ x.nombre }}</p>
-            </a>
-        {% endfor %}
-    </div>
-</aside>
+{% block hot_topic %}
+{# El home ya trae el contenedor con scroll (.ht-scroll), asi que aqui solo
+   van el titulo y las tarjetas. #}
+<div class="ht-section-label">⭐ Mejores usuarios</div>
+
+{% for x in top_users %}
+    <a class="ht-group-chip" href="{% url 'users:Perfil' x.id %}" title="{{ x.username }}">
+        {% if x.imagen %}
+            <img src="{{ x.imagen.url }}" alt="{{ x.username }}">
+        {% else %}
+            <div class="ht-chip-placeholder">{{ x.username|slice:":2"|upper }}</div>
+        {% endif %}
+        <span class="ht-chip-name">{{ x.username }}</span>
+    </a>
+{% empty %}
+    <p class="ht-empty">Todavía no hay usuarios.</p>
+{% endfor %}
+
+<div class="ht-section-label" style="margin-top: 1rem;">🏆 Mejores grupos</div>
+
+{% for x in top_groups %}
+    <a class="ht-group-chip" href="{% url 'catalog:topic_group' x.id %}" title="{{ x.nombre }}">
+        {% if x.imagen %}
+            <img src="{{ x.imagen.url }}" alt="{{ x.nombre }}">
+        {% elif x.imagen_url %}
+            <img src="{{ x.imagen_url }}" alt="{{ x.nombre }}">
+        {% else %}
+            <div class="ht-chip-placeholder">{{ x.nombre|slice:":2"|upper }}</div>
+        {% endif %}
+        <span class="ht-chip-name">{{ x.nombre }}</span>
+    </a>
+{% empty %}
+    <p class="ht-empty">Todavía no hay grupos.</p>
+{% endfor %}
 {% endblock %}

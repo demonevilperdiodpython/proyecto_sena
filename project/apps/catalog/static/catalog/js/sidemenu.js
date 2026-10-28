@@ -71,6 +71,47 @@ function iniciarMenuLateral() {
         });
     }
 
+    /* Desplegable del pie y submenu "mis grupos".
+       CoreUI ya los maneja en el home, pero las vistas que extienden
+       plantilla.html directamente no cargan CoreUI. Este bloque es el
+       respaldo para que ahi tambien abran y cierren. */
+    if (sidebar && !window.coreui && !window.bootstrap) {
+        const botonesDropdown = sidebar.querySelectorAll('[data-coreui-toggle="dropdown"]');
+
+        function cerrarDropdowns() {
+            sidebar.querySelectorAll('.sidebar-footer .dropdown-menu.show')
+                .forEach(function (menu) { menu.classList.remove('show'); });
+        }
+
+        botonesDropdown.forEach(function (boton) {
+            boton.addEventListener('click', function (evento) {
+                evento.preventDefault();
+                evento.stopPropagation();
+
+                const contenedor = boton.closest('.dropdown');
+                const menu = contenedor ? contenedor.querySelector('.dropdown-menu') : null;
+                if (!menu) return;
+
+                const estabaAbierto = menu.classList.contains('show');
+                cerrarDropdowns();
+                if (!estabaAbierto) menu.classList.add('show');
+            });
+        });
+
+        sidebar.addEventListener('click', function (evento) {
+            if (!evento.target.closest('.dropdown')) cerrarDropdowns();
+        });
+
+        sidebar.querySelectorAll('.nav-group-toggle').forEach(function (boton) {
+            boton.addEventListener('click', function (evento) {
+                evento.preventDefault();
+                evento.stopPropagation();
+                const grupo = boton.closest('.nav-group');
+                if (grupo) grupo.classList.toggle('show');
+            });
+        });
+    }
+
     /* Al pasar a pantalla ancha el menu se cierra solo: si no se queda
        tapando el contenido. */
     window.addEventListener('resize', function () {

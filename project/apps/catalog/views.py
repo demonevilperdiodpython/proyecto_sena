@@ -157,6 +157,7 @@ def _contexto_ia(user):
         partes.append("Usuario: {}".format(p.content))
         if p.ia_response:
             partes.append("Asistente: {}".format(p.ia_response.content))
+            
     return "\n".join(partes)
 def group_contexto_ia(group):
     partes = []
