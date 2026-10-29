@@ -39,6 +39,15 @@
             {% csrf_token %}
             {# Un solo boton para todos los archivos. Antes habia dos, uno de imagen y otro de video, y cada uno aceptaba un archivo. El input va oculto y con multiple, asi que el navegador deja marcar cuantos se quiera. Sin accept: se sube cualquier tipo. #}
             <div class="media-upload-btns">
+                {# El input va aqui y no como campo del form: la vista lee los archivos con request.FILES.getlist('archivos'), y un FileField normal solo admite uno. El boton de abajo solo abre este input. #}
+                <input
+                    type="file"
+                    name="archivos"
+                    multiple
+                    class="input-archivos"
+                    style="display:none;"
+                    aria-label="Archivos adjuntos"
+                />
                 <button
                     type="button"
                     class="btn-custom btn-adjuntar"

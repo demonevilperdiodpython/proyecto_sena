@@ -20,7 +20,21 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from functools import wraps
 from urllib.parse import urlparse
+#importo esto para manejar los dox
+from docx import Document
+from docx.text.paragraph import Paragraph
+from docx.table import Table
+#esto para los pdf
+from pypdf import PdfReader
 
+#importo esto paara
+import io
+import re
+#extenciones que se pueden manejar de la misma forma
+EXTENSIONES_TEXTO = {
+    "txt", "md", "markdown", "csv", "tsv", "log", "json",
+    "xml", "html", "htm", "py", "js", "css", "sql", "yaml", "yml", "ini",
+}
 
 from ollama import ps
 ia_model = Client(
@@ -82,7 +96,40 @@ CIERRE
 Cuando sea útil, termina con una pregunta breve, un siguiente paso concreto o una advertencia relevante. No añadas despedidas largas."""
 MAX_HISTORIAL = 16          # pares user/assistant que se mandan al modelo
 SESSION_KEY = "ia_historial"
-
+def doc_como_argumento(request, group_object):
+    group = get_object_or_404(topics_group, id=group_object.id)
+    doc_text = ""
+    for p in group.post.all():
+        for j in  p.archivos.all():
+            extension = getattr(j.archivo, 'name', "").rsplit(".", 1)[-1].lower()
+            if getattr(j.archivo, 'name', "").endswith(".docx"):
+                #desde aca comienzo a utiliza python-dox, que lo encontre para manejar los documentos dox
+                doc = Document(getattr(j.archivo, "path", ""))
+                for d in doc.paragraphs:
+                    doc_text += d.text + "\n"
+                for d in doc.tables:
+                    for f in d.rows:
+                        for c in f.cells:
+                            doc_text += c.text + "\t"
+                        doc_text += "\n"
+            elif getattr(j.archivo, 'name', "").endswith(".pdf"):
+                #desde aca comienzo a utilizar pypdf, que lo encontre para manejar los documentos pdf
+                doc_text += "contenido de archivo pdf: \n"
+                pdf = PdfReader(getattr(j.archivo, "path", ""))
+                for page in pdf.pages:
+                    doc_text += page.extract_text() + "\n"
+            elif extension in EXTENSIONES_TEXTO:
+                with j.archivo.open("rb") as archivo_abierto:
+                    datos = archivo_abierto.read()
+                texto = datos.decode("utf-8", errors="replace")
+                if extension in {"html", "htm", "xml"}:
+                    texto = re.sub(r"<[^>]+>", " ", texto)
+                doc_text += "otra extencion de texto" + texto + "\n"
+           
+    return doc_text
+                
+#hay que recordar que el historial solo funciona en la session en la que se este, reiniciando la pagina re resetea.
+#las modificaciones del historial no tiene nada que ver con el contexto
 def _get_historial(request):
     historial = request.session.get(SESSION_KEY, [])
     if not isinstance(historial, list):
@@ -106,7 +153,7 @@ def _guardar_historial(request, historial):
     return historial
 
 
-def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_historial=True):
+def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_historial=True, group_object=None):
     # En grupos/secciones no mezclamos el historial de la pestana /ia.
     if guardar_historial:
         if historial is None:
@@ -120,7 +167,7 @@ def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_his
     if historial:
         messages.extend(historial)
     messages.append({"role": "user", "content": texto})
-
+    
     print("HISTORIAL ({} mensajes):".format(len(historial)), [m.get("role") for m in historial])
     print(messages)
 
@@ -151,18 +198,22 @@ def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_his
     except Exception as e:
         return None, str(e), messages
     
+    
 def _contexto_ia(user):
     partes = []
+    #filtro unicamente los comentarios del usuario en session   teniendo en cuenta que no se este escribiend oen un grupo, sino en la
+    #vista de ia
     for p in post_model.objects.filter(user=user, group__isnull=True, es_ia=False).order_by('created_at'):
         partes.append("Usuario: {}".format(p.content))
         if p.ia_response:
             partes.append("Asistente: {}".format(p.ia_response.content))
-            
+    
+    
     return "\n".join(partes)
 
 def group_contexto_ia(group):
     partes = []
-
+    #filtro lso comentarios del grupo para de esta manera mandar un arreglo, con todo el contexto de conversacion de lgrupo
     for p in group.post.all().order_by('created_at'):
         partes.append("Usuario: {}".format(p.content))
 
@@ -180,12 +231,12 @@ def ia_view(request):
             if request.user.is_authenticated:
                 contexto = _contexto_ia(request.user)
                 print("contexto funcionando")
-
+            #utilizo commit false para poder asignar el usuario y el grupo antes de guardar el post
             nuevo_post = form.save(commit=False)
             nuevo_post.user = request.user
             nuevo_post.group = None
             nuevo_post.save()
-
+            #guardo los tres valores que me da la funcion para luego utilizarlos
             respuesta, error, messages = preguntar_a_la_ia(
                 request, nuevo_post.content, contexto=contexto, guardar_historial=True)
             print("messages:", messages)
@@ -248,11 +299,7 @@ def sin_cuenta_no_se_puede_actuar(view):
 
 
 def guardar_archivos(post_obj, archivos):
-    """Guarda los adjuntos del post y devuelve cuantos se guardaron.
-
-    Acepta cualquier tipo de archivo y todos los que se marquen a la vez.
-    Antes habia dos bloques, uno para video y otro para imagen, y cada uno
-    aceptaba un solo archivo."""
+    #guard a  los archivos para que esten ordenados corectamente y no se pierdan
     guardados = 0
     for archivo in archivos:
         # Los vacios (0 bytes) se saltan: no son un archivo util.
@@ -269,10 +316,9 @@ def guardar_archivos(post_obj, archivos):
 
 
 def archivos_del_request(request):
-    """Los adjuntos que(se subiieron en este POST.
-
-    Se leen de request.FILES y no de un forms.FileField porque ese campo
-    espera un archivo suelto y revienta con la lista de getlist."""
+    #realemente no sabia como hacer esto, entonces le pregute a la ia
+    #creo que  la funcion es un poco inutil pero ya se utiliza de estqa manera 
+    #no quiero rempalzar la funcion por el request.FILES.getlist('archivos') :,v
     return request.FILES.getlist('archivos')
 
 
@@ -290,7 +336,7 @@ def posts_del_feed(vista, usuario):
         return base.filter(children__isnull=True).order_by('created_at')[:10]
 
     if vista == 'mis_grupos' and usuario.is_authenticated:
-        # Los grupos donde soy dueno o estoy suscrito.
+        # Los grupos donde soy dueño o estoy suscrito.
         mios = topics_group.objects.filter(
             Q(creator=usuario) | Q(subscriptions=usuario))
         return base.filter(group__in=mios).order_by('-created_at')[:10]
@@ -300,8 +346,8 @@ def posts_del_feed(vista, usuario):
 
 
 def home(request):
-    # top_comments y top_groups ya no se calculan aqui: los inyecta
-    # apps.catalog.context_processors.hot_topic en todas las vistas.
+    # top_comments y top_groups ya no se calculan aqui: solo utilizo la funcion
+        # apps.catalog.context_processors.hot_topic ahora se utilza en cada vista
     grupos = topics_group.objects.all()
 
     # Que se esta viendo. Se lee de la URL (?ver=ayuda) para que la vista
@@ -664,7 +710,6 @@ def topic_group(request, id):
             post = form.save(commit=False)
             post.user = request.user
             post.group = group  
-
             parent_id = request.POST.get("parent_id")
             if parent_id:
                 try:
@@ -682,6 +727,8 @@ def topic_group(request, id):
                 group = get_object_or_404(topics_group, id=id)
 
                 contexto = group_contexto_ia(group=group)
+                doc_text = doc_como_argumento(request, group)
+                contexto = contexto + "\n\n  (contenido de archivos .docx del grupo):\n" + doc_text
                 respuesta_ia, error_ia, messages = preguntar_a_la_ia(
                     request, post.content,contexto=contexto, guardar_historial=False)
                 if error_ia:
@@ -718,7 +765,7 @@ def post_in_section(request, group_id, section_id):
             section.posts.add(post_obj)
 
             if request.POST.get("ia") == "on":
-                contexto = _contexto_grupo(group)
+                contexto = group_contexto_ia(group)
                 respuesta_ia, error_ia, messages = preguntar_a_la_ia(
                     request, post_obj.content, contexto=contexto, guardar_historial=False)
                 if error_ia:

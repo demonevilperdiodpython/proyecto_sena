@@ -2,11 +2,6 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <!-- IMPORTANTE: sin esta etiqueta el celular asume una pantalla de
-             980px de ancho y escala TODO hacia abajo (se ve chiquitito) y
-             ademas las media queries de movil (max-width: 700px, etc.)
-             nunca se activan, porque se miden contra 980px.
-             Con esto el ancho real es el del celular. -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Plantilla Base{% endblock %}</title>
         {% load static %}
@@ -20,10 +15,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
         {%block css%}
         {% endblock %}
-        {# Iconos del menu (cil-*). Se cargan aqui, en la plantilla base, para
-           que el sidebar se vea igual en TODAS las vistas: antes solo los
-           cargaba home.html y en settings, add_group, login, etc. los iconos
-           salian vacios. #}
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
         {# El menu lateral. Va aqui, en la plantilla base, para que exista en CUALQUIER pagina y no solo en el home. Lo abre el boton de hamburguesa de abajo (sidemenu.js). #}
         <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/sidebar.css' %}">
@@ -107,9 +98,8 @@
         
         </div>
 
-        {# Va al final del body a proposito: si se carga en el <head> el boton de tema todavia no existe en el DOM y el listener nunca se conecta. #}
+        <head>
         <script src="{% static 'catalog/js/sidemenu.js' %}"></script>
-        {# Boton de adjuntar archivos del post. No hace nada si la pagina no tiene ese boton, asi que se puede cargar en todas. #}
         <script src="{% static 'catalog/js/adjuntos.js' %}"></script>
     </body>
 </html>
