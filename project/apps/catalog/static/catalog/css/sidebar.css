@@ -72,8 +72,9 @@ body.menu-abierto {
 body.menu-abierto .sidebar {
     transform: translateX(0) !important;
     visibility: visible !important;
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    /* El scroll ya no es de toda la sidebar: lo lleva .sidebar-nav. Asi el
+       pie (y su dropdown) no se recortan por el overflow del contenedor. */
+    overflow: visible;
 }
 
 .sidebar-backdrop {
@@ -84,12 +85,14 @@ body.menu-abierto .sidebar {
    Contenido del menu
    --------------------------------------------------------------------------- */
 .sidebar .sidebar-nav {
-    /* Antes era flex:1 con overflow-y:auto. Eso le recortaba el ultimo
-       enlace a media altura: el <ul> se quedaba corto y el enlace de
-       abajo caia fuera de su caja, sin poder pulsarlo. Ahora el nav toma
-       su alto natural y es la sidebar entera la que scrollea. */
-    flex: 0 0 auto;
-    overflow: visible;
+    /* El scroll vive aqui (y no en toda la sidebar) para que el pie y su
+       dropdown no se recorten. flex:1 + min-height:0 permiten que la lista
+       ocupe el espacio disponible y scrollee sin empujar el pie fuera. */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
     /* Estas cuatro lineas antes las ponia CoreUI (.nav). Las paginas que
        no cargan CoreUI (settings, add_group, login...) dejaban la lista
        con vinetas y los enlaces uno debajo de otro sin separacion. */

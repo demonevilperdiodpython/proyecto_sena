@@ -168,8 +168,6 @@ def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_his
         messages.extend(historial)
     messages.append({"role": "user", "content": texto})
     
-    print("HISTORIAL ({} mensajes):".format(len(historial)), [m.get("role") for m in historial])
-    print(messages)
 
     # Se guarda el mensaje del usuario ANTES de llamar al modelo, asi el
     # historial no se pierde si la llamada falla.
@@ -230,16 +228,16 @@ def ia_view(request):
             contexto = None
             if request.user.is_authenticated:
                 contexto = _contexto_ia(request.user)
-                print("contexto funcionando")
             #utilizo commit false para poder asignar el usuario y el grupo antes de guardar el post
             nuevo_post = form.save(commit=False)
             nuevo_post.user = request.user
             nuevo_post.group = None
             nuevo_post.save()
             #guardo los tres valores que me da la funcion para luego utilizarlos
-            respuesta, error, messages = preguntar_a_la_ia(
+            # OJO: el tercer valor es la lista de mensajes del chat, NO el
+            # modulo django.contrib.messages. Se renombra para no pisarlo.
+            respuesta, error, _chat_messages = preguntar_a_la_ia(
                 request, nuevo_post.content, contexto=contexto, guardar_historial=True)
-            print("messages:", messages)
             if error:
                 messages.warning(request, error)
             else:
@@ -247,9 +245,9 @@ def ia_view(request):
                 post_ia.save()
                 nuevo_post.ia_response = post_ia
                 nuevo_post.save()
+                messages.success(request, "Publicación enviada.")
 
             guardar_archivos(nuevo_post, archivos_del_request(request))
-            messages.success(request, "Publicación enviada.")
             return redirect('catalog:ia')
         else:
             messages.error(request, "No se pudo publicar. El contenido no puede estar vacío.")
@@ -273,7 +271,7 @@ def ia_view(request):
 def ia_response(request):
     if request.method == "POST":
         texto = request.POST.get("input_text", "").strip()
-        respuesta, error, messages = preguntar_a_la_ia(request, texto)
+        respuesta, error, _chat_messages = preguntar_a_la_ia(request, texto)
         historial = _get_historial(request)
         return render(request, "catalog/ia_response.html", {
             "historial": historial, "error": error,
@@ -696,7 +694,6 @@ def topic_section_view(request, group_id, section_id):
     })
 
 def topic_group(request, id):
-    print("inicia la pagina---------------------------------------------------------")
     form = postForm(request.POST or None, request.FILES or None)
     group = get_object_or_404(topics_group, id=id)
     group_post = group.post.filter(parent__isnull=True).order_by('-created_at')
@@ -704,24 +701,19 @@ def topic_group(request, id):
     if request.method == 'POST':
         if not request.user.is_authenticated:
             return para_registrarse(request)
-            print('el usuario esta autenticadp-------------------------------------')
         if form.is_valid():
-            print('el formulario es valido -----------------------------------')
             post = form.save(commit=False)
             post.user = request.user
             post.group = group  
             parent_id = request.POST.get("parent_id")
             if parent_id:
                 try:
-                    print("tonoto")
                     post.parent = group.post.get(id=parent_id, parent__isnull=True)
                 except group.post.model.DoesNotExist:
                     messages.error(request, "Comentario padre inválido")
                     return redirect('catalog:topic_group', id=id)
 
             post.save()
-            print(post.id)
-            print('formulario valido------------------------------------------')
 
             if request.POST.get("ia") == "on":
                 group = get_object_or_404(topics_group, id=id)
@@ -729,7 +721,7 @@ def topic_group(request, id):
                 contexto = group_contexto_ia(group=group)
                 doc_text = doc_como_argumento(request, group)
                 contexto = contexto + "\n\n  (contenido de archivos .docx del grupo):\n" + doc_text
-                respuesta_ia, error_ia, messages = preguntar_a_la_ia(
+                respuesta_ia, error_ia, _chat_messages = preguntar_a_la_ia(
                     request, post.content,contexto=contexto, guardar_historial=False)
                 if error_ia:
                     messages.warning(request, error_ia)
@@ -739,8 +731,6 @@ def topic_group(request, id):
                     post_ia.save()
                     post.ia_response = post_ia
                     post.save()
-                    print(post)
-
             guardar_archivos(post, archivos_del_request(request))
     posts = group.post.filter().order_by('-created_at')
     return render(request, "catalog/group.html", {
@@ -766,7 +756,7 @@ def post_in_section(request, group_id, section_id):
 
             if request.POST.get("ia") == "on":
                 contexto = group_contexto_ia(group)
-                respuesta_ia, error_ia, messages = preguntar_a_la_ia(
+                respuesta_ia, error_ia, _chat_messages = preguntar_a_la_ia(
                     request, post_obj.content, contexto=contexto, guardar_historial=False)
                 if error_ia:
                     messages.warning(request, error_ia)

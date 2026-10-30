@@ -1,5 +1,19 @@
 
 
+import sys
+
+# En Windows la consola por defecto usa cp1252 y cualquier print() con
+# caracteres Unicode (acentos, guiones largos, etc.) lanza
+# UnicodeEncodeError y rompe la peticion. Se reconfigura stdout/stderr
+# para que usen UTF-8 y, si aun asi falla, reemplacen el caracter.
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 """
 Django settings for project project.
 
@@ -22,21 +36,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-oi&q!_$dxjx1r_f7xh6u#5nlmm$0_ys=92k)^sec7ufvgpu+#d')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-# El dominio de render va primero. Se agregan localhost/127.0.0.1 para poder
-# probar en local: sin ellos Django responde DisallowedHost (400) al entrar
-# desde la IP del equipo o desde el movil en la misma red.
-ALLOWED_HOSTS = [
-    '.onrender.com',
-    'proyecto-sena-jbwi.onrender.com',
-    'localhost',
-    '127.0.0.1',
-    '0.0.0.0',
-]
+# Hosts permitidos (lee de variable de entorno o lista local por defecto)
+allowed_hosts_env = os.environ.get('DJANGO_ALLOWED_HOSTS')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = [
+        '.onrender.com',
+        'proyecto-sena-jbwi.onrender.com',
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0',
+    ]
 CSRF_TRUSTED_ORIGINS = ['https://proyecto-sena-jbwi.onrender.com']
 
 
@@ -120,12 +136,11 @@ TEMPLATES = [
 
 
 
-mysqlittle =True 
+# Configuración de base de datos (SQLite por defecto, MySQL/MariaDB si USE_SQLITE=False)
+use_sqlite = os.environ.get('USE_SQLITE', 'True').lower() in ('true', '1', 'yes')
 
-
-
-if mysqlittle == False:
-    # 1. Ignorar la restricción de versión mínima de MariaDB para XAMPP (MariaDB 10.4)
+if not use_sqlite:
+    # Ignorar la restriccion de version minima de MariaDB para XAMPP (MariaDB 10.4)
     from django.db.backends.mysql.base import DatabaseWrapper
     from django.db.backends.mysql.features import DatabaseFeatures
 
@@ -135,20 +150,22 @@ if mysqlittle == False:
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',    # Motor oficial de Django para MySQL
-            'NAME': 'sharp_mind',                    # El nombre en phpMyAdmin
-            'USER': 'root',                         # Usuario por defecto en XAMPP
-            'PASSWORD': '',                         # Contraseña por defecto en XAMPP
-            'HOST': 'localhost',                    # Servidor
-            'PORT': '3306',                         # Puerto estándar
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('DB_NAME', 'sharp_mind'),
+            'USER': os.environ.get('DB_USER', 'root'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '3306'),
         }
     }
-else: 
+else:
     DATABASES = {
-    'default': {
+        'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',}
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
+
 AUTH_USER_MODEL = "users.customuser"
 LOGIN_REDIRECT_URL = "/"
     # Password validation

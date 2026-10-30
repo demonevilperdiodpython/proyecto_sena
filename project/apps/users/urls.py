@@ -5,10 +5,13 @@ app_name = 'users'
 
 urlpatterns = [
     path('login/', views.login_view, name='login'),
-    path('signup/', views.Register_view, name='singup'),
+    path('signup/', views.Register_view, name='signup'),
+    path('signup/', views.Register_view, name='singup'),  # Alias de compatibilidad
     path('acounts/', views.acounts_view, name='acounts'),  
     path('logout/', views.logOut_view, name='logout'), 
     path('eliminate_session/<int:user_id>/', views.eliminate_user_session_view, name='eliminate_user_session'),
-    path('loginwith', views.log_in_with_user_view, name='login_with_user'),
-    path('perfil/<int:id>/', views.perfil_view, name='Perfil' )
+    path('loginwith/', views.log_in_with_user_view, name='login_with_user'),
+    path('loginwith', views.log_in_with_user_view),
+    path('perfil/<int:id>/', views.perfil_view, name='perfil'),
+    path('perfil/<int:id>/', views.perfil_view, name='Perfil'),  # Alias de compatibilidad
 ]
