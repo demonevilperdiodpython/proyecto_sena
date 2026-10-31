@@ -75,8 +75,10 @@ function iniciarMenuLateral() {
        CoreUI ya los maneja en el home, pero las vistas que extienden
        plantilla.html directamente no cargan CoreUI. Este bloque es el
        respaldo para que ahi tambien abran y cierren. */
-    if (sidebar && !window.coreui && !window.bootstrap) {
-        const botonesDropdown = sidebar.querySelectorAll('[data-coreui-toggle="dropdown"]');
+    /* El desplegable del pie y el submenu "mis grupos" los maneja siempre
+       sidemenu.js, para que se abran hacia arriba y no dependan de CoreUI. */
+    if (sidebar) {
+        const botonesDropdown = sidebar.querySelectorAll('.sidebar-footer .sidebar-user-btn');
 
         function cerrarDropdowns() {
             sidebar.querySelectorAll('.sidebar-footer .dropdown-menu.show')
@@ -94,7 +96,12 @@ function iniciarMenuLateral() {
 
                 const estabaAbierto = menu.classList.contains('show');
                 cerrarDropdowns();
-                if (!estabaAbierto) menu.classList.add('show');
+                if (!estabaAbierto) {
+                    // Quita estilos inline que CoreUI/Popper pudo dejar, para
+                    // que se use la posicion CSS (hacia arriba).
+                    menu.removeAttribute('style');
+                    menu.classList.add('show');
+                }
             });
         });
 

@@ -1,26 +1,14 @@
-import os
-import uuid
 import mimetypes
 
 from django.db import models
 from django.conf import settings
 from apps.users.models import customuser as user
 from django.core.validators import FileExtensionValidator
-from django.utils import timezone
 
-
-from django.utils.deconstruct import deconstructible
-
-
-@deconstructible
-class ruta_con_fecha:
-    def __init__(self, carpeta):
-        self.carpeta = carpeta
-
-    def __call__(self, instance, filename):
-        extension = os.path.splitext(filename)[1].lower()
-        fecha = timezone.now().strftime("%Y/%m/%d")
-        return f"{self.carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
+# Se centraliza en project.paths para que users y catalog compartan la misma
+# logica de rutas. Se reexporta aqui para no romper migraciones viejas que
+# referencian apps.catalog.models.ruta_con_fecha.
+from project.paths import ruta_con_fecha
 
 
 

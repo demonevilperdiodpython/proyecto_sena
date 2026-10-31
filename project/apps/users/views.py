@@ -1,18 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.contrib.auth import login, logout
+
 from .forms import CustomAuthenticationForm as AuthenticationForm
-from django.shortcuts import redirect
-from django.contrib.auth import login
-from .utils import get_client_ip, get_device_id, es_gmail_valido
-from .models import UserSession
-from .models import customuser as User
 from .forms import CustomUserCreationForm as UserCreationForm
+from .utils import get_client_ip, get_device_id, es_gmail_valido
+from .models import UserSession, customuser as User, imagen as ImagenModel
 from apps.catalog.models import post
-import re
-from django.contrib.auth import logout
-from apps.catalog.models import post
-from apps.users.models import imagen as ImagenModel
+
+import re  # validacion simple en vistas
 # Create your views here.cu
 def login_view(request):
     if request.method == 'POST':
@@ -91,7 +88,7 @@ def acounts_view(request):
     # sea que theoretically solo mostraba cuentas abiertas en este mismo
     # dispositivo.
     #
-    # No se borra ni la vista ni la plantilla (users/acounts.html): se deja
+    # No se borra ni la vista ni la plantilla (users/accounts.html): se deja
     # el codigo ahi y solo se impide entrar. Para volver a habilitarla:
     # 1) quitar el return de abajo,
     # 2) devolver los enlaces del navbar y del menu lateral
@@ -136,19 +133,12 @@ def logOut_view(request):
     user_agent = request.META.get('HTTP_USER_AGENT', '')
     device_id = request.COOKIES.get("device_id")
     
-    print(f"DEBUG Logout: ip={ip}, user_agent={user_agent}, device_id={device_id}, user={request.user}")
-    
+    # Debug prints eliminados para mantener la salida limpia.
     if request.user.is_authenticated:
         queryset = UserSession.objects.filter(user=request.user, is_active=True)
         if device_id:
             queryset = queryset.filter(device_id=device_id)
-        print(f"DEBUG: Sessions found before update: {list(queryset.values('id', 'is_active'))}")
-        updated = queryset.update(is_active=False)
-        print(f"DEBUG: Sessions updated: {updated}")
-        queryset_after = UserSession.objects.filter(user=request.user, is_active=True)
-        print(f"DEBUG: Sessions after update: {list(queryset_after.values('id', 'is_active'))}")
-    else:
-        print("DEBUG: Logout requested without authenticated user")
+        queryset.update(is_active=False)
     
     logout(request)
     response = redirect('users:login')
@@ -211,7 +201,7 @@ def log_in_with_user_view_original(request):
     username = request.GET.get('user')
     if request.method == 'POST':
         username = request.POST.get('user')
-        print(username)
+        # print eliminado
         data = request.POST.copy()
         data['username'] = username
         form = AuthenticationForm(request, data=data, user=username)  # Agregar user=username

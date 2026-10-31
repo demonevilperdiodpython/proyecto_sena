@@ -102,9 +102,9 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 
 	<div class="sidebar-footer">
 		{% if user.is_authenticated %}
-			<div class="dropdown dropend w-100">
+			<div class="dropdown dropup w-100">  {# abre hacia arriba para no salir del cajon #}
 				<a class="sidebar-user-btn btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button"
-					data-coreui-toggle="dropdown" aria-expanded="false">
+					aria-expanded="false">  {# el desplegable lo maneja sidemenu.js para que se abra hacia arriba #}
 					<div class="avatar avatar-md">
 						<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">
 					</div>

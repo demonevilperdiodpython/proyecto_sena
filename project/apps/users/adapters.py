@@ -11,13 +11,7 @@ class CustomSocialAdapter(DefaultSocialAccountAdapter):
     def populate_user(self, request, sociallogin, data):
         user = super().populate_user(request, sociallogin, data)
         email = data.get('email') or sociallogin.account.extra_data.get('email')
-        #muestro  sociallogin.account.extra_data que es el  el archivo json, o lo que contiene (es lo que entiendo)
-        #para verificar errores
-        print("================================")
-        print("PROVIDER:", sociallogin.account.provider)
-        print("DATA:", data)
-        print("EXTRA DATA:", sociallogin.account.extra_data)
-        print("================================")
+        # Debug prints eliminados para mantener la salida limpia.
         #si el hay valor externo de gmail en el auth entonces pone el email en la base de datos 
         if email:
             user.email = email

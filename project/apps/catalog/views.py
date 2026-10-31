@@ -12,14 +12,17 @@ from .forms import topic_groupForm
 from apps.users.models import customuser as CustomUser
 from .models import postvideo
 from .models import postarchivo
+# Helpers extraidos a utils para mantener views manejables.
+from .utils import (guardar_archivos, archivos_del_request, posts_del_feed,
+                    sin_cuenta_no_se_puede_actuar, a_volver)
 from ollama import Client
 from ollama import ResponseError
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Q
-from functools import wraps
-from urllib.parse import urlparse
+# Q movido a utils junto con posts_del_feed.
+# wraps movido a utils junto con el decorador.
+# urlparse movido a utils junto con a_volver.
 #importo esto para manejar los dox
 from docx import Document
 from docx.text.paragraph import Paragraph
@@ -42,15 +45,7 @@ ia_model = Client(
     headers={'Authorization': '49a571fc0d6b40e7a459824cc65ca1e0.pTTonJh6DeKjszShxAXu_ciV'}
 )
 
-def modelo_esta_cargado(nombre_modelo: str) -> bool:
-    try:
-        respuesta = ps()
-        for modelo in respuesta.models:
-            if nombre_modelo in modelo.model:
-                return True
-        return False
-    except Exception:
-        return False
+# Helper no usado eliminado para simplificar el modulo.
 MODELO_IA = "gemma4:31b-cloud"
 
 
@@ -96,6 +91,7 @@ CIERRE
 Cuando sea útil, termina con una pregunta breve, un siguiente paso concreto o una advertencia relevante. No añadas despedidas largas."""
 MAX_HISTORIAL = 16          # pares user/assistant que se mandan al modelo
 SESSION_KEY = "ia_historial"
+# --- Helpers de IA y contexto (historial, prompts) ---
 def doc_como_argumento(request, group_object):
     group = get_object_or_404(topics_group, id=group_object.id)
     doc_text = ""
@@ -286,63 +282,14 @@ def para_registrarse(request):
     return redirect(reverse('users:singup') + '?next=' + request.get_full_path())
 
 
-def sin_cuenta_no_se_puede_actuar(view):
-    @wraps(view)
-    def envoltura(request, *args, **kwargs):
-        if request.method in ('GET', 'HEAD') or request.user.is_authenticated:
-            return view(request, *args, **kwargs)
-        messages.info(request, 'Registrate para poder publicar y crear grupos.')
-        return para_registrarse(request)
-    return envoltura
+# Decorador movido a apps.catalog.utils (sin_cuenta_no_se_puede_actuar).
 
 
-def guardar_archivos(post_obj, archivos):
-    #guard a  los archivos para que esten ordenados corectamente y no se pierdan
-    guardados = 0
-    for archivo in archivos:
-        # Los vacios (0 bytes) se saltan: no son un archivo util.
-        if not archivo or not getattr(archivo, 'size', 0):
-            continue
-        adjunto = postarchivo(post=post_obj)
-        adjunto.archivo = archivo
-        # Se guarda el nombre que subio el usuario para que al descargar
-        # no aparezca el nombre aleatorio del servidor.
-        adjunto.nombre_original = getattr(archivo, 'name', '')[:255]
-        adjunto.save()
-        guardados += 1
-    return guardados
+# Helpers movidos a apps.catalog.utils (guardar_archivos, archivos_del_request,
+# posts_del_feed) para mantener esta vista mas manejable.
 
 
-def archivos_del_request(request):
-    #realemente no sabia como hacer esto, entonces le pregute a la ia
-    #creo que  la funcion es un poco inutil pero ya se utiliza de estqa manera 
-    #no quiero rempalzar la funcion por el request.FILES.getlist('archivos') :,v
-    return request.FILES.getlist('archivos')
-
-
-
-def posts_del_feed(vista, usuario):
-
-    base = post_model.objects.filter(parent__isnull=True)
-
-    if vista == 'populares':
-        return base.order_by('-score', '-created_at')[:15]
-
-    if vista == 'ayuda':
-        # children__isnull: nadie le ha respondido. De mas antiguo a mas
-        # nuevo, asi lo que mas lleva esperando queda arriba.
-        return base.filter(children__isnull=True).order_by('created_at')[:10]
-
-    if vista == 'mis_grupos' and usuario.is_authenticated:
-        # Los grupos donde soy dueño o estoy suscrito.
-        mios = topics_group.objects.filter(
-            Q(creator=usuario) | Q(subscriptions=usuario))
-        return base.filter(group__in=mios).order_by('-created_at')[:10]
-
-    # 'recientes' es la vista normal: lo ultimo publicado, como estaba.
-    return base.order_by('-created_at')[:10]
-
-
+# --- Feed principal ---
 def home(request):
     # top_comments y top_groups ya no se calculan aqui: solo utilizo la funcion
         # apps.catalog.context_processors.hot_topic ahora se utilza en cada vista
@@ -381,14 +328,10 @@ def home(request):
             "puede_ver_mis_grupos": False,
         })
 
-@sin_cuenta_no_se_puede_actuar
-def eliminate_product(request, product_id):
-    product = get_object_or_404(producto, id=product_id)
-    product.delete()
-    # Antes redirigia a 'catalog:product_list', una URL que no existe.
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+# Vista no usada eliminada para simplificar el modulo.
 
 
+# --- Grupos: crear, editar, borrar, puntuar, suscribir ---
 @sin_cuenta_no_se_puede_actuar
 def add_group(request):
     if request.method == "POST":
@@ -399,7 +342,7 @@ def add_group(request):
             return redirect('catalog:home')
     else:
         form = topic_groupForm()
-    return render(request, "catalog/addGroup.html", {"form": form})
+    return render(request, "catalog/add_group.html", {"form": form})  # nombre consistente (snake_case)
 
 @sin_cuenta_no_se_puede_actuar
 def eliminate_post(request):
@@ -424,6 +367,7 @@ def edit_post(request):
 
 
 
+# --- Busqueda ---
 def search_view(request):
     # Buscar y ver los grupos es publico: no hace falta iniciar sesion.
     best_group = topics_group.objects.order_by('-score')[:5]
@@ -591,6 +535,7 @@ def settings_view(request):
     return render(request, "catalog/settings.html")
 
 
+# --- Popular y detalle de post ---
 def popular(request):
     # Ranking por score. El score lo recalcula topics_group.recalcular_score()
     # cada vez que alguien da like, dislike o se une al grupo.
@@ -648,30 +593,7 @@ def post_detail(request, id):
 
 
 
-def a_volver(request, nombre_url, **kwargs):
-    """A donde volver despues de guardar.
-
-    Si el navegador manda Referer y esa pagina es del propio proyecto, se
-    vuelve ahi: asi el que responde desde una seccion o desde popular se
-    queda donde estaba, en vez de que lo boten a la pagina del post.
-
-    El Referer se revisa antes de usarlo: si alguien fabricara uno que
-    apunte a otro sitio, redirigir alli seria un.redirect abierto. Solo se
-    acepta si es una ruta interna que empieza por "/".
-    """
-    anterior = request.META.get("HTTP_REFERER", "")
-
-    if anterior:
-        partes = urlparse(anterior)
-        # misma pagina: con path vacio, todo es la raiz
-        es_del_proyecto = partes.netloc in ("", request.get_host())
-        # se rechazan "//sitio.com" (protocolo relativo), que es el truco
-        # clasico del redirect abierto
-        no_relativo = not partes.path.startswith("//")
-        if es_del_proyecto and no_relativo:
-            return partes.path + (("?" + partes.query) if partes.query else "")
-
-    return reverse(nombre_url, kwargs=kwargs)
+# Helper movido a apps.catalog.utils (a_volver).
 
 
 def topic_section_view(request, group_id, section_id):
@@ -693,6 +615,7 @@ def topic_section_view(request, group_id, section_id):
         "puede_admin": group.puede_administrar(request.user),
     })
 
+# --- Detalle de grupo, secciones y posts ---
 def topic_group(request, id):
     form = postForm(request.POST or None, request.FILES or None)
     group = get_object_or_404(topics_group, id=id)
@@ -797,7 +720,7 @@ def edit_group(request, id):
     else:
         form = topic_groupForm(instance=group)
 
-    return render(request, "catalog/editGroup.html", {
+    return render(request, "catalog/edit_group.html", {  # nombre consistente
         "form": form,
         "group": group,
     })
@@ -819,7 +742,7 @@ def eliminate_group(request, id):
         messages.success(request, f"El grupo '{nombre}' fue eliminado.")
         return redirect('catalog:home')
 
-    return render(request, "catalog/deleteGroup.html", {"group": group})
+    return render(request, "catalog/delete_group.html", {"group": group})  # nombre consistente
 
 
 # ---------------------------------------------------------------------------
@@ -847,7 +770,7 @@ def add_section(request, group_id):
     else:
         nombre = ""
 
-    return render(request, "catalog/addSection.html", {
+    return render(request, "catalog/add_section.html", {  # nombre consistente
         "group": group,
         "nombre": nombre,
         "error": error,
@@ -877,7 +800,7 @@ def edit_section(request, group_id, section_id):
     else:
         nombre = section.name
 
-    return render(request, "catalog/editSection.html", {
+    return render(request, "catalog/edit_section.html", {  # nombre consistente
         "group": group,
         "section": section,
         "nombre": nombre,
