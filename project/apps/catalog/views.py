@@ -438,10 +438,15 @@ def search_view_post(request):
 def rate_group(request):
     group_id = request.GET.get('group_id')
     rate = request.GET.get('rate')
+<<<<<<< HEAD
     
     group = get_object_or_404(topics_group, id=group_id) 
     
 
+=======
+    group = get_object_or_404(topics_group, id=group_id)
+    user_id = request.GET.get("user", id=id)
+>>>>>>> a85ac07e3df00d2b234418acb9ad7b41542c11b3
     # Dar like otra vez quita el like (toggle), en vez de sumar siempre.
     if rate == 'like':
         if request.user in group.likes.all():

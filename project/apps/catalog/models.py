@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import mimetypes
+=======
+import functools
+import os
+import uuid
+>>>>>>> a85ac07e3df00d2b234418acb9ad7b41542c11b3
 
 from django.db import models
 from django.conf import settings
@@ -10,6 +16,37 @@ from django.core.validators import FileExtensionValidator
 # referencian apps.catalog.models.ruta_con_fecha.
 from project.paths import ruta_con_fecha
 
+<<<<<<< HEAD
+=======
+def subir(instance, filename, carpeta):
+    """Genera 'carpeta/2026/10/12/nombre-aleatorio.jpg'.
+
+    Django no sobreescribe: si el archivo ya existe le pega un sufijo
+   ('_aB3xY9z'), y como el campo nunca se limpia, cada reintento dejaba
+    una copia nueva. Con un nombre aleatorio cada subida es un archivo
+    unico y las subdirectorios por fecha evitan meter miles de archivos
+    en una sola carpeta.
+
+    Esta a nivel de modulo y no como closure dentro de otra funcion
+    porque Django solo sabe escribir en un archivo de migracion las
+    funciones cuyo __qualname__ NO lleva '<locals>'. Con la closure,
+    'makemigrations' reventaba con:
+        ValueError: Could not find function subir in apps.catalog.models
+    """
+    extension = os.path.splitext(filename)[1].lower()
+    fecha = timezone.now().strftime("%Y/%m/%d")
+    return f"{carpeta}/{fecha}/{uuid.uuid4().hex[:12]}{extension}"
+
+
+def ruta_con_fecha(carpeta):
+    """Devuelve el upload_to que guarda en subcarpetas por fecha.
+
+    Se usa functools.partial porque Django si sabe serializarlo en las
+    migraciones (functools.partial + una funcion de modulo), y asi el
+    modelo y las migraciones siguen viendo exactamente el mismo valor.
+    """
+    return functools.partial(subir, carpeta=carpeta)
+>>>>>>> a85ac07e3df00d2b234418acb9ad7b41542c11b3
 
 
 class producto(models.Model):
@@ -78,9 +115,18 @@ class post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add= True)
     group = models.ForeignKey('topics_group', on_delete=models.CASCADE, related_name='post', blank = True, null=True)
+<<<<<<< HEAD
     ia_response = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='ai_responses')
     es_ia = models.BooleanField(default=False)
     
+=======
+    ia_response= models.TextField(blank=True, null=True)
+    # related_name propio: 'liked_groups'/'disliked_groups' ya lo usan
+    # topics_group (revisar dos M2M al mismo modelo con el mismo
+    # related_name_revira fields.E304/E305).
+    likes = models.ManyToManyField('users.customuser', related_name='liked_posts', blank=True)
+    dislikes = models.ManyToManyField('users.customuser', related_name='disliked_posts', blank=True)
+>>>>>>> a85ac07e3df00d2b234418acb9ad7b41542c11b3
     parent = models.ForeignKey('self',null=True,on_delete=models.CASCADE, blank=True, related_name="children")
     score = models.IntegerField(default=0)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
