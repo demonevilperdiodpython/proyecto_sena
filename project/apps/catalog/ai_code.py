@@ -1,16 +1,7 @@
 from django.shortcuts import get_object_or_404
-from django.contrib import messages
 
-from .models import producto
 from .models import topics_group
-from .models import topic_section
 from .models import post as post_model
-from .forms import postForm
-from apps.users.models import customuser as CustomUser
-from .models import postvideo
-from .models import postarchivo
-from .utils import (guardar_archivos, archivos_del_request, posts_del_feed,
-                    sin_cuenta_no_se_puede_actuar, a_volver)
 
 from ollama import Client
 from ollama import ResponseError
@@ -19,7 +10,6 @@ from docx.text.paragraph import Paragraph
 from docx.table import Table
 from pypdf import PdfReader
 
-import io
 import re
 
 
@@ -27,12 +17,6 @@ EXTENSIONES_TEXTO = {
     "txt", "md", "markdown", "csv", "tsv", "log", "json",
     "xml", "html", "htm", "py", "js", "css", "sql", "yaml", "yml", "ini",
 }
-
-from ollama import ps
-ia_model = Client(
-    host="https://ollama.com",
-    headers={'Authorization': '49a571fc0d6b40e7a459824cc65ca1e0.pTTonJh6DeKjszShxAXu_ciV'}
-)
 
 # Helper no usado eliminado para simplificar el modulo.
 MODELO_IA = "gemma4:31b-cloud"
@@ -186,8 +170,10 @@ def group_contexto_ia(group):
 
 
 def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_historial=True, group_object=None):
-    ia_model = _get_client(request) 
-    print("Using provided IA model:", ia_model)
+    try:
+        ia_model = _get_client(request)
+    except ValueError as e:
+        return None, str(e), []
     if guardar_historial:
         if historial is None:
             historial = _get_historial(request)
@@ -228,8 +214,3 @@ def preguntar_a_la_ia(request, texto, historial=None, contexto=None, guardar_his
         return contenido, None, messages
     except Exception as e:
         return None, str(e), messages
-
-def ask_key_and_model(request):
-    api_key = request.POST.get("api_key", "").strip()
-    ia_host = request.POST.get("ia_host", "").strip()
-    

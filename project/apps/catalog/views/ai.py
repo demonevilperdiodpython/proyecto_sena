@@ -8,9 +8,6 @@ from ..ai_code import (
     preguntar_a_la_ia,
 )
 
-from ..ai_code import *
-
-
 
 def ia_view(request):
     if request.method == "POST":
@@ -62,31 +59,19 @@ def ia_view(request):
 
 
 def ia_api_view(request):
-    print("API Container View Called")
-
     if request.method == "POST":
-    
-        host = request.POST.get("ia_host", "").strip()
-        key  = request.POST.get("ia_api_key", "").strip()
-
+        host = (request.POST.get("ia_host") or "").strip()
+        key = (request.POST.get("ia_api_key") or "").strip()
         if host:
-            
             request.session["ia_host"] = host
         if key:
-            
             request.session["ia_api_key"] = key
+        request.session.modified = True
 
-        print("API Key:", request.session.get("ia_api_key"))
-        print("IA Host:", request.session.get("ia_host"))
-        if host and key:
-            ia_model = Client(
-                host= str(request.session.get("ia_host").strip()),
-                headers={'Authorization': str(request.session.get("ia_api_key").strip())}
-            )
-
-    return render(request, "catalog/includes/ia_api.html", {"ia_model": ia_model, 
-                                                            "ia_host": request.session.get("ia_host"),
-                                                            "ia_api_key": request.session.get("ia_api_key")})
+    return render(request, "catalog/includes/ia_api.html", {
+        "ia_host": request.session.get("ia_host", ""),
+        "ia_api_key": request.session.get("ia_api_key", ""),
+    })
 def ia_response(request):
     if request.method == "POST":
         texto = request.POST.get("input_text", "").strip()
