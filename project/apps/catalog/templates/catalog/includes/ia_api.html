@@ -1,0 +1,27 @@
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<form hx-post="{% url 'catalog:ia_api' %}" method="POST" hx-trigger="submit" class="ia-api-form">
+    {% csrf_token %}
+    <div class="ia-api-panel">
+        <h2 class="ia-api-title">Configuración de la IA</h2>
+        <p class="ia-api-description">
+            Conecta tu asistente ingresando el host y la API key de tu servicio de IA.
+            Los cambios se guardan automáticamente mientras escribes.
+        </p>
+        <div class="ia-api-fields">
+            <div class="ia-api-field">
+                <label for="host">Host de la IA</label>
+                <input type="text" name="ia_host" id="host"
+                        value="{{ ia_host|default:'' }}"
+                        placeholder="Ej. http://localhost:11434"
+                        hx-post="{% url 'catalog:ia_api' %}" hx-trigger="input changed 100ms">
+            </div>
+            <div class="ia-api-field">
+                <label for="key">API Key</label>
+                <input type="text" name="ia_api_key" id="key"
+                        value="{{ ia_api_key|default:'' }}"
+                        placeholder="Ingresa tu API key"
+                        hx-post="{% url 'catalog:ia_api' %}" hx-trigger="input changed 100ms">
+            </div>
+        </div>
+    </div>
+</form>

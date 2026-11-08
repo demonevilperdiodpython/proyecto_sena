@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 
 from . import views
@@ -23,6 +24,7 @@ urlpatterns = [
     path('edit_post/', views.edit_post, name='edit_post'),
     path("ia_response/" , views.ia_response , name="ia_response"),
     path("ia/", views.ia_view, name="ia"),
+    path("ia_api/", views.ia_api_view, name="ia_api"),
     path("settings/", views.settings_view, name="settings"),
     path("popular/", views.popular, name="popular"),
     path("search/", views.search_view, name="search_view"),
@@ -30,8 +32,14 @@ urlpatterns = [
     path("rate_group/", views.rate_group, name="rate_group"),
     path("rate_post/", views.rate_post, name="rate_post"),
     path("subscribe/", views.subscribe, name="subscribe"),
+    path("terminos/", TemplateView.as_view(template_name="catalog/legal/terminos.html"), name="terminos"),
+    path("privacidad/", TemplateView.as_view(template_name="catalog/legal/privacidad.html"), name="privacidad"),
+    path("normas/", TemplateView.as_view(template_name="catalog/legal/normas.html"), name="normas"),
+    path("cookies/", TemplateView.as_view(template_name="catalog/legal/cookies.html"), name="cookies"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/token/verify", TokenVerifyView.as_view(), name="token_verify"),
+    
     
 ]
 

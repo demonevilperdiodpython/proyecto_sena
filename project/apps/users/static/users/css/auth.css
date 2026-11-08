@@ -267,3 +267,107 @@
         align-items: flex-start;
     }
 }
+
+/* ===========================================================================
+   BOTON ATRACTIVO PARA ACEPTAR TERMINOS Y SERVICIOS
+   =========================================================================== */
+.terms-group {
+    margin-top: 0.5rem;
+}
+
+.terms-accept {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--primary-color) 45%, transparent);
+    background: color-mix(in srgb, var(--primary-color-dark) 35%, transparent);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.terms-accept:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--primary-color-darker);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary-color) 45%, transparent);
+}
+
+.terms-accept:hover .terms-text {
+    color: var(--primary-color-darker);
+}
+
+.terms-accept:hover .terms-text a {
+    color: var(--primary-color-darker);
+}
+
+.terms-accept:hover .terms-check {
+    border-color: var(--primary-color-darker);
+    background: color-mix(in srgb, var(--primary-color-darker) 20%, transparent);
+}
+
+.terms-accept input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.terms-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 2px solid color-mix(in srgb, var(--primary-color) 60%, transparent);
+    background: var(--campo-fondo);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.terms-check::after {
+    content: "";
+    width: 6px;
+    height: 11px;
+    border: solid transparent;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.15s ease;
+}
+
+.terms-accept:has(input:checked) .terms-check {
+    background: var(--boton-sito);
+    border-color: var(--boton-sito);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--boton-sito) 50%, transparent);
+}
+
+.terms-accept:has(input:checked) .terms-check::after {
+    border-color: var(--boton-texto);
+    transform: rotate(45deg) scale(1);
+}
+
+.terms-accept:has(input:checked) {
+    border-color: var(--boton-sito);
+    background: color-mix(in srgb, var(--boton-sito) 12%, transparent);
+}
+
+.terms-text {
+    color: var(--font-primary-black-light);
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+
+.terms-text a {
+    color: var(--accent-text);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.terms-text a:hover {
+    color: var(--primary-color);
+}

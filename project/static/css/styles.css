@@ -190,6 +190,33 @@ html {
   scroll-behavior: smooth;
 }
 
+.site-footer {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border-top: 1px solid color-mix(in srgb, var(--primary-color) 25%, transparent);
+    background: var(--primary-color-darker);
+    color: var(--font-primary-black);
+}
+.site-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+.site-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.site-footer a:hover {
+    text-decoration: underline;
+}
+.site-footer p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--font-primary-black-light);
+}
 body {  background: var(--primary-color-darker);
   color: var(--font-primary-black);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;

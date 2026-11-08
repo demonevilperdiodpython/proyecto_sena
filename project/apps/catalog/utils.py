@@ -63,7 +63,6 @@ from django.contrib import messages
 from django.urls import reverse
 from urllib.parse import urlparse
 
-
 def sin_cuenta_no_se_puede_actuar(view):
     # Decorador: si no hay sesion, redirige al registro en vez de fallar.
     @wraps(view)

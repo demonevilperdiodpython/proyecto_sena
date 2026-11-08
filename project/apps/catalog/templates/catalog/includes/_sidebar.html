@@ -157,5 +157,11 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 				</a>
 			</div>
 		{% endif %}
+		<div class="sidebar-legal small mt-2 text-center">
+			<a class="text-muted" href="{% url 'catalog:terminos' %}">Términos</a> ·
+			<a class="text-muted" href="{% url 'catalog:privacidad' %}">Privacidad</a> ·
+			<a class="text-muted" href="{% url 'catalog:normas' %}">Normas</a> ·
+			<a class="text-muted" href="{% url 'catalog:cookies' %}">Cookies</a>
+		</div>
 	</div>
 </div>

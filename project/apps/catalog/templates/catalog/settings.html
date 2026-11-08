@@ -4,10 +4,12 @@
 {% load static %}
 
 {% block css %}
+{%load static%}
     <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/settings.css' %}">
 {% endblock %}
 
 {% block content %}
+{%load static%}
 <div class="cont-settings"> 
     <div class="card-settings">
         <h1>Configuraciones</h1>
@@ -19,6 +21,7 @@
             <div class="boton-tema">
                 <button id="modo" class="btn-tema" title="Cambiar tema" aria-pressed="false">🌙</button>
             </div> 
+            
         </div>
 
         <div class="setting-item">
@@ -26,7 +29,10 @@
                 <h3>Asistente IA</h3>
                 <p>Pregunta sobre cualquier tema de estudio con el modelo local.</p>
             </div>
-            <a href="{% url 'catalog:ia' %}" class="btn-publish" style="white-space: nowrap;">Abrir</a>
+            <button id="botton-settings"class="btn-publish" style="white-space: nowrap;" onclick="erase_pop_up_menu('api-config-panel')">
+                settings
+            </button>
+            <a href="{% url 'catalog:ia' %}" class="btn-publish" style="white-space: nowrap;">abrir</a>
         </div>
 
         <div class="setting-item">
@@ -39,7 +45,13 @@
             {% else %}
                 <a href="{% url 'users:login' %}" class="btn-publish" style="white-space: nowrap;">Entrar</a>
             {% endif %}
+            
         </div>
     </div>
+    <div class="hidden" id="api-config-panel">
+        {% include 'catalog/includes/ia_api.html' %}
+    </div>
 </div>
+
+<script src="/static/catalog/js/quit_ia_form.js"></script>
 {% endblock %}

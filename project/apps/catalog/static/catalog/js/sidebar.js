@@ -14,17 +14,7 @@ function iniciarSidebar() {
     /* Ancho en el que el sidebar se ve. El mismo corte que layout.css. */
     const ANCHO_SIDEBAR = 1200;
 
-    /* PROBLEMA QUE ARREGLA ESTO:
-       CoreUI trata el sidebar como un cajon superpuesto cuando la pantalla
-       es angosta y, al estar "abierto", registra un listener de "clic
-       fuera" en el document. Ese listener hace preventDefault() y
-       stopPropagation() en CUALQUIER clic de la pagina, asi que ningun
-       boton respondia en el celular: publicar, editar, eliminar,
-       like, dislike... todos dead.
 
-       El sidebar de este proyecto lo dibuja el CSS con la clase
-       .sidebar-open, asi que en el celular no hace falta el de CoreUI:
-       lo unico que hay que hacer es quitarle ese listener. */
     function quitarListenerClicFuera() {
         if (window.innerWidth > ANCHO_SIDEBAR) return;
         if (typeof coreui === 'undefined') return;
@@ -44,7 +34,7 @@ function iniciarSidebar() {
 
     crearSidebarSiHaceFalta();
     quitarListenerClicFuera();
-
+9
     /* CoreUI puede crear la instancia un poco despues (en el load o con
        un resize), asi que se revisa otra vez al rato y en cada cambio de
        tamano de pantalla. */

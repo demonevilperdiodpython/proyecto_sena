@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.utils import timezone
 
 from .forms import CustomAuthenticationForm as AuthenticationForm
 from .forms import CustomUserCreationForm as UserCreationForm
@@ -44,6 +45,10 @@ def Register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST, request.FILES)
         if form.is_valid():
+            if not request.POST.get("acepto_terminos"):
+                messages.error(request, "Debes aceptar los Términos de Servicio y la Política de Privacidad.")
+                return render(request, 'users/register.html', {"imagen": imagen, "form": form, "error": "Debes aceptar los Términos de Servicio."})
+
             if not es_gmail_valido(form.cleaned_data['email']):
                 messages.error(request, "El correo electrónico debe ser una cuenta de Gmail válida (@gmail.com).")
                 return render(request, 'users/register.html', {"imagen": imagen, "form": form, "error": "El correo debe ser de Gmail (@gmail.com)."})
@@ -62,6 +67,9 @@ def Register_view(request):
             # If neither is provided, leave the model default image in place.
 
             user.save()
+            user.terminos_aceptados_en = timezone.now()
+            user.version_terminos = "1.0"
+            user.save(update_fields=["terminos_aceptados_en", "version_terminos"])
 
             response = redirect('catalog:home')
             device_id = get_device_id(request, response)
@@ -172,21 +180,7 @@ def eliminate_user_session_view(request, user_id):
 def log_in_with_user_view(request):
     # DESHABILITADA a pedido.
     #
-    # Esta vista iniciaba sesion como la cuenta que se le pidiera, SIN
-    # preguntar la contrasena: armaba el AuthenticationForm solo con el
-    # nombre y, si era valido, hacia login. O sea que un POST a
-    # /acounts/loginwith con "user=laura" entraba como Laura. No es un
-    # forgot de una cuenta: es entrar a cualquier cuenta.
-    #
-    # Antes solo se llegaba desde la pagina de sesiones, que ademas exigia
-    # tener abierta la cuenta en ese mismo dispositivo; esa pagina ya quedo
-    # deshabilitada. Aqui se cierra tambien la ruta, que si no se quedaba
-    # viva con solo saber la direccion.
-    #
-    # No se borra la vista ni su URL, pero el codigo que hacia el login se
-    #Alejandro al final de este archivo, en log_in_with_user_view_original(),
-    # para poder recuperarlo. Si se rehabilita, hay que pedir ademas la
-    # contrasena del usuario.
+
     messages.info(request, "La entrada con otra cuenta quedo deshabilitada.")
     return redirect('catalog:home')
 

@@ -33,6 +33,9 @@ class customuser(AbstractUser):
     )
     score = models.IntegerField(default=0)
     is_banned = models.BooleanField(default=False)
+    # Aceptacion de terminos y servicios al registrarse.
+    terminos_aceptados_en = models.DateTimeField(null=True, blank=True)
+    version_terminos = models.CharField(max_length=20, default="1.0", blank=True)
 
     def clean(self):
         if not self.email.endswith("@gmail.com"):

@@ -98,6 +98,16 @@
         
         </div>
 
+        <footer class="site-footer">
+            <nav aria-label="Enlaces legales">
+                <a href="{% url 'catalog:terminos' %}">Términos de Servicio</a>
+                <a href="{% url 'catalog:privacidad' %}">Política de Privacidad</a>
+                <a href="{% url 'catalog:normas' %}">Normas de la Comunidad</a>
+                <a href="{% url 'catalog:cookies' %}">Política de Cookies</a>
+            </nav>
+            <p>© {% now "Y" %} TuRedSocial. Todos los derechos reservados.</p>
+        </footer>
+
         <head>
         <script src="{% static 'catalog/js/sidemenu.js' %}?v=2"></script>  {# cache-bust tras cambios del menu #}
         <script src="{% static 'catalog/js/adjuntos.js' %}"></script>

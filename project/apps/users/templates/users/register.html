@@ -58,6 +58,17 @@
             {% endfor %}
         </div>
 
+        <div class="input-group">
+            <label class="terms-accept">
+                <input type="checkbox" name="acepto_terminos" required>
+                <span class="terms-check"></span>
+                He leído y acepto los
+                <a href="{% url 'catalog:terminos' %}" target="_blank" rel="noopener">Términos de Servicio</a>
+                y la
+                <a href="{% url 'catalog:privacidad' %}" target="_blank" rel="noopener">Política de Privacidad</a>
+            </label>
+        </div>
+
         <button type="submit">Registrarse</button>
     </div>
     
