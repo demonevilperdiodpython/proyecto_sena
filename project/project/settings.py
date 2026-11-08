@@ -77,7 +77,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'apps.users',
     'apps.catalog',
-    'apps.orders',
     'rest_framework',
 ]
 SOCIALACCOUNT_PROVIDERS = {
