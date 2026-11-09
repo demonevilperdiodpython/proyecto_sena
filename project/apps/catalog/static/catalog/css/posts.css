@@ -196,7 +196,8 @@
 
 /* Botones de like / dislike. Antes eran <div> sin onclick: no hacían nada. */
 .voto {
-    display: block;
+    display: block; 
+    padding-top: 40px;
 }
 
 .voto-caja {
