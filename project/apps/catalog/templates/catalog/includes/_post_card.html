@@ -1,6 +1,6 @@
 <div class="post">
     {% if i.user and i.user.imagen and not i.parent %}
-        <img src="{{ i.user.imagen.url }}" class="foto-perfil" alt="{{ i.user.username }}" />
+        <a href="{% url 'users:Perfil' i.user.id %}"><img src="{{ i.user.imagen.url }}" class="foto-perfil" alt="{{ i.user.username }}" /></a>
     {% elif i.group and i.group.imagen %}
         <img src="{{ i.group.imagen.url }}" class="foto-perfil" alt="{{ i.group.nombre }}" />
     {% elif not i.user %}

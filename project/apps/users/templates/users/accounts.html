@@ -20,7 +20,7 @@
                 <input type="hidden" name="user" value="{{i.user}}">
                 <div class="user-img-1">
     
-                        <img src="{{i.user.imagen.url}}" alt="" class="userImagen">
+                        <a href="{% url 'users:Perfil' i.user.id %}"><img src="{{i.user.imagen.url}}" alt="" class="userImagen"></a>
                         
                 </div>
                 <div class="user-info">

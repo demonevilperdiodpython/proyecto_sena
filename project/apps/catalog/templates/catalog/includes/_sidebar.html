@@ -106,7 +106,7 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 				<a class="sidebar-user-btn btn btn-ghost w-100 d-flex gap-2 p-1 align-items-center" href="#" role="button"
 					aria-expanded="false">  {# el desplegable lo maneja sidemenu.js para que se abra hacia arriba #}
 					<div class="avatar avatar-md">
-						<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">
+						<a href="{% url 'users:Perfil' user.id %}"><img class="avatar-img rounded" src="{{ user.imagen.url }}" alt=""></a>
 					</div>
 					<div class="small text-start d-sidebar-narrow-none">
 						<div class="fw-semibold">{{ user.username }}</div>
@@ -118,7 +118,7 @@ Lo abre el boton de hamburguesa del navbar (sidemenu.js).
 					<li>
 						<div class="d-flex gap-2 px-2">
 							<div class="avatar avatar-md">
-								<img class="avatar-img rounded" src="{{ user.imagen.url }}" alt="">
+								<a href="{% url 'users:Perfil' user.id %}"><img class="avatar-img rounded" src="{{ user.imagen.url }}" alt=""></a>
 							</div>
 							<div class="small text-start">
 								<div class="fw-semibold">{{ user.username }}</div>
