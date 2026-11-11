@@ -11,12 +11,8 @@ __pycache__/
 *.pyd
 
 # Django databases
-*.sqlite3
-db.sqlite3
 
 # Django media files (uploaded by users)
-project/media/
-media/
 
 # Static root collected for production
 project/staticfiles/
