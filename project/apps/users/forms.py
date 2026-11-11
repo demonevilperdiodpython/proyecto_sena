@@ -39,7 +39,23 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields["password1"].label = "password"
         self.fields["email"].label = "email"
         self.fields["imagen"].label = "profile picture"
-    email = forms.EmailField(required=True)
+
+        self.fields["username"].error_messages = {
+            'required': 'El nombre de usuario es obligatorio.',
+            'unique': 'Este nombre de usuario ya está en uso.',
+            'max_length': 'El nombre de usuario es demasiado largo.',
+        }
+        self.fields["password1"].error_messages = {
+            'required': 'La contraseña es obligatoria.',
+        }
+        self.fields["password2"].error_messages = {
+            'required': 'Debes confirmar la contraseña.',
+            'password_mismatch': 'Las contraseñas no coinciden.',
+        }
+    email = forms.EmailField(required=True, error_messages={
+        'required': 'El correo es obligatorio.',
+        'invalid': 'Ingresa un correo válido.',
+    })
     
 
     class Meta:
@@ -84,6 +100,13 @@ class CustomAuthenticationForm(AuthenticationForm):
             'class': 'Form-control',
             'placeholder': ' '
         })
+
+        self.fields["username"].error_messages = {
+            'required': 'El usuario o correo es obligatorio.',
+        }
+        self.fields["password"].error_messages = {
+            'required': 'La contraseña es obligatoria.',
+        }
         
     def clean_username(self):
         username = self.cleaned_data.get("username")

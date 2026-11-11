@@ -108,7 +108,7 @@ MIDDLEWARE = [
 ]
 
 SOCIALACCOUNT_ADAPTER = 'apps.users.adapters.CustomSocialAdapter'
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_UNIQUE_EMAIL = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True

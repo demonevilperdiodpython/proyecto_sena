@@ -113,7 +113,7 @@ def topic_group(request, id):
                     post.ia_response = post_ia
                     post.save()
             guardar_archivos(post, archivos_del_request(request))
-    posts = group.post.filter().order_by('-created_at')
+    posts = group.post.filter(parent__isnull=True).order_by('-created_at')
     return render(request, "catalog/group.html", {
         'posts': posts,
         'form': form,

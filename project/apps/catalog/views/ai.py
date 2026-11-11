@@ -44,10 +44,10 @@ def ia_view(request):
     # respuestas de IA asociadas a ellas (no las de otros usuarios).
     if request.user.is_authenticated:
         mis_preguntas = post_model.objects.filter(
-            user=request.user, group__isnull=True, es_ia=False)
+            user=request.user, group__isnull=True, es_ia=False, parent__isnull=True)
     else:
         mis_preguntas = post_model.objects.filter(
-            user__isnull=True, group__isnull=True, es_ia=False)
+            user__isnull=True, group__isnull=True, es_ia=False, parent__isnull=True)
  
     ids_preguntas = list(mis_preguntas.values_list('id', flat=True))
     ids_ia = list(mis_preguntas.exclude(ia_response__isnull=True).values_list('ia_response', flat=True))

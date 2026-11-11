@@ -37,7 +37,7 @@ def comentarios_populares(cantidad=5):
     de un post raiz) y la popularidad se mide por cuantos comentarios
     recibio, no por respuestas anidadas.
     """
-    ids_de_posts = post_model.objects.filter(parent__isnull=True).values('id')
+    ids_de_posts = post_model.objects.filter(parent__isnull=True, group__isnull=False).values('id')
 
     comentarios = (
         post_model.objects

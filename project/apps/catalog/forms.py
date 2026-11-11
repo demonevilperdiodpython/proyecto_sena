@@ -5,7 +5,13 @@ from .models import topic_section
 
 
 class topic_groupForm(forms.ModelForm):
-    descripcion = forms.CharField(required=False, widget=forms.Textarea)
+    nombre = forms.CharField(error_messages={
+        'required': 'El nombre del grupo es obligatorio.',
+        'max_length': 'El nombre no puede superar los 100 caracteres.',
+    })
+    descripcion = forms.CharField(required=False, widget=forms.Textarea, error_messages={
+        'required': 'La descripción es obligatoria.',
+    })
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,7 +48,9 @@ class topic_groupForm(forms.ModelForm):
 
 
 class postForm(forms.ModelForm):
-    content = forms.CharField(widget=forms.Textarea, required=True)
+    content = forms.CharField(widget=forms.Textarea, required=True, error_messages={
+        'required': 'El contenido no puede estar vacío.',
+    })
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
