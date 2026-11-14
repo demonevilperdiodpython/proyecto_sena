@@ -31,6 +31,9 @@ from .groups import (
     rate_group,
     subscribe,
     topic_group,
+    group_admin,
+    group_ban,
+    group_ban_any,
     edit_group,
     eliminate_group,
 )

@@ -8,6 +8,10 @@ def topic_section_view(request, group_id, section_id):
     group = get_object_or_404(topics_group, id=group_id)
     section = get_object_or_404(group.sections, id=section_id)
     sections_posts = section.posts.filter(parent__isnull=True).order_by('-created_at')
+    esta_baneado = (
+        request.user.is_authenticated
+        and group.banned_users.filter(id=request.user.id).exists()
+    )
 
     return render(request, "catalog/section.html", {
         "group": group,
@@ -19,6 +23,7 @@ def topic_section_view(request, group_id, section_id):
         # manda "form" no hay nada que iterate y no se podia escribir nada.
         "form": postForm(),
         "puede_admin": group.puede_administrar(request.user),
+        "puede_hablar": not esta_baneado,
     })
 
 # --- Detalle de grupo, secciones y posts ---
@@ -28,6 +33,11 @@ def post_in_section(request, group_id, section_id):
     # Publicar directamente dentro de una seccion del grupo.
     group = get_object_or_404(topics_group, id=group_id)
     section = get_object_or_404(group.sections, id=section_id)
+
+    if request.user.is_authenticated and group.banned_users.filter(id=request.user.id).exists():
+        messages.error(request, "Estás suspendido en este grupo y no puedes publicar en sus secciones.")
+        return redirect('catalog:topic_section', group_id=group_id, section_id=section_id)
+
     form = postForm(request.POST or None)
 
     if request.method == "POST":

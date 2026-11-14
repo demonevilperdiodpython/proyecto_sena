@@ -44,10 +44,16 @@
         {% endfor %}
 
         {% if request.user.is_authenticated %}
-            <div class="pd-form-respuesta">
-                {# Se pasa i=post para que parent_id quede informado: sin esto el comentario se guardaba sin padre. #}
-                {% include 'catalog/includes/_post_form_card.html' with i=post %}
-            </div>
+            {% if puede_hablar %}
+                <div class="pd-form-respuesta">
+                    {# Se pasa i=post para que parent_id quede informado: sin esto el comentario se guardaba sin padre. #}
+                    {% include 'catalog/includes/_post_form_card.html' with i=post %}
+                </div>
+            {% else %}
+                <p class="pd-vacio">
+                    🚫 Estás suspendido en este grupo. Puedes leer, pero no responder.
+                </p>
+            {% endif %}
         {% else %}
             <p class="pd-vacio">
                 <a href="{% url 'users:login' %}">Inicia sesión</a> para responder.

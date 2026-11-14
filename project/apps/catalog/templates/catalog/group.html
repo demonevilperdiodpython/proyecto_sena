@@ -7,7 +7,13 @@
 {% endblock %}
 
 {% block post %}
-{% include 'catalog/includes/_post_form_card.html'%}
+{% if puede_hablar %}
+    {% include 'catalog/includes/_post_form_card.html'%}
+{% else %}
+    <div class="ga-bar" style="background: rgba(200, 0, 0, 0.08);">
+        <span class="ga-label">🚫 Estás suspendido en este grupo. Puedes leer, pero no publicar ni comentar.</span>
+    </div>
+{% endif %}
 
 {% endblock %}
 
@@ -16,10 +22,12 @@
         Botones de administracion. group.puede_administrar() ya aplica la
         regla del interruptor CUALQUIERA_PUEDE_BORRAR del modelo.
     {% endcomment %}
-    {% if group.creator %}
+    {% if group.creator.all %}
     <div class="ga-creador">
         Creado por
-        <a href="{% url 'users:Perfil' group.creator.id %}">{{ group.creator.username }}</a>
+        {% for creador in group.creator.all %}
+            <a href="{% url 'users:Perfil' creador.id %}">{{ creador.username }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
     </div>
     {% endif %}
 
@@ -29,6 +37,89 @@
         <a href="{% url 'catalog:add_section' group.id %}" class="ga-btn">+ Sección</a>
         <a href="{% url 'catalog:edit_group' group.id %}" class="ga-btn">Editar grupo</a>
         <a href="{% url 'catalog:eliminate_group' group.id %}" class="ga-btn ga-btn-peligro">Eliminar grupo</a>
+    </div>
+
+    <div style="padding: 0.75rem 1.5rem;">
+        <span class="ga-label">Admins del grupo:</span>
+        {% for admin in group.admin_users.all %}
+            <span style="display: inline-flex; align-items: center; gap: 0.35rem; margin: 0.25rem;">
+                {{ admin.username }}
+                <form method="post" action="{% url 'catalog:group_admin' group.id admin.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="remove">
+                    <button type="submit" class="ga-btn ga-btn-peligro" title="Quitar admin">✕</button>
+                </form>
+            </span>
+        {% empty %}
+            <span class="ga-label">Sin admins asignados.</span>
+        {% endfor %}
+
+        <details style="margin-top: 0.5rem;">
+            <summary style="cursor: pointer; color: var(--accent-text);">Dar admin a un suscriptor</summary>
+            {% for u in group.subscriptions.all %}
+                {% if u not in group.admin_users.all and u not in group.banned_users.all %}
+                    <form method="post" action="{% url 'catalog:group_admin' group.id u.id %}" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
+                        {% csrf_token %}
+                        <span>{{ u.username }}</span>
+                        <button type="submit" class="ga-btn">Hacer admin</button>
+                    </form>
+                {% endif %}
+            {% empty %}
+                <p class="ga-label" style="margin-top: 0.4rem;">No hay usuarios suscritos.</p>
+            {% endfor %}
+        </details>
+
+        <div style="margin-top: 0.85rem;">
+            <span class="ga-label">Baneados del grupo:</span>
+            {% for b in group.banned_users.all %}
+                <span style="display: inline-flex; align-items: center; gap: 0.35rem; margin: 0.25rem;">
+                    {{ b.username }}
+                    <form method="post" action="{% url 'catalog:group_ban' group.id b.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="unban">
+                        <button type="submit" class="ga-btn">Quitar ban</button>
+                    </form>
+                </span>
+            {% empty %}
+                <span class="ga-label">Sin usuarios baneados.</span>
+            {% endfor %}
+
+            <details style="margin-top: 0.5rem;">
+                <summary style="cursor: pointer; color: var(--accent-text);">Banear a un suscriptor</summary>
+                {% for u in group.subscriptions.all %}
+                    {% if u not in group.banned_users.all %}
+                        {% if es_admin_global or u not in group.admin_users.all and u not in group.creator.all %}
+                            <form method="post" action="{% url 'catalog:group_ban' group.id u.id %}" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="ban">
+                                <span>{{ u.username }}</span>
+                                <button type="submit" class="ga-btn ga-btn-peligro">Banear</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% empty %}
+                    <p class="ga-label" style="margin-top: 0.4rem;">No hay usuarios suscritos.</p>
+                {% endfor %}
+            </details>
+
+            {% if es_admin_global %}
+            <details style="margin-top: 0.5rem;">
+                <summary style="cursor: pointer; color: var(--accent-text);">Banear a cualquier usuario</summary>
+                <form method="post" action="{% url 'catalog:group_ban_any' group.id %}" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                    {% csrf_token %}
+                    <select name="user_id" required style="padding: 0.35rem; border-radius: 6px;">
+                        <option value="">Elige un usuario...</option>
+                        {% for u in todos_los_usuarios %}
+                            {% if u not in group.banned_users.all and u != request.user %}
+                                <option value="{{ u.id }}">{{ u.username }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="ga-btn ga-btn-peligro">Banear</button>
+                </form>
+            </details>
+            {% endif %}
+        </div>
     </div>
     {% endif %}
 

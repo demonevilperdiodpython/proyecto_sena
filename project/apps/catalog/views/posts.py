@@ -1,12 +1,27 @@
 from .common import *
 from .auth import para_registrarse
+from apps.users.permissions import (
+    es_moderador_global,
+    esta_baneado_de_grupo,
+    puede_administrar_grupo,
+)
 
 
 @sin_cuenta_no_se_puede_actuar
 def eliminate_post(request):
     post_id = request.POST.get("post_id")
     post = get_object_or_404(post_model, id=post_id)
+
+    es_autor = request.user == post.user
+    es_moderador = es_moderador_global(request.user)
+    es_admin_grupo = bool(post.group) and puede_administrar_grupo(request.user, post.group)
+
+    if not (es_autor or es_moderador or es_admin_grupo):
+        messages.error(request, "No tienes permiso para eliminar esta publicación.")
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
     post.delete()
+    messages.success(request, "Publicación eliminada.")
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -15,6 +30,24 @@ def edit_post(request):
     if request.method == "POST":
         post_id = request.POST.get("post_id")
         Post = get_object_or_404(post_model, id=post_id)
+
+        es_autor = request.user == Post.user
+        es_moderador = es_moderador_global(request.user)
+        es_admin_grupo = bool(Post.group) and puede_administrar_grupo(request.user, Post.group)
+
+        if not (es_autor or es_moderador or es_admin_grupo):
+            messages.error(request, "No tienes permiso para editar esta publicación.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        if (
+            Post.group
+            and esta_baneado_de_grupo(request.user, Post.group)
+            and not es_moderador
+            and not es_admin_grupo
+        ):
+            messages.error(request, "Estás suspendido en este grupo y no puedes editar publicaciones.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
         content = request.POST.get("content", "").strip()
         if content:
             Post.content = content
@@ -35,11 +68,20 @@ def post_detail(request, id):
     # Enlace propio para compartir un post: /post/12/
     post_obj = get_object_or_404(post_model, id=id)
     form = postForm(request.POST or None)
+    esta_baneado = (
+        request.user.is_authenticated
+        and post_obj.group
+        and post_obj.group.banned_users.filter(id=request.user.id).exists()
+    )
+    puede_hablar = not esta_baneado
 
     if request.method == "POST":
         # Red de seguridad, igual que en topic_group.
         if not request.user.is_authenticated:
             return para_registrarse(request)
+        if esta_baneado:
+            messages.error(request, "Estás suspendido en este grupo y no puedes responder.")
+            return redirect(a_volver(request, "catalog:post_detail", id=id))
         if form.is_valid():
             respuesta = form.save(commit=False)
             respuesta.user = request.user
@@ -62,6 +104,7 @@ def post_detail(request, id):
         "post": post_obj,
         "group": post_obj.group,
         "form": form,
+        "puede_hablar": puede_hablar,
     })
 
 

@@ -19,6 +19,11 @@ def login_view(request):
             ip = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT','')
             user = form.get_user()
+            if getattr(user, "is_banned", False):
+                return render(request, 'users/login.html', {
+                    "form": form,
+                    "error": "Tu cuenta está suspendida. Contacta al administrador.",
+                })
             UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
 
             response = redirect('catalog:home')

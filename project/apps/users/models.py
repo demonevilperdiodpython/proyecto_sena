@@ -23,24 +23,28 @@ class UserSession(models.Model):
 
 
 class customuser(AbstractUser):
+    
+
     email = models.EmailField(unique=True)
 
-    # Avatar del usuario. Se guarda en users/avatares/<fecha>/<uuid>.ext para
-    # no acumular duplicados. El default vive en la misma carpeta.
     imagen = models.ImageField(
         upload_to=ruta_con_fecha("users/avatares"),
         default="users/avatares/user.jpg",
     )
     score = models.IntegerField(default=0)
-    is_banned = models.BooleanField(default=False)
-    # Aceptacion de terminos y servicios al registrarse.
+    is_banned = models.BooleanField(default=False) 
+    is_platform_admin = models.BooleanField(
+        default=False,
+        help_text="Moderador global de la aplicacion (no es el superusuario de Django).",
+    )
+    created_groups = models.ManyToManyField("catalog.topics_group", related_name="creator", blank=True)
+    admin_fk = models.ManyToManyField("catalog.topics_group", blank=True, related_name='admin_users')
     terminos_aceptados_en = models.DateTimeField(null=True, blank=True)
     version_terminos = models.CharField(max_length=20, default="1.0", blank=True)
 
     def clean(self):
         if not self.email.endswith("@gmail.com"):
             from django.core.exceptions import ValidationError
-
             raise ValidationError("El correo debe ser de Gmail (@gmail.com).")
 
     def recalcular_score(self):

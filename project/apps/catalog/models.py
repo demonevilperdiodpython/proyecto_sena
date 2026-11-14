@@ -3,8 +3,8 @@ import mimetypes
 from django.db import models
 from django.conf import settings
 from apps.users.models import customuser as user
+from apps.users.permissions import puede_administrar_grupo
 from django.core.validators import FileExtensionValidator
-
 # Se centraliza en project.paths para que users y catalog compartan la misma
 # logica de rutas. Se reexporta aqui para no romper migraciones viejas que
 # referencian apps.catalog.models.ruta_con_fecha.
@@ -29,16 +29,14 @@ class topics_group(models.Model):
     categoria = models.CharField(max_length=100, default="unknown")
     users_joined = models.ManyToManyField(user,blank=True)
 
-    # Dueño del grupo. Si es None, el grupo es viejo (creado antes de
-    # este campo) y cualquiera con permiso puede administrarlo.
-    creator = models.ForeignKey(user, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_groups')
-    
     imagen = models.ImageField(upload_to=ruta_con_fecha('catalog/grupos'), null=True, blank=True)
     imagen_url = models.URLField(null=True, blank=True)
     score = models.IntegerField(default=0)
     likes = models.ManyToManyField(user, related_name='liked_groups', blank=True)
     dislikes = models.ManyToManyField(user, related_name='disliked_groups', blank=True)
     subscriptions = models.ManyToManyField(user, related_name='subscribed_groups', blank=True)
+    banned_users = models.ManyToManyField(user, related_name='banned_groups', blank=True)
+
     def __str__(self):
         return self.nombre
 
@@ -47,23 +45,18 @@ class topics_group(models.Model):
         # Asi el score siempre refleja el estado real sin desajustarse.
         self.score = self.likes.count() - self.dislikes.count() + (self.subscriptions.count() * 2)
         self.save()
-        if self.creator and hasattr(self.creator, 'recalcular_score'):
-            self.creator.recalcular_score()
+        for creador in self.creator.all():
+            if hasattr(creador, 'recalcular_score'):
+                creador.recalcular_score()
         return self.score
 
-    # Si lo pones en False, solo el dueño (o un superusuario) puede
-    # editar y borrar grupos. En True, cualquier usuario logueado puede.
-    CUALQUIERA_PUEDE_BORRAR = True
+    # Si lo pones en True, cualquier usuario logueado puede administrar
+    # el grupo. En False, solo el creador, un admin del grupo o un
+    # superusuario/staff pueden editarlo o borrarlo.
+    CUALQUIERA_PUEDE_BORRAR = False
 
     def puede_administrar(self, usuario):
-        if not usuario.is_authenticated:
-            return False
-        if usuario.is_superuser:
-            return True
-        if self.CUALQUIERA_PUEDE_BORRAR:
-            return True
-        # Grupo sin dueño (creado antes de este campo): se permite.
-        return self.creator_id is None or self.creator_id == usuario.id
+        return puede_administrar_grupo(usuario, self)
 
 class topic_section(models.Model):
     name = models.CharField(max_length=100)

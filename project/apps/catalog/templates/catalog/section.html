@@ -17,9 +17,13 @@
     <p class="sec-sub">{{ posts.count }} publicación(es) en esta sección</p>
 
     {% if request.user.is_authenticated %}
-    <a href="{% url 'catalog:post_in_section' group.id section.id %}" class="btn-publish sec-publicar">
-        ✏️ Publicar en esta sección
-    </a>
+        {% if puede_hablar %}
+            <a href="{% url 'catalog:post_in_section' group.id section.id %}" class="btn-publish sec-publicar">
+                ✏️ Publicar en esta sección
+            </a>
+        {% else %}
+            <p class="sec-sub">🚫 Estás suspendido en este grupo. Puedes leer, pero no publicar.</p>
+        {% endif %}
     {% endif %}
 
     <!-- Selector de secciones del grupo -->

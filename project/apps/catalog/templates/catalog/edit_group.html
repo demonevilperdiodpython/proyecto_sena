@@ -12,9 +12,10 @@
     <div class="groupz">
         <h2>Editar Grupo</h2>
 
-        {% if group.creator %}
+        {% if group.creator.all %}
             <p style="text-align:center; font-size:0.85rem; color: var(--font-primary-black-light);">
-                Creado por <strong>{{ group.creator.username }}</strong>
+                Creado por
+                <strong>{% for creador in group.creator.all %}{{ creador.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</strong>
             </p>
         {% endif %}
 

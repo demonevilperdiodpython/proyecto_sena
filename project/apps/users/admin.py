@@ -13,6 +13,13 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2'),
         }),
     )
+    list_display = ('username', 'email', 'is_platform_admin', 'is_banned', 'is_staff', 'is_superuser')
+    list_filter = ('is_platform_admin', 'is_banned', 'is_staff', 'is_superuser')
+    fieldsets = UserAdmin.fieldsets + (
+        ('Roles de la aplicacion', {
+            'fields': ('is_platform_admin', 'is_banned'),
+        }),
+    )
 class imagenAdmin(admin.ModelAdmin):
     
     list_display = ('imagen', 'imagen_url')
